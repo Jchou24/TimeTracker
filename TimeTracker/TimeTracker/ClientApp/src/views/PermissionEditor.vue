@@ -29,8 +29,7 @@
             const isLoading = ref(false)
             const accounts = ref([] as Array<IUserInfoDetail>)
             function HandleGetAccounts(){
-                return GetAccounts(isLoading)
-                    .then((response)=>{
+                return GetAccounts(isLoading, ( response )=>{
                         accounts.value = response.data
                     })
             }

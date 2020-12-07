@@ -122,11 +122,11 @@
                     return
                 }
                 
-                Login(logindata.value as ILogin, store, isLoading).then(() => {
+                Login(logindata.value as ILogin, store, isLoading, () => {
                     EmptyErrorMessages()
                     password.value = ""
                     isOpenModalRef.value = false
-                }).catch(error=>{
+                }, ( error ) => {
                     if (error.response.status == 400) {
                         EmptyErrorMessages()
                         errorMessages.Email = error.response.data["Email"] || []

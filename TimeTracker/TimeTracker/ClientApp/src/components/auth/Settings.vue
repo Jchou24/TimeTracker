@@ -208,16 +208,14 @@
                     return
                 }
                 passwordErrorMessage.value = ""
-                UpdatePassword({ currentPassword: currentPassword.value, password: password.value } as IUpdatePassword, isUpdatePasswordLoading)
-                    .then(()=>{
+                UpdatePassword({ currentPassword: currentPassword.value, password: password.value } as IUpdatePassword, isUpdatePasswordLoading, ()=>{
                         ToastSuccess(toast, "Password changed!.")
                         isResetPassword.value = false
                         currentPassword.value = ""
                         password.value = ""
                         comfirmPassword.value = ""
                         passwordErrorMessage.value = ""
-                    })
-                    .catch(error=>{
+                    },( error )=>{
                         if (error.response.status == 400) {
                             passwordErrorMessage.value =error.response.data["Fail"][0]
                         }

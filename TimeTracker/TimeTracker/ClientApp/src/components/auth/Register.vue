@@ -137,11 +137,11 @@
                 if (!isPasswordComfirmed.value){
                     return                    
                 }
-                Regist(logindata.value as ILogin, store, isLoading).then(() => {
+                Regist(logindata.value as ILogin, store, isLoading, () => {
                     EmptyErrorMessages()
                     isRegistOk.value = true
                     ToastSuccess(toast, "Registration success! Please connect admin to activate your account.", { timeout: 15 * 1000 })
-                }).catch(error=>{
+                }, ( error ) => {
                     console.log( error )
                     isRegistOk.value = false
                     if (error.response.status == 400) {
@@ -172,11 +172,7 @@
 
 
 <style lang="scss" scoped>
-    .Register{
-        // height: 100%;
-    }
-
-    .regist-success{
+    .Register .regist-success{
         $color: #bbe9d4;
         color: $color;
         .theme--light.v-icon{

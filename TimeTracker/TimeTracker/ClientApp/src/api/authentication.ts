@@ -1,8 +1,7 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { Store } from 'vuex'
 import { Ref } from '@vue/composition-api'
-
-axios.defaults.withCredentials = true
+import { HttpGet, HttpPost } from '@/util/apiHandler.ts'
 
 interface ILogin{
     email: string;
@@ -15,92 +14,82 @@ interface IUpdatePassword{
     password: string;
 }
 
-function GetUserInfo(store: Store<any>, isLoading: Ref<boolean>){
-    isLoading.value = true
-    return axios.get(process.env.VUE_APP_SERVER_URL + 'api/account/getuserinfo')
-        .then( response =>{
-            // console.log(response.data)
-            store.commit("authentication/SetClaims", response.data)
-        })
-        .finally(()=>{
-            isLoading.value = false                    
-        })
+function GetUserInfo(store: Store<any>, isLoading: Ref<boolean>,
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){    
+    HttpGet('api/Account/GetUserInfo', isLoading, (response) =>{
+        if(SuccessFunc){
+            SuccessFunc(response)
+        }
+        store.commit("authentication/SetClaims", response.data)
+    }, ErrorFunc)
 }
 
-function IsLogin(store: Store<any>, isLoading: Ref<boolean>){
-    // console.log("Run IsLogin API")
-    isLoading.value = true
-    return axios.get(process.env.VUE_APP_SERVER_URL + 'api/account/islogin')
-        .then( response => {
-            store.commit("authentication/SetIsAuthenticated", Boolean(response.data))
-            if(store.state.authentication.isAuthenticated){
-                GetUserInfo(store, isLoading)
-            }
-        })
-        .finally(()=>{
-            isLoading.value = false                    
-        })
+function IsLogin(store: Store<any>, isLoading: Ref<boolean>,
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){    
+    HttpGet('api/Account/IsLogin', isLoading, (response) =>{
+        if(SuccessFunc){
+            SuccessFunc(response)
+        }
+        store.commit("authentication/SetIsAuthenticated", Boolean(response.data))
+        if(store.state.authentication.isAuthenticated){
+            GetUserInfo(store, isLoading)
+        }
+    }, ErrorFunc)
 }
 
-function Login(data: ILogin, store: any, isLoading: Ref<boolean>){
-    // console.log("Run Login API")
-    isLoading.value = true
-    return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/login', data)
-        .then(()=>{
-            GetUserInfo(store, isLoading).then( () => {
-                store.commit("authentication/SetIsAuthenticated", true)
-            })
+function Login(data: ILogin, store: any, isLoading: Ref<boolean>,
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){
+    HttpPost('api/Account/Login', isLoading, data, (response) =>{
+        if(SuccessFunc){
+            SuccessFunc(response)
+        }
+        GetUserInfo(store, isLoading, () => {
+            store.commit("authentication/SetIsAuthenticated", true)
         })
-        .finally(()=>{
-            isLoading.value = false                    
-        })
+    }, ErrorFunc)
 }
 
-function Logout(store: any, isLoading: Ref<boolean>){
-    // console.log("run log out")
-    isLoading.value = true
+function Logout(store: any, isLoading: Ref<boolean>,
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){
     store.commit("authentication/Init")
     store.commit("pageIdle/Init")
-    return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/logout')
-        .finally(()=>{
-            isLoading.value = false                
-        })
+    HttpPost('api/Account/Logout', isLoading, undefined, SuccessFunc, ErrorFunc)
 }
 
-function Regist(data: ILogin, store: any, isLoading: Ref<boolean>){
-    // console.log("Run Login API")
-    isLoading.value = true
-    return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/regist', data)
-        .then(()=>{
-            Login(data, store, isLoading)
-        })
-        .finally(()=>{
-            isLoading.value = false                    
-        })
+function Regist(data: ILogin, store: any, isLoading: Ref<boolean>, 
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){
+    HttpPost('api/Account/Regist', isLoading, data, (response) =>{
+        if(SuccessFunc){
+            SuccessFunc(response)
+        }
+        Login(data, store, isLoading)
+    }, ErrorFunc)
 }
 
 function KeepAlive(){
-    return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/keepalive')
+    HttpPost('api/Account/KeepAlive')
 }
 
-function UpdateName(data: ILogin, store: any, isLoading: Ref<boolean>){
-    // console.log("Run Login API")
-    isLoading.value = true
-    return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/updateName', data)
-        .then(()=>{
-            store.commit("authentication/SetName", data.name)
-        })
-        .finally(()=>{
-            isLoading.value = false                    
-        })
+function UpdateName(data: ILogin, store: any, isLoading: Ref<boolean>, 
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){
+    HttpPost('api/Account/UpdateName', isLoading, data, (response) =>{
+        if(SuccessFunc){
+            SuccessFunc(response)
+        }
+        store.commit("authentication/SetName", data.name)
+    }, ErrorFunc)
 }
 
-function UpdatePassword(data: IUpdatePassword, isLoading: Ref<boolean>){
-    isLoading.value = true
-    return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/updatePassword', data)
-        .finally(()=>{
-            isLoading.value = false                    
-        })
+function UpdatePassword(data: IUpdatePassword, isLoading: Ref<boolean>, 
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){
+    HttpPost('api/Account/UpdatePassword', isLoading, data, SuccessFunc, ErrorFunc)
 }
 
 export {

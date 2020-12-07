@@ -160,10 +160,9 @@
             // uncheckAccounts            
             const uncheckAccounts = ref([] as Array<IUserInfoDetail>)
             function HandlerGetUncheckAccounts(){
-                return GetUncheckAccounts(isLoading)
-                    .then((response)=>{
-                        uncheckAccounts.value = response.data
-                    })
+                GetUncheckAccounts(isLoading, (response)=>{
+                    uncheckAccounts.value = response.data
+                })
             }
             HandlerGetUncheckAccounts()
             // =================================================================
@@ -259,8 +258,7 @@
                 })
 
                 const updateAccounts = Object.values(tmpUpdateAccounts) as Array<IUpdateAccounts>
-                UpdateAccounts(updateAccounts, isLoading)
-                    .then(()=>{
+                UpdateAccounts(updateAccounts, isLoading, ()=>{
                         ToastSuccess(toast, "Account(s) updated!")
                         HandleGetAccounts()
                     })           

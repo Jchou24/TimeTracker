@@ -67,10 +67,9 @@
             const isLoading = ref(false)
             const uncheckAccounts = ref([] as Array<IUserInfoDetail>)
             function HandlerGetUncheckAccounts(){
-                return GetUncheckAccounts(isLoading)
-                    .then((response)=>{
-                        uncheckAccounts.value = response.data
-                    })
+                GetUncheckAccounts(isLoading, (response)=>{
+                    uncheckAccounts.value = response.data
+                })
             }
             HandlerGetUncheckAccounts()
 
@@ -90,8 +89,7 @@
                     IsUpdateUserRoles: false,
                 }] as Array<IUpdateAccounts>
 
-                UpdateAccounts(updateAccounts, isLoading)
-                    .then(()=>{
+                UpdateAccounts(updateAccounts, isLoading, ()=>{
                         const messageTitle = uncheckAccount.name ? uncheckAccount.name : uncheckAccount.email
                         ToastSuccess(toast, `${messageTitle}: Account status is updated!`)
                         HandlerGetUncheckAccounts()
