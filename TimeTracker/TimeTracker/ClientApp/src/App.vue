@@ -1,70 +1,91 @@
 <template>
-    <div id="app">
-        <div id="nav">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/about">About</router-link> |
-            <router-link to="/testAPI">Test weather API</router-link> |
-            <router-link to="/registration" v-if="!isAuthenticated">Regist</router-link> |
-            <router-link to="/admin" v-if="isAdmin">Admin</router-link> |
-            <router-link to="/signIn">SignIn</router-link> |
-            
-            {{authenticationInfo}}
-            <router-link to="/settings" v-if="isAuthenticated"><span class="material-icons settings">settings</span></router-link>
-        </div>
+    <!-- <div id="app">
+        <Nav />
         <router-view/>
-        <!-- <PageIdle /> -->
+        <PageIdle />
         <PageIdle :idleSeconds="3" :userConfirmSeconds="5" />
-    </div>
+    </div> -->
+
+    <v-app>
+        <!-- <v-navigation-drawer app> -->
+            <!-- -->
+        <!-- </v-navigation-drawer> -->
+
+        <NavProgress/>
+        <Nav />
+
+        <v-main>
+            <v-container fluid fill-height >
+                <transition   
+                    mode="out-in"
+                    enter-active-class="animate__animated animate__fadeIn animate__faster"
+                    leave-active-class="animate__animated animate__fadeOut animate__faster"
+                >
+                    <router-view></router-view>
+                </transition>
+            </v-container>
+        </v-main>
+
+        <!-- <v-footer app> -->
+            <!-- -->
+        <!-- </v-footer> -->
+
+        <!-- <PageIdle :isLogOutRedirect="false" /> -->
+        <!-- <PageIdle :isLogOutRedirect="false" :idleSeconds="3" :userConfirmSeconds="5000" /> -->
+    </v-app>
 </template>
 
 <script lang="ts">
     // import { defineComponent, computed, watch, ref } from 'vue'
-    import { defineComponent, computed, watch, ref } from '@vue/composition-api'
-    // import { useStore } from 'vuex'
-    import PageIdle from '@/components/PageIdle.vue'
+    import { defineComponent, computed, watch, ref, onMounted } from '@vue/composition-api'
+
+    import Nav from '@/components/nav/Nav.vue'
+    import NavProgress from '@/components/nav/NavProgress.vue'
+    import PageIdle from '@/components/auth/PageIdle.vue'
+
+    import debounce from 'lodash.debounce';    
+    import { provideToast, useToast } from "vue-toastification/composition";
+    // Also import the toast's css
+    import "vue-toastification/dist/index.css";
+
     import { IsLogin } from '@/api/authentication.ts'
-    import { IUserRole, UserRoles } from '@/models/authentication.ts'
-    import { provideToast } from "vue-toastification/composition";
+    import { GetRedirectPath } from './router/routeConfigs';
+    import { ValidationResults } from './models/authValidation';
 
     export default defineComponent({
         name: 'App',
         components:{
-          PageIdle
+            Nav,
+            NavProgress,
+            PageIdle,
         },
         setup(props, { root }){
-            provideToast()
-            
-            const { $store } = root
+            const { $store, $router } = root
+            // const router = useRouter()
             // const store = useStore()
             const store = $store
-            const unauthInfo = "You are not log in"
-            // console.log( "store.state.authentication", store.state.authentication )
-            // console.log( "store.state.authentication.claims.name", store.state.authentication.claims.name )
-
-            const displayName = computed( () => 
-                store.state.authentication.claims.name ? 
-                store.state.authentication.claims.name : 
-                store.state.authentication.claims.email)
-            const NavigationMessage = () => `Hi, ${displayName.value}! You are now log in!`
-            const authInfo = ref(NavigationMessage())
-            watch( () => store.state.authentication.claims.name, (name: string) => {
-              authInfo.value = NavigationMessage()
-            })
-
-            const isAuthenticated = computed( () => store.state.authentication.isAuthenticated )
+            const router = $router            
             
-            const authenticationInfo = computed(() =>{
-              return isAuthenticated.value ? authInfo.value : unauthInfo
+            provideToast({ toastClassName: "toast-notification" })
+            const toast = useToast()
+            store.commit("SetNotificator", toast)
+            
+            const isLoading = ref(false)
+            IsLogin(store, isLoading)
+            watch( isLoading, (value: boolean) => {
+                value ? store.commit("TurnOnLoading") : store.commit("TurnOffLoading")
             })
 
-            const isAdmin = computed( () => store.state.authentication.claims.userRoles.find( (x: IUserRole) => x.id == UserRoles.Admin ) )
 
-            IsLogin(store)
+
+            watch( () => store.state.authentication.isAuthenticated, debounce((isAuthenticated: boolean) => {                
+                if(isAuthenticated == false){
+                    router.push(GetRedirectPath(ValidationResults.logout))
+                }
+            }, 250))
 
             return {
-                isAuthenticated,
-                authenticationInfo,
-                isAdmin,
+
             }
         }
 
@@ -80,24 +101,11 @@
         color: #2c3e50;
     }
 
-    #nav {
-        padding: 30px;
-
-        a {
-            font-weight: bold;
-            color: #2c3e50;
-
-            &.router-link-exact-active {
-                color: #42b983;
-            }
-        }
+    .toast-notification{
+        width: 400px;
     }
 </style>
 
 <style lang="scss" scoped>
-    .material-icons.settings{
-        position: absolute;
-        margin-left: 5px;
-        margin-top: -4px;
-    }
+    
 </style>

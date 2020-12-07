@@ -1,4 +1,5 @@
 import { IAuthentication, IClaims } from '@/models/authentication'
+import { Module } from "vuex";
 
 function GetInitAuthentication(): IAuthentication{
     return {
@@ -16,7 +17,7 @@ function SetClaims( state: IAuthentication, claims: IClaims ){
     Object.keys(claims).forEach( key => Reflect.set( state.claims, key, Reflect.get(claims, key) ) )
 }
 
-export default{
+const module: Module<any, any> = {
     namespaced: true,
     state: GetInitAuthentication(),
     mutations: {
@@ -35,3 +36,5 @@ export default{
     modules: {
     }
 }
+
+export default module

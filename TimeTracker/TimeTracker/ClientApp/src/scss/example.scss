@@ -1,0 +1,26 @@
+// =================================================================================
+// midea query
+// =================================================================================
+@media (max-width: $mediaquery-width-sm) { 
+
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: $mediaquery-width-sm) and (max-width: $mediaquery-width-md) { 
+
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: $mediaquery-width-md) and (max-width: $mediaquery-width-l) { 
+   
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: $mediaquery-width-l) and (max-width: $mediaquery-width-xl) { 
+    
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: $mediaquery-width-xl) { 
+
+}

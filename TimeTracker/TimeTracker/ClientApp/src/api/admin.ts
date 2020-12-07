@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { Store } from 'vuex'
+import { Ref } from '@vue/composition-api'
 
-import { AccountStatus } from '@/models/authentication.ts'
+import { AccountStatus } from '@/models/constants/authentication.ts'
+
 
 axios.defaults.withCredentials = true
 
@@ -17,16 +18,28 @@ interface IUpdateAccounts{
     IsUpdateUserRoles: boolean;
 }
 
-function GetUncheckAccounts(){
+function GetUncheckAccounts(isLoading: Ref<boolean>){
+    isLoading.value = true
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/admin/getuncheckaccounts')
+        .finally(()=>{
+            isLoading.value = false                    
+        })
 }
 
-function GetAccounts(){
+function GetAccounts(isLoading: Ref<boolean>){
+    isLoading.value = true
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/admin/getaccounts')
+        .finally(()=>{
+            isLoading.value = false                    
+        })
 }
 
-function UpdateAccounts(data: Array<IUpdateAccounts>){
+function UpdateAccounts(data: Array<IUpdateAccounts>, isLoading: Ref<boolean>){
+    isLoading.value = true
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/admin/updateaccounts', data)
+        .finally(()=>{
+            isLoading.value = false                    
+        })
 }
 
 export {

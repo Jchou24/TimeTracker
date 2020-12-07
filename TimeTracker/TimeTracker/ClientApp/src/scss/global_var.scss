@@ -1,0 +1,40 @@
+@import "./var";
+
+@include vm-global();
+
+hr.vm-test{
+    margin: 0 25px;
+    height: 500px;
+    width: 1px;
+    background: black;
+    background: -webkit-gradient(linear, 180 180, 100% 0, from(white), to(white), color-stop(50%, black));
+}
+
+$alert-color: #922828;
+
+$tmp-color: rgba(165, 126, 126, 0.459);
+$tmp-color: #e6dcdc;
+
+$tmp-color: #922828;
+$tmp-color: #e27c7c;
+
+$tmp-color: #2c3e50;
+$tmp-color: #496586;
+$tmp-color: #f5f3f3;
+
+.flex-center{
+    display: flex;
+    justify-content: center;
+}
+
+.margin-center{
+    margin: 0 auto;
+}
+
+$color-primary: #009688;
+$color-secondary: #00bcd4;
+$color-accent: #607d8b;
+$color-error: #ff5722;
+$color-warning: #ff9800;
+$color-info: #2196f3;
+$color-success: #4caf50;

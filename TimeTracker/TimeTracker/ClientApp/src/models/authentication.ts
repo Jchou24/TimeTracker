@@ -1,15 +1,4 @@
-enum AccountStatus{
-    Uncheck = 0, // 未審核用戶
-    Approved = 1, // 合法用戶
-    Rejected = 2, // 拒絕用戶
-    Suspend = 3, // 停權用戶
-}
-
-enum UserRoles
-{
-    Admin = 1,
-    User = 2,        
-}
+import { AccountStatus } from './constants/authentication'
 
 interface IUserRole{
     id: number;
@@ -37,11 +26,25 @@ interface IUserInfoDetail{
     userRoles: Array<IUserRole>;
 }
 
+function GetAccountRemind(accountStatus: AccountStatus){
+    switch (accountStatus) {
+        case AccountStatus.Uncheck:
+            return "Please connect admin to activate your account."  
+        case AccountStatus.Approved:
+            return ""
+        case AccountStatus.Rejected:
+            return "Your account is rejected."
+        case AccountStatus.Suspend:
+            return "Your account is suspended."
+        default:
+            return ""
+    }
+}
+
 export {
-    AccountStatus,
-    UserRoles,
     IUserRole,
     IClaims,
     IAuthentication,
     IUserInfoDetail,
+    GetAccountRemind,
 }

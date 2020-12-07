@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Store } from 'vuex'
+import { Ref } from '@vue/composition-api'
 
 axios.defaults.withCredentials = true
 
@@ -14,47 +15,67 @@ interface IUpdatePassword{
     password: string;
 }
 
-function GetUserInfo(store: Store<any>){
+function GetUserInfo(store: Store<any>, isLoading: Ref<boolean>){
+    isLoading.value = true
     return axios.get(process.env.VUE_APP_SERVER_URL + 'api/account/getuserinfo')
         .then( response =>{
             // console.log(response.data)
             store.commit("authentication/SetClaims", response.data)
         })
+        .finally(()=>{
+            isLoading.value = false                    
+        })
 }
 
-function IsLogin(store: Store<any>){
+function IsLogin(store: Store<any>, isLoading: Ref<boolean>){
     // console.log("Run IsLogin API")
+    isLoading.value = true
     return axios.get(process.env.VUE_APP_SERVER_URL + 'api/account/islogin')
         .then( response => {
             store.commit("authentication/SetIsAuthenticated", Boolean(response.data))
             if(store.state.authentication.isAuthenticated){
-                GetUserInfo(store)
+                GetUserInfo(store, isLoading)
             }
+        })
+        .finally(()=>{
+            isLoading.value = false                    
         })
 }
 
-function Login(data: ILogin, store: any){
+function Login(data: ILogin, store: any, isLoading: Ref<boolean>){
     // console.log("Run Login API")
+    isLoading.value = true
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/login', data)
         .then(()=>{
-            GetUserInfo(store).then( () => {
+            GetUserInfo(store, isLoading).then( () => {
                 store.commit("authentication/SetIsAuthenticated", true)
             })
         })
+        .finally(()=>{
+            isLoading.value = false                    
+        })
 }
 
-function Logout(store: any){
+function Logout(store: any, isLoading: Ref<boolean>){
     // console.log("run log out")
+    isLoading.value = true
     store.commit("authentication/Init")
     store.commit("pageIdle/Init")
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/logout')
+        .finally(()=>{
+            isLoading.value = false                
+        })
 }
 
-function Regist(data: ILogin, store: any){
+function Regist(data: ILogin, store: any, isLoading: Ref<boolean>){
     // console.log("Run Login API")
+    isLoading.value = true
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/regist', data)
         .then(()=>{
-            Login(data, store)
+            Login(data, store, isLoading)
+        })
+        .finally(()=>{
+            isLoading.value = false                    
         })
 }
 
@@ -62,22 +83,30 @@ function KeepAlive(){
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/keepalive')
 }
 
-function UpdateName(data: ILogin, store: any){
+function UpdateName(data: ILogin, store: any, isLoading: Ref<boolean>){
     // console.log("Run Login API")
+    isLoading.value = true
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/updateName', data)
         .then(()=>{
             store.commit("authentication/SetName", data.name)
         })
+        .finally(()=>{
+            isLoading.value = false                    
+        })
 }
 
-function UpdatePassword(data: IUpdatePassword){
+function UpdatePassword(data: IUpdatePassword, isLoading: Ref<boolean>){
+    isLoading.value = true
     return axios.post(process.env.VUE_APP_SERVER_URL + 'api/account/updatePassword', data)
+        .finally(()=>{
+            isLoading.value = false                    
+        })
 }
 
 export {
     ILogin,
-    IsLogin,
     IUpdatePassword,
+    IsLogin,
     Login,
     Logout,
     GetUserInfo,

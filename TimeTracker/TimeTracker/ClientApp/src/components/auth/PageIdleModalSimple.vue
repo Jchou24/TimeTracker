@@ -1,11 +1,11 @@
 <template>
-    <div class="Modal-Wrapper">
+    <div class="PageIdleModal-Wrapper">
         <transition
             name="custom-classes-transition"
             enter-active-class="animate__animated animate__fadeIn animate__faster"
             leave-active-class="animate__animated animate__fadeOut animate__faster"
         >
-            <div class="Modal" v-if="isShowModal"
+            <div class="PageIdleModal" v-if="isShowModal"
               @click.self="HandleClickBackground"
               >
               <div class="content">
@@ -22,7 +22,7 @@
     import 'animate.css/animate.min.css'
 
     export default defineComponent({
-        name: 'Modal',
+        name: 'PageIdleModal',
         props: {
             isShowModal:{
                 type: Boolean,
@@ -34,7 +34,7 @@
             },
         },
         setup(props, { emit }){
-            console.log(props.isShowModal)
+            // console.log(props.isShowModal)
             const modelValue = computed({ 
                 get: () => props.isShowModal, 
                 set: (value) => emit('update:isShowModal', value) 
@@ -65,7 +65,7 @@
 
 
 <style scoped lang="scss">
-    .Modal{
+    .PageIdleModal{
         position: fixed;
         left: 0;
         top: 0;
@@ -85,7 +85,7 @@
         z-index: 9999;
     }
 
-    .Modal .content{
+    .PageIdleModal .content{
         background: white;
         border-radius: 15px;
         // width: 50%;

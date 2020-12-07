@@ -1,0 +1,238 @@
+// =================================================================================
+// Readme
+// =================================================================================
+/*
+    * name of shared variable starts with '$v-' (v => var)
+    * name of shared mixin starts with 'vm-' (VM => var mixin)
+    * name of shared class starts with '.vm-' (VM => var mixin)
+*/
+
+// =================================================================================
+// variables
+// =================================================================================
+$v-nav-height: 60px;
+
+// =================================================================================
+// media-query setting
+// =================================================================================
+$v-mediaquery-width-sm: 576px;
+$v-mediaquery-width-md: 768px;
+$v-mediaquery-width-l: 992px;
+$v-mediaquery-width-xl: 1200px;
+
+// =================================================================================
+// img
+// =================================================================================
+$imgs-light:(
+    crossword: url("~@theme/img/crossword.png"),
+    dust_scratches: url("~@theme/img/dust_scratches.png"),
+    whitey: url("~@theme/img/whitey.png"),
+    vichy: url("~@theme/img/vichy.png")
+);
+
+$imgs-medium:(
+    xv: url("~@theme/img/xv.png"),
+    xv_light_blue: url("~@theme/img/xv_light_blue.png")
+    );
+    
+$imgs-heavy:(
+    grey_wash_wall: url("~@/assets/img/grey_wash_wall.png"),
+    blue_wash_wall: url("~@/assets/img/blue_wash_wall_4.png"),
+    always_grey: url("~@/assets/img/always_grey.png"),
+    footer_lodyas: url("~@/assets/img/footer_lodyas.png"),
+    dark_wood: url("~@/assets/img/dark_wood.png")
+);
+
+$img-always-grey: url("~@/assets/img/always_grey.png");
+$img-dark-wood: url("~@/assets/img/dark_wood.png");
+$img-triangular: url("~@/assets/img/triangular.png");
+$img-vichy: url("~@/assets/img/vichy.png");
+$img-vichy-dark: url("~@/assets/img/vichy-dark.png");
+$img-xv: url("~@/assets/img/xv_light_blue.png");
+$img-noisy_grid: url("~@/assets/img/noisy_grid.png");
+$img-noisy_grid2: url("~@/assets/img/noisy_grid2.png");
+$img-project_papper: url("~@/assets/img/project_papper.png");
+$img-fabric_of_squares_gray: url("~@/assets/img/fabric_of_squares_gray.png");
+$img-whitey: url("~@/assets/img/whitey.png");
+$img-whitey-light: url("~@/assets/img/whitey-light.png");
+$img-footer_lodyas: url("~@/assets/img/footer_lodyas.png");
+$img-footer_lodyas2: url("~@/assets/img/footer_lodyas2.png");
+
+// =================================================================================
+// font
+// =================================================================================
+$v-font-family-standard: arial,"Microsoft JhengHei","微軟正黑體",sans-serif;
+$v-font-family-standard2: "Helvetica Neue", Helvetica, Arial, sans-serif;;
+
+// =================================================================================
+// text shadow
+// =================================================================================
+.vm-text-shadow-1{
+    text-shadow:2px 2px 2px #aaa;
+}
+
+.vm-text-shadow-2{ 
+    text-shadow:1px 1px 0 #fff, 2px 2px 0 #000; 
+}
+
+// =================================================================================
+// hr style
+// =================================================================================
+hr.vm-style-1 {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+hr.vm-style-1-2 {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #496586, rgba(0, 0, 0, 0));
+}
+
+hr.vm-style-2 {
+    height: 10px;
+    border: 1;
+    box-shadow: inset 0 9px 9px -3px rgba(0, 0, 0, 0.5);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+}
+
+hr.vm-style-3 {
+    border: 0;
+    height: 0; /* Firefox... */
+    box-shadow: 0 0 10px 1px black;
+
+    &:after{ /* Not really supposed to work, but does */
+        content: "\00a0";  /* Prevent margin collapse */
+    }
+}
+
+// =================================================================================
+// Functions
+// =================================================================================
+@mixin vm-global(){
+
+}
+
+@mixin vm-global-box-sizing(){
+    * {
+        -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+                box-sizing: border-box;
+    }
+}
+
+@mixin vm-ransition($target:all, $time: 0.3s, $affect:ease-in-out) {
+    -webkit-transition: $target $time ease-in-out;
+    -moz-transition: $target $time ease-in-out;
+    -ms-transition: $target $time ease-in-out;
+    -o-transition: $target $time ease-in-out;
+    transition: $target $time ease-in-out;
+}
+
+@mixin vm-scale( $size: 1.3 ) {
+    -webkit-transform: scale($size);
+    -ms-transform: scale($size);
+    transform: scale($size);
+}
+
+@mixin vm-box-shadow-1( $hover-width: 8px, $color-hover: #7c7c7c ) {
+    box-shadow: 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover;
+}
+
+@mixin vm-box-shadow-inset-1( $hover-width: 8px, $color-hover: #7c7c7c ) {
+    box-shadow: 
+        inset 0px 0px $hover-width $color-hover, 
+        inset 0px 0px $hover-width $color-hover, 
+        inset 0px 0px $hover-width $color-hover, 
+        inset 0px 0px $hover-width $color-hover, 
+        inset 0px 0px $hover-width $color-hover, 
+        inset 0px 0px $hover-width $color-hover, 
+        inset 0px 0px $hover-width $color-hover;
+}
+
+@mixin vm-drop-shadow-1( $offset-x, $offset-y, $blur-radius, $shadow-color: #000000b3 ) {
+    -webkit-filter: drop-shadow($offset-x $offset-y $blur-radius $shadow-color);
+    filter: drop-shadow($offset-x $offset-y $blur-radius $shadow-color);
+}
+
+@mixin vm-text-shadow-1( $hover-width: 8px, $color-hover: #7c7c7c ) {
+    text-shadow: 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover, 
+        0px 0px $hover-width $color-hover;
+}
+
+@mixin vm-article-meta-box-shadow($color, $color-inset) {
+    $width: 3px;
+    box-shadow: 
+        0px 0px $width $color, 
+        0px 0px $width $color, 
+        0px 0px $width $color, 
+        0px 0px $width $color, 
+        0px 0px $width $color, 
+        0px 0px $width $color, 
+        0px 0px $width $color,
+        1px 1px 20px 1px $color-inset inset, 
+        1px 1px 40px 10px $color-inset inset;
+}
+
+// =================================================================================
+// shadow
+// =================================================================================
+
+.text-shadow-1{
+    text-shadow:2px 2px 2px #aaa;
+}
+
+.text-shadow-2{ 
+    text-shadow:1px 1px 0 #fff, 2px 2px 0 #000; 
+}
+
+.drop-shadow-1{
+    @include vm-drop-shadow-1(12px, 12px, 7px);
+}
+
+.drop-shadow-2{
+    @include vm-drop-shadow-1(5px, 5px, 6px);
+}
+
+i.material-icons::selection{
+    color: initial;
+}
+
+// =================================================================================
+// Global Functions
+// =================================================================================
+@mixin vm-global(){
+    @include vm-global-box-sizing();
+    
+    body {
+        display: block;
+        margin: 0px;
+    }
+}
+
+@mixin vm-global-box-sizing(){
+    * {
+        -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+                box-sizing: border-box;
+    }
+}
+

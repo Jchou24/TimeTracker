@@ -1,11 +1,45 @@
 <template>
     <div class="">
-        <Modal :isShowModal.sync="isShowUserConfirm" :isBackgroundCancellable="false">
+        <!-- <PageIdleModal :isShowModal.sync="isShowUserConfirm" :isBackgroundCancellable="false">
             <div class="notification">
                 <div><p>You will be logged out after {{remainUserComfirmSeconds}}</p></div>
                 <button @click="UserConfirm"> Do not log out</button>
             </div>
-        </Modal>
+        </PageIdleModal> -->
+
+        <v-dialog class="SignIn"
+            v-model="isShowUserConfirm"
+            width="500"
+            persistent
+            >
+            <v-card
+                :loading="true"
+                elevation="10"
+                outlined
+                shaped  
+                >
+                <v-card-title class="pt-8 text-h4 flex-center">網頁閒置中</v-card-title>
+                <v-card-text class="py-2 pb-6 text-h6">
+                    即將在 {{remainUserComfirmSeconds}} 秒後自動登出
+                </v-card-text>
+                <v-divider class="mx-4" />
+                <v-card-actions class="py-6 flex-center">
+                    <div class="text-center">
+                        <v-btn
+                            color="primary"
+                            elevation="2"
+                            large
+                            rounded                        
+                            @click="UserConfirm"
+                        >
+                            <!-- <v-icon left>mdi-play-circle-outline</v-icon> -->
+                            <!-- <v-icon left>mdi-circle-off-outline</v-icon> -->
+                            不要登出
+                        </v-btn>
+                    </div>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -17,10 +51,9 @@
     import $ from "jquery"
     // import { useToast } from "vue-toastification";
     import { useToast } from "vue-toastification/composition"
+    import { ToastSuccess } from '@/util/notification.ts'
     import throttle from 'lodash.throttle'
     import debounce from 'lodash.debounce'
-
-    import Modal from './Modal.vue'
 
     import { Logout, KeepAlive } from '@/api/authentication.ts'
     import { IdleDetermineStates } from '@/models/pageIdle'
@@ -32,7 +65,6 @@
         userConfirmSeconds: number;
         maxIdleTimes: number;
         unidleEvents: string;
-        localStorageKey: string;
         isLogOutRedirect: boolean;
         LogOutRedirectPath: string;
     }
@@ -60,10 +92,6 @@
                 type: String,
                 default: 'mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick'
             },
-            localStorageKey:{
-                type: String,
-                default: "PageIdle"
-            },
             isLogOutRedirect:{
                 type: Boolean,
                 default: true,
@@ -73,9 +101,6 @@
                 default: "/"
             }
         },
-        components:{
-            Modal,
-        },
         setup(props: IProps, { root }){
             const { $store } = root
             // const store = useStore()
@@ -84,7 +109,9 @@
             const { $router, $route } = root
             // const router = useRouter()
             const router = $router
+            const route = $route
 
+            const isLoading = ref(false)
             const remainUserComfirmSeconds = ref(props.userConfirmSeconds)
             const SetIdleDetermineStates = ( idleDetermineStates: IdleDetermineStates ) => store.commit("pageIdle/SetIdleDetermineStates", idleDetermineStates)
             // =================================================================
@@ -101,28 +128,23 @@
             }
             // =================================================================
             const toast = useToast()
-            let toastId: ToastID
+            let toastId: ToastID | undefined
             const SetIsShowLogOutNotification = (value: boolean) => store.commit("pageIdle/SetIsShowLogOutNotification", value)
 
             function OpenToast(){
                 // console.log("OpenToast")
-                return toast.success("User is logged out automatically.", {
-                    icon: {
-                        iconClass: 'material-icons',  
-                        iconChildren: 'check_circle_outline', 
-                        iconTag: 'span'               
-                    },
+                return ToastSuccess(toast, "User is logged out automatically.", {
                     timeout: false,
                     onClick: () => SetIsShowLogOutNotification(false)
-                });
+                })
             }
 
             function HandleLogOutNotification(isShowLogOutNotification: boolean){
                 if(isShowLogOutNotification){
-                    toast.dismiss(toastId)
+                    toast.dismiss(toastId as ToastID)
                     toastId = OpenToast()
                 }else{
-                    toast.dismiss(toastId)
+                    toast.dismiss(toastId as ToastID)
                 }
             }
 
@@ -168,7 +190,7 @@
                                 break
                             }
 
-                            console.log("PageIdle passSeconds", passSeconds)
+                            // console.log("PageIdle passSeconds", passSeconds)
                             if ( passSeconds >= props.idleSeconds) {
                                 SetIdleDetermineStates(IdleDetermineStates.UserComfirm)
                             }
@@ -177,7 +199,7 @@
                         case IdleDetermineStates.UserComfirm:
                             SetRemainUserComfirmSeconds()
 
-                            console.log("UserComfirm passSeconds", passSeconds)
+                            // console.log("UserComfirm")
                             if ( remainUserComfirmSeconds.value <= 0 ) {
                                 SetIdleDetermineStates(IdleDetermineStates.Logout)
                             }
@@ -238,7 +260,7 @@
 
                 if (oldStates == IdleDetermineStates.UserComfirm && newStates == IdleDetermineStates.Logout) {
                     // console.log("IdleDetermineStates.Logout")
-                    Logout(store)
+                    Logout(store, isLoading)
                     SetIsShowLogOutNotification(true)
                 }
             })
@@ -274,6 +296,7 @@
             })
 
             return {
+                isLoading,
                 isShowUserConfirm,
                 remainUserComfirmSeconds,
                 UserConfirm,
