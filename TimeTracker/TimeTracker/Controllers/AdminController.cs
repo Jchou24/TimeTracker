@@ -31,7 +31,7 @@ namespace TimeTracker.Controllers
         [HttpPost]
         public IActionResult GetUncheckAccounts()
         {
-            var unCheckAccounts = this._context.User.Where(x => x.AccountStatus == AccountStatus.Uncheck);
+            var unCheckAccounts = this._context.User.Where(x => x.AccountStatus == AccountStatus.Uncheck).AsNoTracking();
             var returnData = new List<UserInfoDetail>();
             foreach (var unCheckAccount in unCheckAccounts)
             {
@@ -43,7 +43,7 @@ namespace TimeTracker.Controllers
         [HttpPost]
         public IActionResult GetAccounts()
         {
-            var accounts = this._context.User.Select(x => x).Include(x => x.UserRoles).ToList();
+            var accounts = this._context.User.Select(x => x).Include(x => x.UserRoles).AsNoTracking().ToList();
             var returnData = new List<UserInfoDetail>();
             foreach (var account in accounts)
             {
