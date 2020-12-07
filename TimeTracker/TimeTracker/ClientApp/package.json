@@ -18,6 +18,7 @@
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@mdi/font": "^5.8.55",
     "@types/jest": "^24.0.19",
     "@types/jquery": "^3.5.4",
     "@types/lodash.debounce": "^4.0.6",
@@ -47,6 +48,7 @@
     "typescript": "~3.9.3",
     "vue-template-compiler": "^2.6.11",
     "vue-toastification": "^1.7.8",
+    "vuetify": "^2.3.19",
     "vuex-multi-tab-state": "^1.0.15"
   }
 }
