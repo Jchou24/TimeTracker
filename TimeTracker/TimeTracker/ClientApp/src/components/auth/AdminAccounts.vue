@@ -95,6 +95,8 @@
     import { AdminAPIHandler } from '@/api/admin.ts'
     import { IClaims, IUpdateAccounts, IUserRole } from '@/models/authentication.ts'
     import { accountStatusIcon, accountStatusColor, AccountStatus, UserRoles, GetAccountStatusKey, GetUserRolesKey } from '@/models/constants/authentication.ts'
+    import { IStore } from '@/models/store'
+    import { Store } from 'vuex/types/index'
 
     interface IUserInfoDetailExtend extends IClaims{
         admin: string;
@@ -122,7 +124,7 @@
         },
         setup(props: IProps, { emit, root }){
             const { $store, $router } = root
-            const store = $store
+            const store = $store as Store<IStore>
             const router = $router
             const adminAPIHandler = new AdminAPIHandler( store, router )
             const toast = useToast()

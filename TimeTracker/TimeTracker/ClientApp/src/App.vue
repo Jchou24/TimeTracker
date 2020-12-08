@@ -43,16 +43,20 @@
     import NavProgress from '@/components/nav/NavProgress.vue'
     import PageIdle from '@/components/auth/PageIdle.vue'
 
-    import debounce from 'lodash.debounce';    
+    import debounce from 'lodash.debounce'
     import { provideToast, useToast } from "vue-toastification/composition";
-    // Also import the toast's css
     import "vue-toastification/dist/index.css";
 
     import { AuthenticationAPIHandler } from '@/api/authentication.ts'
-    import { GetRedirectPath } from './router/routeConfigs';
-    import { ValidationResults } from './models/authValidation';
+    import { GetRedirectPath, routeConfigs } from './router/routeConfigs';
 
-    // import { WSHandler } from '@/api/webSocket'
+    import { WSHandler } from '@/api/webSocket'
+    import { IStore } from './models/store'
+    import { Store } from 'vuex/types/index'
+    import { GetAccountRemind, IUserRole, ValidationResults } from './models/authentication'
+    import { AccountStatus } from './models/constants/authentication'
+    import { ToastError, ToastWarning } from './util/notification'
+    import { ValidateAuth } from './util/authValidation'
 
     export default defineComponent({
         name: 'App',
@@ -62,13 +66,14 @@
             PageIdle,
         },
         setup(props, { root }){
-            const { $store, $router } = root
+            const { $store, $router, $route } = root
             // const router = useRouter()
             // const store = useStore()
-            const store = $store
+            const store = $store as Store<IStore>
             const router = $router
-
+            const route = $route
             const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
+            // =================================================================
             
             provideToast({ toastClassName: "toast-notification" })
             const toast = useToast()
@@ -80,47 +85,43 @@
                 value ? store.commit("TurnOnLoading") : store.commit("TurnOffLoading")
             })
 
+            const wsHandler = new WSHandler(store, router)
+            store.commit("SetWSHandler", wsHandler)
+            // =================================================================
+            // Watch Account Status
+            watch( () => store.state.authentication.claims.accountStatus, debounce((accountStatus: AccountStatus) => {
+                if( !store.state.authentication.isAuthenticated ){
+                    return
+                }
 
-
-            watch( () => store.state.authentication.isAuthenticated, debounce((isAuthenticated: boolean) => {                
-                if(isAuthenticated == false){
-                    router.push(GetRedirectPath(ValidationResults.logout))
+                if( accountStatus != AccountStatus.Approved ){
+                    ToastError(toast, GetAccountRemind(accountStatus))
+                    router.push(GetRedirectPath(ValidationResults.invalidAccountStatus))
                 }
             }, 250))
 
+            watch( () => store.state.authentication.isAuthenticated, debounce((isAuthenticated: boolean) => {                
+                if( !isAuthenticated ){
+                    // ToastWarning(toast, "")
+                    router.push(GetRedirectPath(ValidationResults.invalidAuthentication))
+                }
+            }, 250))
 
+            let pathName = route.name
+            router.afterEach((to, from) => {
+                pathName = to.name
+            })
+            watch( () => store.state.authentication.claims.userRoles, debounce((userRoles: Array<IUserRole>) => {
+                if( !store.state.authentication.isAuthenticated ){
+                    return
+                }
 
-
-
-
-            // const wsHandler = new WSHandler()
-            // const connection = wsHandler.connection
-
-            // connection.on("broadcastMessage", data => {
-            //     console.log(data);
-            // });
-
-            // connection.on("GetUserInfo", (dataX, dataY) => {
-            //     console.log( "I will get user info", dataX, dataY);
-            // });
-
-
-            // function InitWS(isAuthenticated: boolean){
-            //     if(isAuthenticated){
-            //         connection.start()
-            //             .then(() => connection.invoke("send", "MyName", "Hello"));
-            //     }else{
-            //         connection.stop()
-            //     }
-            // }
-            // InitWS(store.state.authentication.isAuthenticated)
-            // watch( () => store.state.authentication.isAuthenticated, debounce((isAuthenticated: boolean) => {                
-            //     InitWS(isAuthenticated)
-            // }, 250))
-
-            
-            
-            
+                if( pathName && ValidateAuth(pathName, store, routeConfigs) !== ValidationResults.ok ){
+                    ToastWarning(toast, `Sorry! You don't have sufficient permission.`)
+                    router.push(GetRedirectPath(ValidationResults.invalidRole))
+                }
+            }, 250) )
+            // =================================================================
 
             return {
 

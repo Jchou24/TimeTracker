@@ -1,5 +1,6 @@
 import { routeConfigs } from '@/router/routeConfigs'
-import { ValidateAuth, ValidationResults } from '@/models/authValidation'
+import { ValidateAuth } from '@/util/authValidation'
+import { ValidationResults } from '@/models/authentication'
 import { Store } from 'vuex/types/index'
 import { IStore } from './store'
 

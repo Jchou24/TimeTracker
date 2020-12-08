@@ -7,6 +7,7 @@ import { IStore, IStoreRoot } from '@/models/store'
 import authentication from './authentication'
 import pageIdle from './pageIdle'
 import ToastInterface from 'vue-toastification/dist/types/src/ts/interface'
+import { WSHandler } from '@/api/webSocket'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     state: {
         isLoading: false,
         notificator: undefined,
+        wsHandler: undefined,
     },
     mutations: {
         TurnOnLoading: ( state: IStoreRoot ) => {
@@ -24,6 +26,9 @@ export default new Vuex.Store({
         },
         SetNotificator: ( state: IStoreRoot, notificator: ReturnType<typeof ToastInterface> ) => {
             state.notificator = notificator
+        },
+        SetWSHandler: ( state: IStoreRoot, wsHandler: WSHandler ) => {
+            state.wsHandler = wsHandler
         },
     },
     actions: {

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ChatSample.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.DAL;
 using TimeTracker.DAL.Models;
 using TimeTracker.Helper.Auth;
 using TimeTracker.Helper.Extensions;
+using TimeTracker.Hubs;
 using TimeTracker.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,10 +23,15 @@ namespace TimeTracker.Controllers
     public class AdminController : ControllerBase
     {
         protected readonly ApplicationDbContext _context;
+        private readonly IHubContext<WSHub> _hubContext;
+        private readonly WSHubHandler<WSHub> _hubMethods;
 
-        public AdminController(ApplicationDbContext applicationDbContext)
+        public AdminController(ApplicationDbContext applicationDbContext, IHubContext<WSHub> hubContext, WSHubHandler<WSHub> hubMethods)
         {
             this._context = applicationDbContext;
+            this._hubContext = hubContext;
+
+            _hubMethods = hubMethods;
         }
 
         [HttpPost]
@@ -89,8 +95,13 @@ namespace TimeTracker.Controllers
                         }), x => x.Id);
                 }
             }
-
             _context.SaveChanges();
+
+            foreach (var updateAccount in updateAccounts)
+            {
+                _hubMethods.ClientGetUserInfo(updateAccount.Guid);
+            }
+                
             return Ok();
         }
     }

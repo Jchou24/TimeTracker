@@ -32,7 +32,23 @@ function ToastWarning(toast?: ReturnType<typeof ToastInterface>, message: string
     return toast?.warning(message, mergedOption)
 }
 
+function ToastError(toast?: ReturnType<typeof ToastInterface>, message: string, option?: (ToastOptions & {
+    type?: TYPE.WARNING | undefined;
+}) | undefined){
+    const mergedOption = {
+        icon: {
+            iconClass: 'material-icons',  
+            iconChildren: 'error', 
+            iconTag: 'span'   
+        },
+        timeout: 7 * 1000,
+        ...option
+    } as PluginOptions
+    return toast?.error(message, mergedOption)
+}
+
 export {
     ToastSuccess,
     ToastWarning,
+    ToastError,
 }

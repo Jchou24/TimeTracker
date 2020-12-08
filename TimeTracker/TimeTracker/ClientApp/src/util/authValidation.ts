@@ -1,16 +1,8 @@
+import { ValidationResults } from '@/models/authentication'
 import { Store } from 'vuex/types/index'
-import { AccountStatus } from './constants/authentication'
-import { IRouteConfigs } from './routeConfigs'
-import { IStore } from './store'
-
-enum ValidationResults{
-    ok,
-    invalidPath,
-    invalidAccountStatus,
-    invalidAuthentication,
-    invalidRole,
-    logout,
-}
+import { AccountStatus } from '../models/constants/authentication'
+import { IRouteConfigs } from '../models/routeConfigs'
+import { IStore } from '../models/store'
 
 function ValidatePathExists(pathName: string, store: Store<IStore>, routeConfigs: IRouteConfigs){
     const isFoundPath = pathName in routeConfigs
@@ -42,6 +34,7 @@ function ValidateAuthentication(pathName: string, store: Store<IStore>, routeCon
 }
 
 function ValidateRole(pathName: string, store: Store<IStore>, routeConfigs: IRouteConfigs){
+    console.log("ValidateRole")
     const requiredRoles = routeConfigs[pathName].auth.requiredRoles
     const userRoleIds = store.state.authentication.claims.userRoles.map( x => x.id )
 
@@ -74,7 +67,6 @@ function ValidateAuth(pathName: string, store: Store<IStore>, routeConfigs: IRou
 }
 
 export {
-    ValidationResults,
     ValidatePathExists,
     ValidateAccountStatus,
     ValidateAuthentication,

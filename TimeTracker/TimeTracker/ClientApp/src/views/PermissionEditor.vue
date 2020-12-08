@@ -13,6 +13,8 @@
     import AdminUncheckAccounts from '@/components/auth/AdminUncheckAccounts.vue'
     import { IClaims, IUserRole } from '@/models/authentication'
     import { AdminAPIHandler } from '@/api/admin'
+    import { IStore } from '@/models/store'
+    import { Store } from 'vuex/types/index'
 
     export default defineComponent({
         name: 'PermissionEditor',
@@ -26,7 +28,7 @@
         },
         setup(props, { root }){
             const { $store, $router } = root
-            const store = $store
+            const store = $store as Store<IStore>
             const router = $router
             const adminAPIHandler = new AdminAPIHandler( store, router )
 

@@ -59,6 +59,8 @@
     import { IdleDetermineStates } from '@/models/pageIdle'
     // import { ToastID } from 'vue-toastification/src/types';
     import { ToastID } from 'vue-toastification/dist/types/src/types';
+    import { IStore } from '@/models/store'
+    import { Store } from 'vuex/types/index'
 
     interface IProps{
         idleSeconds: number;
@@ -105,7 +107,7 @@
             const { $router, $route, $store } = root
             // const store = useStore()
             // const router = useRouter()
-            const store = $store
+            const store = $store as Store<IStore>
             const router = $router
             const route = $route
 

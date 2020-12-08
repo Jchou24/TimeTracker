@@ -2,7 +2,7 @@ import Home from '../views/Home.vue'
 
 import { UserRoles } from '@/models/constants/authentication'
 import { IRouteConfigs } from '@/models/routeConfigs'
-import { ValidationResults } from '@/models/authValidation'
+import { ValidationResults } from '@/models/authentication'
 
 const routeConfigs: IRouteConfigs = {
     Home: {

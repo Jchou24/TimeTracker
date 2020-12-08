@@ -2,7 +2,8 @@ import { VueRouter } from 'vue-router/types/router'
 import { Store } from 'vuex/types/index'
 
 import { IStore } from '@/models/store'
-import { ValidateAuth, ValidationResults } from '@/models/authValidation'
+import { ValidateAuth } from '@/util/authValidation'
+import { ValidationResults } from '@/models/authentication'
 import { GetRedirectPath, routeConfigs } from './routeConfigs'
 
 import { ToastWarning } from '@/util/notification'

@@ -98,6 +98,8 @@
 
     import { AuthenticationAPIHandler } from '@/api/authentication.ts'
     import { ILogin } from '@/models/authentication';
+    import { IStore } from '@/models/store';
+    import { Store } from 'vuex/types/index';
 
     export default defineComponent({
         name: 'Register',
@@ -106,7 +108,7 @@
         },
         setup(props, { emit, root }){
             const { $store, $router } = root
-            const store = $store
+            const store = $store as Store<IStore>
             const router = $router
             const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
             const toast = useToast()

@@ -35,7 +35,8 @@
     import { IUserRole } from '@/models/authentication.ts'
     import { UserRoles } from '@/models/constants/authentication.ts'
     import { allNavLeftItems, allNavRightItems, FiltNavItems } from '@/models/nav.ts'
-    
+    import { IStore } from '@/models/store'
+    import { Store } from 'vuex/types/index'    
 
     export default defineComponent({
         name: 'Nav',
@@ -50,7 +51,7 @@
         setup(props, { root }){
             const { $store, $router } = root
             // const store = useStore()
-            const store = $store
+            const store = $store as Store<IStore>
             const router = $router
             const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
 
@@ -80,7 +81,7 @@
             const NavigationMessage = () => `Hi ${displayName.value}!`
             const authInfo = ref(NavigationMessage())
             watch( () => store.state.authentication.claims.name, (name: string) => {
-              authInfo.value = NavigationMessage()
+                authInfo.value = NavigationMessage()
             })
 
             const isAuthenticated = computed( () => store.state.authentication.isAuthenticated )

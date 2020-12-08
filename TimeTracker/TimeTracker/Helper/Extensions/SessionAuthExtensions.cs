@@ -28,7 +28,7 @@ namespace TimeTracker.Helper.Extensions
         /// <returns></returns>
         public static int? GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
-            string idString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            string idString = claimsPrincipal.FindFirstValue(ClaimTypes.Sid);
             int id = -1;
 
             if (!Int32.TryParse(idString, out id))

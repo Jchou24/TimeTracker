@@ -12,7 +12,7 @@ class AuthenticationAPIHandler extends APIHandler{
         super(store, router)
     }
 
-    GetUserInfo(isLoading: Ref<boolean>,
+    GetUserInfo(isLoading?: Ref<boolean>,
             SuccessFunc?: (response: AxiosResponse<any>) => void, 
             ErrorFunc?: (error: any) => void){
         this.HttpGet('api/Account/GetUserInfo', isLoading, (response) =>{

@@ -1,8 +1,11 @@
+using AutoMapper;
+using ChatSample.Hubs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +16,7 @@ using System.IO;
 using System.Threading.Tasks;
 using TimeTracker.DAL;
 using TimeTracker.DAL.DBModels;
+using TimeTracker.Hubs;
 using VueCliMiddleware;
 
 namespace TimeTracker
@@ -31,10 +35,21 @@ namespace TimeTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUserAuthHandler<User, int>, UserAuthHandler>();
+
+            services.AddTransient<WSHubHandler<WSHub>>();
+            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
             // NOTE: PRODUCTION Ensure this is the same path that is specified in your webpack output
             services.AddSpaStaticFiles(configuration =>
@@ -53,7 +68,7 @@ namespace TimeTracker
                 });
 
             // Add service and create Policy with options
-            services.AddCors(options =>{});
+            services.AddCors(options => {});
 
             // Add cookie-based authentication
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -110,7 +125,7 @@ namespace TimeTracker
             // Authentication
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 //endpoints.MapControllerRoute(
@@ -118,6 +133,7 @@ namespace TimeTracker
                 //    pattern: "{controller}/{action=Index}/{id?}");
 
                 endpoints.MapControllers();
+                endpoints.MapHub<WSHub>("/wssync");
             });
 
             app.UseSpa(spa =>

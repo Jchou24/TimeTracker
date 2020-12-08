@@ -42,6 +42,15 @@ interface IUpdateAccounts{
     IsUpdateUserRoles: boolean;
 }
 
+enum ValidationResults{
+    ok,
+    invalidPath,
+    invalidAccountStatus,
+    invalidAuthentication,
+    invalidRole,
+    logout,
+}
+
 function GetAccountRemind(accountStatus: AccountStatus){
     switch (accountStatus) {
         case AccountStatus.Uncheck:
@@ -64,5 +73,6 @@ export {
     ILogin,
     IUpdatePassword,
     IUpdateAccounts,
+    ValidationResults,
     GetAccountRemind,
 }
