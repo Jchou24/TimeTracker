@@ -97,7 +97,7 @@
 
                 adminAPIHandler.UpdateAccounts(updateAccounts, isLoading, ()=>{
                         const messageTitle = uncheckAccount.name ? uncheckAccount.name : uncheckAccount.email
-                        ToastSuccess(toast, `${messageTitle}: Account status is updated!`)
+                        ToastSuccess( `${messageTitle}: Account status is updated!`, toast )
                         HandlerGetUncheckAccounts()
                         HandleGetAccounts()
                     })

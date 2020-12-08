@@ -135,7 +135,7 @@
 
             function OpenToast(){
                 // console.log("OpenToast")
-                return ToastSuccess(toast, "User is logged out automatically.", {
+                return ToastSuccess( "User is logged out automatically.", toast, {
                     timeout: false,
                     onClick: () => SetIsShowLogOutNotification(false)
                 })
@@ -158,7 +158,7 @@
                 idleTimes.value = 0
             }
 
-            function GetPassSeconds(startCountDownTimestamp: Date): number | undefined{
+            function GetPassSeconds(startCountDownTimestamp?: Date): number | undefined{
                 // read startCountDownTimestamp from local storage
                 // startCountDownTimestamp may be setted from other tab
                 const currentTimestamp = new Date()

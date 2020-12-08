@@ -148,7 +148,7 @@
                 authenticationAPIHandler.Regist(logindata.value as ILogin, isLoading, () => {
                     EmptyErrorMessages()
                     isRegistOk.value = true
-                    ToastSuccess(toast, "Registration success! Please connect admin to activate your account.", { timeout: 15 * 1000 })
+                    ToastSuccess( "Registration success! Please connect admin to activate your account.", toast, { timeout: 15 * 1000 })
                 }, ( error ) => {
                     console.log( error )
                     isRegistOk.value = false

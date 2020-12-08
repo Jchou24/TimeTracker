@@ -95,14 +95,14 @@
                 }
 
                 if( accountStatus != AccountStatus.Approved ){
-                    ToastError(toast, GetAccountRemind(accountStatus))
+                    ToastError( GetAccountRemind(accountStatus)), toast
                     router.push(GetRedirectPath(ValidationResults.invalidAccountStatus))
                 }
             }, 250))
 
             watch( () => store.state.authentication.isAuthenticated, debounce((isAuthenticated: boolean) => {                
                 if( !isAuthenticated ){
-                    // ToastWarning(toast, "")
+                    // ToastWarning("", toast)
                     router.push(GetRedirectPath(ValidationResults.invalidAuthentication))
                 }
             }, 250))
@@ -117,7 +117,7 @@
                 }
 
                 if( pathName && ValidateAuth(pathName, store, routeConfigs) !== ValidationResults.ok ){
-                    ToastWarning(toast, `Sorry! You don't have sufficient permission.`)
+                    ToastWarning(`Sorry! You don't have sufficient permission.`, toast)
                     router.push(GetRedirectPath(ValidationResults.invalidRole))
                 }
             }, 250) )

@@ -65,12 +65,12 @@ class APIHandler{
         switch (errorStatusCode) {
             case 401:
                 this.LogoutProcess()
-                ToastWarning(toast, `Sorry! You don't have sufficient permission. You will be signed out automatically.` )
+                ToastWarning( `Sorry! You don't have sufficient permission. You will be signed out automatically.`, toast )
                 break;
 
             case 403:
                 this._rootRouter.push(GetRedirectPath(ValidationResults.invalidRole))
-                ToastWarning(toast, `Sorry! You don't have sufficient permission.` )
+                ToastWarning( `Sorry! You don't have sufficient permission.`, toast )
                 break;
         
             default:

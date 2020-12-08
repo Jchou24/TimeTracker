@@ -212,7 +212,7 @@
                 }
                 passwordErrorMessage.value = ""
                 authenticationAPIHandler.UpdatePassword({ currentPassword: currentPassword.value, password: password.value } as IUpdatePassword, isUpdatePasswordLoading, ()=>{
-                        ToastSuccess(toast, "Password changed!.")
+                        ToastSuccess( "Password changed!.", toast )
                         isResetPassword.value = false
                         currentPassword.value = ""
                         password.value = ""

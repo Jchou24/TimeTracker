@@ -256,7 +256,7 @@
 
                 const updateAccounts = Object.values(tmpUpdateAccounts) as Array<IUpdateAccounts>
                 adminAPIHandler.UpdateAccounts(updateAccounts, isLoading, ()=>{
-                        ToastSuccess(toast, "Account(s) updated!")
+                        ToastSuccess( "Account(s) updated!", toast)
                         HandleGetAccounts()
                     })           
             }

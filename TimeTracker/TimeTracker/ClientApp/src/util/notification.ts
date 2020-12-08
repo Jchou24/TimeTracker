@@ -2,7 +2,7 @@ import { PluginOptions, ToastOptions } from "vue-toastification/dist/types/src/t
 import ToastInterface from "vue-toastification/dist/types/src/ts/interface"
 import { TYPE, POSITION } from "vue-toastification/dist/types/src/ts/constants";
 
-function ToastSuccess(toast?: ReturnType<typeof ToastInterface>, message: string, option?: (ToastOptions & {
+function ToastSuccess(message: string, toast?: ReturnType<typeof ToastInterface>, option?: (ToastOptions & {
     type?: TYPE.SUCCESS | undefined;
 }) | undefined){
     const mergedOption = {
@@ -17,7 +17,7 @@ function ToastSuccess(toast?: ReturnType<typeof ToastInterface>, message: string
     return toast?.success(message, mergedOption)
 }
 
-function ToastWarning(toast?: ReturnType<typeof ToastInterface>, message: string, option?: (ToastOptions & {
+function ToastWarning(message: string, toast?: ReturnType<typeof ToastInterface>, option?: (ToastOptions & {
     type?: TYPE.WARNING | undefined;
 }) | undefined){
     const mergedOption = {
@@ -32,7 +32,7 @@ function ToastWarning(toast?: ReturnType<typeof ToastInterface>, message: string
     return toast?.warning(message, mergedOption)
 }
 
-function ToastError(toast?: ReturnType<typeof ToastInterface>, message: string, option?: (ToastOptions & {
+function ToastError(message: string, toast?: ReturnType<typeof ToastInterface>, option?: (ToastOptions & {
     type?: TYPE.WARNING | undefined;
 }) | undefined){
     const mergedOption = {
