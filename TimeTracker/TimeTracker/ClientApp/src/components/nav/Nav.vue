@@ -15,7 +15,7 @@
             :key="'right'+idx" />
             
         <NavLinkItem class="individual-settings" routeConfigsKey="IndividualSettings" mdiIcon v-if="isAuthenticated" />
-        <NavLinkItem routeConfigsKey="Registration" mdiIcon displayName left v-else />
+        <NavLinkItem routeConfigsKey="Registration" mdiIcon displayName left v-if="!isAuthenticated" />
 
         <NavItem mdiIcon="mdi-logout" left @click.native="SignOut" v-if="isAuthenticated">登出</NavItem>
         <NavItem mdiIcon="mdi-login" left @click.native="isOpenModal=true" v-else>登入</NavItem>
@@ -31,7 +31,7 @@
     import SignIn from "@/components/auth/SignIn.vue"    
     
     import { routeConfigs } from '@/router/routeConfigs'
-    import { Logout } from '@/api/authentication.ts'
+    import { AuthenticationAPIHandler } from '@/api/authentication.ts'
     import { IUserRole } from '@/models/authentication.ts'
     import { UserRoles } from '@/models/constants/authentication.ts'
     import { allNavLeftItems, allNavRightItems, FiltNavItems } from '@/models/nav.ts'
@@ -48,9 +48,11 @@
             SignIn,
         },
         setup(props, { root }){
-            const { $store } = root
+            const { $store, $router } = root
             // const store = useStore()
             const store = $store
+            const router = $router
+            const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
 
             const navLeftItems = computed( () => FiltNavItems( allNavLeftItems, store ))
             const navRightItems = computed( () => FiltNavItems( allNavRightItems, store ))
@@ -59,7 +61,7 @@
 
             const isLoading = ref(false)
             function SignOut(){
-                Logout(store, isLoading)
+                authenticationAPIHandler.Logout(isLoading)
                 isOpenModal.value = false
             }
             

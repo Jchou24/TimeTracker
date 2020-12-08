@@ -12,7 +12,7 @@
     import AdminAccounts from '@/components/auth/AdminAccounts.vue'
     import AdminUncheckAccounts from '@/components/auth/AdminUncheckAccounts.vue'
     import { IClaims, IUserRole } from '@/models/authentication'
-    import { GetAccounts } from '@/api/admin'
+    import { AdminAPIHandler } from '@/api/admin'
 
     export default defineComponent({
         name: 'PermissionEditor',
@@ -24,25 +24,25 @@
             AdminAccounts,
             AdminUncheckAccounts,
         },
-        setup(props){
+        setup(props, { root }){
+            const { $store, $router } = root
+            const store = $store
+            const router = $router
+            const adminAPIHandler = new AdminAPIHandler( store, router )
 
             const isLoading = ref(false)
             const accounts = ref([] as Array<IClaims>)
             function HandleGetAccounts(){
-                return GetAccounts(isLoading, ( response )=>{
-                        accounts.value = response.data as Array<IClaims>
-                    })
+                adminAPIHandler.GetAccounts(isLoading, ( response )=>{
+                    accounts.value = response.data as Array<IClaims>
+                })
             }
             HandleGetAccounts()
-
-
 
             return {
                 accounts,
                 HandleGetAccounts
-
             }
-
         }
     })
 </script>

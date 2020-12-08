@@ -92,8 +92,8 @@
     import { ToastSuccess } from '@/util/notification.ts'
     import { DataItemsPerPageOption, DataTableHeader } from 'vuetify'
 
-    import { IUpdateAccounts, GetUncheckAccounts, GetAccounts, UpdateAccounts } from '@/api/admin.ts'
-    import { IClaims, IUserRole } from '@/models/authentication.ts'
+    import { AdminAPIHandler } from '@/api/admin.ts'
+    import { IClaims, IUpdateAccounts, IUserRole } from '@/models/authentication.ts'
     import { accountStatusIcon, accountStatusColor, AccountStatus, UserRoles, GetAccountStatusKey, GetUserRolesKey } from '@/models/constants/authentication.ts'
 
     interface IUserInfoDetailExtend extends IClaims{
@@ -120,7 +120,11 @@
                 required: true
             }
         },
-        setup(props: IProps, { emit }){
+        setup(props: IProps, { emit, root }){
+            const { $store, $router } = root
+            const store = $store
+            const router = $router
+            const adminAPIHandler = new AdminAPIHandler( store, router )
             const toast = useToast()
 
             const isLoading = ref(false)
@@ -249,7 +253,7 @@
                 })
 
                 const updateAccounts = Object.values(tmpUpdateAccounts) as Array<IUpdateAccounts>
-                UpdateAccounts(updateAccounts, isLoading, ()=>{
+                adminAPIHandler.UpdateAccounts(updateAccounts, isLoading, ()=>{
                         ToastSuccess(toast, "Account(s) updated!")
                         HandleGetAccounts()
                     })           

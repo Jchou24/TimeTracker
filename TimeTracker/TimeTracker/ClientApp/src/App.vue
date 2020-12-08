@@ -48,9 +48,11 @@
     // Also import the toast's css
     import "vue-toastification/dist/index.css";
 
-    import { IsLogin } from '@/api/authentication.ts'
+    import { AuthenticationAPIHandler } from '@/api/authentication.ts'
     import { GetRedirectPath } from './router/routeConfigs';
     import { ValidationResults } from './models/authValidation';
+
+    // import { WSHandler } from '@/api/webSocket'
 
     export default defineComponent({
         name: 'App',
@@ -64,14 +66,16 @@
             // const router = useRouter()
             // const store = useStore()
             const store = $store
-            const router = $router            
+            const router = $router
+
+            const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
             
             provideToast({ toastClassName: "toast-notification" })
             const toast = useToast()
             store.commit("SetNotificator", toast)
             
             const isLoading = ref(false)
-            IsLogin(store, isLoading)
+            authenticationAPIHandler.IsLogin(isLoading)
             watch( isLoading, (value: boolean) => {
                 value ? store.commit("TurnOnLoading") : store.commit("TurnOffLoading")
             })
@@ -83,6 +87,40 @@
                     router.push(GetRedirectPath(ValidationResults.logout))
                 }
             }, 250))
+
+
+
+
+
+
+            // const wsHandler = new WSHandler()
+            // const connection = wsHandler.connection
+
+            // connection.on("broadcastMessage", data => {
+            //     console.log(data);
+            // });
+
+            // connection.on("GetUserInfo", (dataX, dataY) => {
+            //     console.log( "I will get user info", dataX, dataY);
+            // });
+
+
+            // function InitWS(isAuthenticated: boolean){
+            //     if(isAuthenticated){
+            //         connection.start()
+            //             .then(() => connection.invoke("send", "MyName", "Hello"));
+            //     }else{
+            //         connection.stop()
+            //     }
+            // }
+            // InitWS(store.state.authentication.isAuthenticated)
+            // watch( () => store.state.authentication.isAuthenticated, debounce((isAuthenticated: boolean) => {                
+            //     InitWS(isAuthenticated)
+            // }, 250))
+
+            
+            
+            
 
             return {
 

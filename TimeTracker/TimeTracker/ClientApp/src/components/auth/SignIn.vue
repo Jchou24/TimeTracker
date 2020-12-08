@@ -60,7 +60,8 @@
 
 <script lang="ts">
     import { defineComponent, computed, ref, reactive } from '@vue/composition-api';
-    import { ILogin, Login } from '@/api/authentication.ts'
+    import { AuthenticationAPIHandler } from '@/api/authentication.ts'
+    import { ILogin } from '@/models/authentication';
 
     export default defineComponent({
         name: 'SignIn',
@@ -70,8 +71,11 @@
             }
         },
         setup(props, { emit, root }){
-            const { $store } = root
+            const { $store, $router } = root
             const store = $store
+            const router = $router
+
+            const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
 
             const password = ref("")
             const isAuthenticated = computed(() => store.state.authentication.isAuthenticated)
@@ -122,7 +126,7 @@
                     return
                 }
                 
-                Login(logindata.value as ILogin, store, isLoading, () => {
+                authenticationAPIHandler.Login(logindata.value as ILogin, isLoading, () => {
                     EmptyErrorMessages()
                     password.value = ""
                     isOpenModalRef.value = false

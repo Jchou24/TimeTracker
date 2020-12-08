@@ -23,9 +23,6 @@
                                 disabled
                             />
                         </v-col>
-                        <!-- <v-col cols="12" class="error--text" v-if="accountRemind.length > 0">
-                            {{accountRemind}}
-                        </v-col> -->
                     </v-row>
 
                     <v-row no-gutters>
@@ -129,7 +126,7 @@
                         </v-col>
                         <v-col cols="4"></v-col>
                         <v-col cols="8" class="">
-                            <v-btn
+                            <v-btn class="text-capitalize"
                                 color="primary"
                                 :loading="isUpdatePasswordLoading"
                                 elevation="2"
@@ -156,16 +153,18 @@
     import { useToast } from "vue-toastification/composition"
     import { ToastSuccess } from '@/util/notification.ts'
 
-    import { ILogin, IUpdatePassword, UpdateName, UpdatePassword } from '@/api/authentication.ts'
-    import { IUserRole, GetAccountRemind } from '@/models/authentication.ts'
+    import { AuthenticationAPIHandler } from '@/api/authentication.ts'
+    import { IUserRole, GetAccountRemind, ILogin, IUpdatePassword } from '@/models/authentication.ts'
     import { AccountStatus } from '@/models/constants/authentication.ts'
 
     export default defineComponent({
         name: 'Settings',
         setup(props, { emit, root }){
-            const { $store } = root
+            const { $store, $router } = root
             // const store = useStore()
             const store = $store
+            const router = $router
+            const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
             const toast = useToast()
 
             const accountStatus = computed( () => AccountStatus[store.state.authentication.claims.accountStatus] )
@@ -188,7 +187,7 @@
                     return
                 }
 
-                UpdateName( { name: name.value } as ILogin, store, isUpdateNameLoading)
+                authenticationAPIHandler.UpdateName( { name: name.value } as ILogin, isUpdateNameLoading)
             }
 
             const isResetPassword = ref(false)
@@ -210,7 +209,7 @@
                     return
                 }
                 passwordErrorMessage.value = ""
-                UpdatePassword({ currentPassword: currentPassword.value, password: password.value } as IUpdatePassword, isUpdatePasswordLoading, ()=>{
+                authenticationAPIHandler.UpdatePassword({ currentPassword: currentPassword.value, password: password.value } as IUpdatePassword, isUpdatePasswordLoading, ()=>{
                         ToastSuccess(toast, "Password changed!.")
                         isResetPassword.value = false
                         currentPassword.value = ""
@@ -275,46 +274,4 @@
         height: 35px;
         border-radius: 15px;
     }
-    
-    // .setting-info .error--text.col-12{
-    //     margin-top: -15px;
-    //     height: 48px;
-    //     font-size: 18px;
-    // }
-
-    // fieldset
-    // $color-error
-
-
-
-
-
-    // .Settings{
-    //     display: flex;
-    //     flex-direction: column;
-    //     justify-content: center;
-    // }
-
-    // .row{
-    //     padding: 5px;
-    //     display: flex;
-    //     flex-direction: row;
-    //     justify-content: center;
-    // }
-
-    // .row .row-title{
-    //     margin-right: 10px;
-    //     width: 180px;
-    //     border-right: 1px solid black;
-    // }
-
-    // .row .row-info{
-    //     width: 200px;
-    //     display: flex;
-    //     flex-direction: row;
-    // }
-
-    // .warning{
-    //     color: orangered;
-    // }
 </style>

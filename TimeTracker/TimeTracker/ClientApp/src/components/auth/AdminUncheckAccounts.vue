@@ -52,8 +52,8 @@
 
     import { DataTableHeader } from 'vuetify/types'
 
-    import { IUpdateAccounts, GetUncheckAccounts, UpdateAccounts } from '@/api/admin.ts'
-    import { IClaims } from '@/models/authentication.ts'
+    import { AdminAPIHandler } from '@/api/admin.ts'
+    import { IClaims, IUpdateAccounts } from '@/models/authentication.ts'
     import { AccountStatus } from '@/models/constants/authentication.ts'
 
     export default defineComponent({
@@ -61,13 +61,17 @@
         components:{
             GeneralCard
         },
-        setup(props, { emit }){
+        setup(props, { emit, root }){
+            const { $store, $router } = root
+            const store = $store
+            const router = $router
+            const adminAPIHandler = new AdminAPIHandler( store, router )
             const toast = useToast()
 
             const isLoading = ref(false)
             const uncheckAccounts = ref([] as Array<IClaims>)
             function HandlerGetUncheckAccounts(){
-                GetUncheckAccounts(isLoading, (response)=>{
+                adminAPIHandler.GetUncheckAccounts(isLoading, (response)=>{
                     uncheckAccounts.value = response.data as Array<IClaims>
                 })
             }
@@ -89,7 +93,7 @@
                     IsUpdateUserRoles: false,
                 }] as Array<IUpdateAccounts>
 
-                UpdateAccounts(updateAccounts, isLoading, ()=>{
+                adminAPIHandler.UpdateAccounts(updateAccounts, isLoading, ()=>{
                         const messageTitle = uncheckAccount.name ? uncheckAccount.name : uncheckAccount.email
                         ToastSuccess(toast, `${messageTitle}: Account status is updated!`)
                         HandlerGetUncheckAccounts()

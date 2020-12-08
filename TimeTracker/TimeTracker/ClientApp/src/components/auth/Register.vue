@@ -96,7 +96,8 @@
     import { useToast } from "vue-toastification/composition"
     import { ToastSuccess } from '@/util/notification.ts'
 
-    import { ILogin, Regist } from '@/api/authentication.ts'
+    import { AuthenticationAPIHandler } from '@/api/authentication.ts'
+    import { ILogin } from '@/models/authentication';
 
     export default defineComponent({
         name: 'Register',
@@ -104,8 +105,10 @@
 
         },
         setup(props, { emit, root }){
-            const { $store } = root
+            const { $store, $router } = root
             const store = $store
+            const router = $router
+            const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
             const toast = useToast()
 
             const email = ref("")
@@ -140,7 +143,7 @@
                 if (!isPasswordComfirmed.value){
                     return                    
                 }
-                Regist(logindata.value as ILogin, store, isLoading, () => {
+                authenticationAPIHandler.Regist(logindata.value as ILogin, isLoading, () => {
                     EmptyErrorMessages()
                     isRegistOk.value = true
                     ToastSuccess(toast, "Registration success! Please connect admin to activate your account.", { timeout: 15 * 1000 })

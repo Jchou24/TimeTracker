@@ -1,42 +1,37 @@
 import { AxiosResponse } from 'axios'
 import { Ref } from '@vue/composition-api'
 
-import { HttpGet, HttpPost } from '@/util/apiHandler.ts'
-import { AccountStatus } from '@/models/constants/authentication.ts'
+import { APIHandler } from '@/util/apiHandler.ts'
+import { Store } from 'vuex/types/index'
+import VueRouter from 'vue-router'
+import { IStore } from '@/models/store'
+import { IUpdateAccounts } from '@/models/authentication'
 
-interface IUpdateAccounts{
-    Guid: string;
-    Name: string;
-    IsUpdateName: boolean;
+class AdminAPIHandler extends APIHandler{
+    
+    constructor( store: Store<IStore>, router: VueRouter ) {
+        super(store, router)
+    }
 
-    AccountStatus: AccountStatus;
-    IsUpdateAccountStatus: boolean;
+    GetUncheckAccounts(isLoading: Ref<boolean>, 
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpPost('api/Admin/GetUncheckAccounts', isLoading, undefined, SuccessFunc, ErrorFunc)
+    }
 
-    UserRoles: Array<number>;
-    IsUpdateUserRoles: boolean;
-}
+    GetAccounts(isLoading: Ref<boolean>, 
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpPost('api/Admin/GetAccounts', isLoading, undefined, SuccessFunc, ErrorFunc)
+    }
 
-function GetUncheckAccounts(isLoading: Ref<boolean>, 
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){
-    HttpPost('api/Admin/GetUncheckAccounts', isLoading, undefined, SuccessFunc, ErrorFunc)
-}
-
-function GetAccounts(isLoading: Ref<boolean>, 
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){
-    HttpPost('api/Admin/GetAccounts', isLoading, undefined, SuccessFunc, ErrorFunc)
-}
-
-function UpdateAccounts(data: Array<IUpdateAccounts>, isLoading: Ref<boolean>, 
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){
-    HttpPost('api/Admin/UpdateAccounts', isLoading, data, SuccessFunc, ErrorFunc)
+    UpdateAccounts(data: Array<IUpdateAccounts>, isLoading: Ref<boolean>, 
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpPost('api/Admin/UpdateAccounts', isLoading, data, SuccessFunc, ErrorFunc)
+    }
 }
 
 export {
-    IUpdateAccounts,
-    GetUncheckAccounts,
-    GetAccounts,
-    UpdateAccounts,
+    AdminAPIHandler
 }

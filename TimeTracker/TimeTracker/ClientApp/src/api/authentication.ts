@@ -1,107 +1,95 @@
 import { AxiosResponse } from 'axios'
 import { Store } from 'vuex'
 import { Ref } from '@vue/composition-api'
-import { HttpGet, HttpPost } from '@/util/apiHandler.ts'
-import { IClaims } from '@/models/authentication'
+import { APIHandler } from '@/util/apiHandler.ts'
+import { IClaims, ILogin, IUpdatePassword } from '@/models/authentication'
+import { IStore } from '@/models/store'
+import VueRouter from 'vue-router'
 
-interface ILogin{
-    email: string;
-    name: string;
-    password: string;
-} 
+class AuthenticationAPIHandler extends APIHandler{
+    
+    constructor( store: Store<IStore>, router: VueRouter ) {
+        super(store, router)
+    }
 
-interface IUpdatePassword{
-    currentPassword: string;
-    password: string;
-}
+    GetUserInfo(isLoading: Ref<boolean>,
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpGet('api/Account/GetUserInfo', isLoading, (response) =>{
+            if(SuccessFunc){
+                SuccessFunc(response)
+            }
+            this._store.commit("authentication/SetClaims", response.data as IClaims )
+        }, ErrorFunc)
+    }
 
-function GetUserInfo(store: Store<any>, isLoading: Ref<boolean>,
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){    
-    HttpGet('api/Account/GetUserInfo', isLoading, (response) =>{
-        if(SuccessFunc){
-            SuccessFunc(response)
-        }
-        store.commit("authentication/SetClaims", response.data as IClaims )
-    }, ErrorFunc)
-}
+    IsLogin(isLoading: Ref<boolean>,
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){    
+        this.HttpGet('api/Account/IsLogin', isLoading, (response) =>{
+            if(SuccessFunc){
+                SuccessFunc(response)
+            }
+            this._store.commit("authentication/SetIsAuthenticated", Boolean(response.data))
+            if(this._store.state.authentication.isAuthenticated){
+                this.GetUserInfo(isLoading)
+            }
+        }, ErrorFunc)
+    }
 
-function IsLogin(store: Store<any>, isLoading: Ref<boolean>,
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){    
-    HttpGet('api/Account/IsLogin', isLoading, (response) =>{
-        if(SuccessFunc){
-            SuccessFunc(response)
-        }
-        store.commit("authentication/SetIsAuthenticated", Boolean(response.data))
-        if(store.state.authentication.isAuthenticated){
-            GetUserInfo(store, isLoading)
-        }
-    }, ErrorFunc)
-}
+    Login(data: ILogin, isLoading: Ref<boolean>,
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpPost('api/Account/Login', isLoading, data, (response) =>{
+            if(SuccessFunc){
+                SuccessFunc(response)
+            }
+            this.GetUserInfo( isLoading, () => {
+                this._store.commit("authentication/SetIsAuthenticated", true)
+            })
+        }, ErrorFunc)
+    }
 
-function Login(data: ILogin, store: any, isLoading: Ref<boolean>,
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){
-    HttpPost('api/Account/Login', isLoading, data, (response) =>{
-        if(SuccessFunc){
-            SuccessFunc(response)
-        }
-        GetUserInfo(store, isLoading, () => {
-            store.commit("authentication/SetIsAuthenticated", true)
-        })
-    }, ErrorFunc)
-}
+    Logout(isLoading: Ref<boolean>,
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.LogoutProcess()
+        this.HttpPost('api/Account/Logout', isLoading, undefined, SuccessFunc, ErrorFunc)
+    }
 
-function Logout(store: any, isLoading: Ref<boolean>,
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){
-    store.commit("authentication/Init")
-    store.commit("pageIdle/Init")
-    HttpPost('api/Account/Logout', isLoading, undefined, SuccessFunc, ErrorFunc)
-}
+    Regist(data: ILogin, isLoading: Ref<boolean>, 
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpPost('api/Account/Regist', isLoading, data, (response) =>{
+            if(SuccessFunc){
+                SuccessFunc(response)
+            }
+            this.Login(data, isLoading)
+        }, ErrorFunc)
+    }
 
-function Regist(data: ILogin, store: any, isLoading: Ref<boolean>, 
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){
-    HttpPost('api/Account/Regist', isLoading, data, (response) =>{
-        if(SuccessFunc){
-            SuccessFunc(response)
-        }
-        Login(data, store, isLoading)
-    }, ErrorFunc)
-}
+    KeepAlive(){
+        this.HttpPost('api/Account/KeepAlive')
+    }
 
-function KeepAlive(){
-    HttpPost('api/Account/KeepAlive')
-}
+    UpdateName(data: ILogin, isLoading: Ref<boolean>, 
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpPost('api/Account/UpdateName', isLoading, data, (response) =>{
+            if(SuccessFunc){
+                SuccessFunc(response)
+            }
+            this._store.commit("authentication/SetName", data.name)
+        }, ErrorFunc)
+    }
 
-function UpdateName(data: ILogin, store: any, isLoading: Ref<boolean>, 
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){
-    HttpPost('api/Account/UpdateName', isLoading, data, (response) =>{
-        if(SuccessFunc){
-            SuccessFunc(response)
-        }
-        store.commit("authentication/SetName", data.name)
-    }, ErrorFunc)
-}
-
-function UpdatePassword(data: IUpdatePassword, isLoading: Ref<boolean>, 
-        SuccessFunc?: (response: AxiosResponse<any>) => void, 
-        ErrorFunc?: (error: any) => void){
-    HttpPost('api/Account/UpdatePassword', isLoading, data, SuccessFunc, ErrorFunc)
+    UpdatePassword(data: IUpdatePassword, isLoading: Ref<boolean>, 
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpPost('api/Account/UpdatePassword', isLoading, data, SuccessFunc, ErrorFunc)
+    }
 }
 
 export {
-    ILogin,
-    IUpdatePassword,
-    IsLogin,
-    Login,
-    Logout,
-    GetUserInfo,
-    Regist,
-    KeepAlive,
-    UpdateName,
-    UpdatePassword,
+    AuthenticationAPIHandler,
 }

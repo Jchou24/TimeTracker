@@ -55,7 +55,7 @@
     import throttle from 'lodash.throttle'
     import debounce from 'lodash.debounce'
 
-    import { Logout, KeepAlive } from '@/api/authentication.ts'
+    import { AuthenticationAPIHandler } from '@/api/authentication.ts'
     import { IdleDetermineStates } from '@/models/pageIdle'
     // import { ToastID } from 'vue-toastification/src/types';
     import { ToastID } from 'vue-toastification/dist/types/src/types';
@@ -102,14 +102,14 @@
             }
         },
         setup(props: IProps, { root }){
-            const { $store } = root
+            const { $router, $route, $store } = root
             // const store = useStore()
-            const store = $store
-
-            const { $router, $route } = root
             // const router = useRouter()
+            const store = $store
             const router = $router
             const route = $route
+
+            const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
 
             const isLoading = ref(false)
             const remainUserComfirmSeconds = ref(props.userConfirmSeconds)
@@ -242,7 +242,7 @@
                 if ( store.state.pageIdle.idleDetermineStates == IdleDetermineStates.ByPass ) {
                     return
                 }
-                KeepAlive()
+                authenticationAPIHandler.KeepAlive()
             }
 
             // =================================================================
@@ -260,7 +260,7 @@
 
                 if (oldStates == IdleDetermineStates.UserComfirm && newStates == IdleDetermineStates.Logout) {
                     // console.log("IdleDetermineStates.Logout")
-                    Logout(store, isLoading)
+                    authenticationAPIHandler.Logout(isLoading)
                     SetIsShowLogOutNotification(true)
                 }
             })

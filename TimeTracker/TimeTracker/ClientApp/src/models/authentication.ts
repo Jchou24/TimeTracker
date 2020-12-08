@@ -19,6 +19,29 @@ interface IAuthentication{
     claims: IClaims;
 }
 
+interface ILogin{
+    email: string;
+    name: string;
+    password: string;
+} 
+
+interface IUpdatePassword{
+    currentPassword: string;
+    password: string;
+}
+
+interface IUpdateAccounts{
+    Guid: string;
+    Name: string;
+    IsUpdateName: boolean;
+
+    AccountStatus: AccountStatus;
+    IsUpdateAccountStatus: boolean;
+
+    UserRoles: Array<number>;
+    IsUpdateUserRoles: boolean;
+}
+
 function GetAccountRemind(accountStatus: AccountStatus){
     switch (accountStatus) {
         case AccountStatus.Uncheck:
@@ -38,5 +61,8 @@ export {
     IUserRole,
     IClaims,
     IAuthentication,
+    ILogin,
+    IUpdatePassword,
+    IUpdateAccounts,
     GetAccountRemind,
 }

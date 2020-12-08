@@ -43,23 +43,21 @@ namespace TimeTracker.Helper.Auth
                 context.Result = new UnauthorizedResult();
                 return;
             }
-            IEnumerable<UserRole> roles = user.UserRoles;
-
-            bool isAuthorized = roles.Any(x => x.CodeName.ToLower() == this._userRole.ToString().ToLower() );
-            if (!isAuthorized)
-            {
-                context.Result = new UnauthorizedResult();
-                return;
-            }
 
             bool isAccountValid = user.AccountStatus == AccountStatus.Approved;
             if (!isAccountValid)
             {
-                context.Result = new UnauthorizedResult();
+                context.Result = new ForbidResult();
+                return;
+            }
+
+            IEnumerable<UserRole> roles = user.UserRoles;
+            bool isAuthorized = roles.Any(x => x.CodeName.ToLower() == this._userRole.ToString().ToLower() );
+            if (!isAuthorized)
+            {
+                context.Result = new ForbidResult();
                 return;
             }
         }
     }
-    
-    
 }
