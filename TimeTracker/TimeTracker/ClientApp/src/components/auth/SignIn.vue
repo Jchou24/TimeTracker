@@ -1,6 +1,6 @@
 <template>
-    <div class="text-center">
-        <v-dialog class="SignIn"
+    <div class="SignIn text-center">
+        <v-dialog
             v-model="isOpenModalRef"
             width="500"            
             >

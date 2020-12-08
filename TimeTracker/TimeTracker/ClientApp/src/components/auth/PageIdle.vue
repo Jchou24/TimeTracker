@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="PageIdle">
         <!-- <PageIdleModal :isShowModal.sync="isShowUserConfirm" :isBackgroundCancellable="false">
             <div class="notification">
                 <div><p>You will be logged out after {{remainUserComfirmSeconds}}</p></div>
@@ -7,7 +7,7 @@
             </div>
         </PageIdleModal> -->
 
-        <v-dialog class="SignIn"
+        <v-dialog
             v-model="isShowUserConfirm"
             width="500"
             persistent

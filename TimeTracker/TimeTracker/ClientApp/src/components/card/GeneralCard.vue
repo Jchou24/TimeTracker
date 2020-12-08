@@ -1,29 +1,27 @@
 <template>
-    <div class="Settings my-10">
-        <v-card
-            elevation="10"
-            :width="props.width"
-            :loading="props.loading"
-            outlined
-            shaped
-            >
-            <v-card-title class="flex-center text-h4 my-4">
-                <v-icon class="text-h4" left v-if="props.titleIcon">{{props.titleIcon}}</v-icon>
-                {{props.title}}
-            </v-card-title>
-            <v-divider class="mb-4" />
+    <v-card class="GeneralCard"
+        elevation="10"
+        :width="props.width"
+        :loading="props.loading"
+        outlined
+        shaped
+        >
+        <v-card-title class="flex-center text-h4 my-4">
+            <v-icon class="text-h4" left v-if="props.titleIcon">{{props.titleIcon}}</v-icon>
+            {{props.title}}
+        </v-card-title>
+        <v-divider class="mb-4" />
 
 
-            <slot :class="{'mb-4': !isCardActionNotEmpty }" name="body"></slot>
+        <slot :class="{'mb-4': !isCardActionNotEmpty }" name="body"></slot>
 
-            <div class="mb-8" v-if="isCardActionEmpty" />
-            <v-divider class="mt-4" v-else />
+        <div class="mb-8" v-if="isCardActionEmpty" />
+        <v-divider class="mt-4" v-else />
 
-            <v-card-actions class="py-6 flex-center" v-if="!isCardActionEmpty">
-                <slot name="action"></slot>
-            </v-card-actions>
-        </v-card>
-    </div>
+        <v-card-actions class="py-6 flex-center" v-if="!isCardActionEmpty">
+            <slot name="action"></slot>
+        </v-card-actions>
+    </v-card>
 </template>
 
 <script lang="ts">

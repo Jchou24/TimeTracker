@@ -1,5 +1,5 @@
 <template>
-    <GeneralCard class="AdminAccounts" title="Accounts" titleIcon="mdi-account-group" 
+    <GeneralCard class="AdminAccounts my-10" title="Accounts" titleIcon="mdi-account-group" 
         :width="800"
         v-if="props.accounts">
         <template v-slot:body>
@@ -27,7 +27,7 @@
                 fixed-header
                 filterable
                 multi-sort
-                no-data-text="No Uncheck Accounts"
+                no-data-text="No Accounts"
             >
                 <template v-slot:header.data-table-select>
                     Change?

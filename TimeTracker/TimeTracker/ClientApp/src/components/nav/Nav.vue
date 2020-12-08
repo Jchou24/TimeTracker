@@ -4,7 +4,7 @@
         <NavLinkItem v-for="(navItem, idx) in navLeftItems" 
             :routeConfigsKey="navItem"
             mdiIcon displayName left
-            :key="idx" />
+            :key="'left'+idx" />
 
         <v-spacer/>
 
@@ -12,7 +12,7 @@
         <NavLinkItem v-for="(navItem, idx) in navRightItems" 
             :routeConfigsKey="navItem"
             mdiIcon displayName left
-            :key="idx" />
+            :key="'right'+idx" />
             
         <NavLinkItem class="individual-settings" routeConfigsKey="IndividualSettings" mdiIcon v-if="isAuthenticated" />
         <NavLinkItem routeConfigsKey="Registration" mdiIcon displayName left v-else />
