@@ -27,6 +27,9 @@
                         prepend-icon="mdi-email"
                         outlined
                         dense
+                        counter
+                        maxlength="256"
+                        
                     />
                     <v-text-field
                         v-model="password"

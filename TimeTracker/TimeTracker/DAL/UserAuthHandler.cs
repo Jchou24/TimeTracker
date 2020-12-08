@@ -57,6 +57,7 @@ namespace TimeTracker.DAL
             {
                 return;
             }
+            entity.SetUpdatedDate();
             _context.Entry(currentUser).CurrentValues.SetValues(entity);
             _context.SaveChanges();
         }

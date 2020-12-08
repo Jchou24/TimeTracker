@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
+using System;
+using System.Reflection;
+using TimeTracker.DAL.Attributes;
 using TimeTracker.DAL.DBModels;
 using TimeTracker.DAL.Models;
 
@@ -19,16 +23,24 @@ namespace TimeTracker.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            InitSqlDefaultValue(modelBuilder);
 
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
-            
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.GuId)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.GuId)
+                .ValueGeneratedOnAdd()
+                .HasValueGenerator<GuidValueGenerator>();
+
             modelBuilder.Entity<User>()
                 .HasMany(p => p.UserRoles)
                 .WithMany(p => p.Users)
-                //.UsingEntity(j => j.ToTable("MapUserRoles"));
-
                 .UsingEntity<MapUserRole>(
                     j => j
                         .HasOne(pt => pt.UserRoles)
@@ -42,8 +54,28 @@ namespace TimeTracker.DAL
                     {
                         j.HasKey(t => new { t.UserId, t.UserRolesId });
                     });
-            
+
+            modelBuilder.Entity<UserRole>()
+                .HasIndex(u => u.CodeName)
+                .IsUnique();
+
             SeedData(modelBuilder);
+        }
+
+        protected void InitSqlDefaultValue(ModelBuilder modelBuilder)
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    var memberInfo = property.PropertyInfo ?? (MemberInfo)property.FieldInfo;
+                    if (memberInfo == null) continue;
+                    var defaultValue = Attribute.GetCustomAttribute(memberInfo, typeof(SqlDefaultValueAttribute)) as SqlDefaultValueAttribute;
+                    if (defaultValue == null) continue;
+
+                    property.SetDefaultValueSql(defaultValue.DefaultValue);
+                }
+            }
         }
 
         protected void SeedData(ModelBuilder modelBuilder)

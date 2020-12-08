@@ -67,11 +67,13 @@ namespace TimeTracker.Controllers
                 if (updateAccount.IsUpdateName )
                 {
                     user.Name = updateAccount.Name;
+                    user.SetUpdatedDate();
                 }
 
                 if (updateAccount.IsUpdateAccountStatus)
                 {
                     user.AccountStatus = updateAccount.AccountStatus;
+                    user.SetUpdatedDate();
                 }
 
                 if (updateAccount.IsUpdateUserRoles)

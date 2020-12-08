@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -7,14 +8,25 @@ using TimeTracker.Helper.Auth;
 
 namespace TimeTracker.DAL.DBModels
 {
-    public class User
+    public class User: BaseEntity
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid GuId { get; set; }
+
+        [Column(TypeName = "NVARCHAR")]
+        [StringLength(256)]
         public string Name { get; set; }
+
+        [Required]
         [DataType(DataType.EmailAddress)]
+        [Column(TypeName = "NVARCHAR")]
+        [StringLength(256)]
         public string Email { get; set; }
+        [Required]
         public string PasswordHash { get; set; }
+        [Required]
         public AccountStatus AccountStatus { get; set; }
 
 

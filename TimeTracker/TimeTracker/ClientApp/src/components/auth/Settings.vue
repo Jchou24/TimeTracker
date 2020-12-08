@@ -65,6 +65,8 @@
                                 v-model="name"
                                 outlined
                                 dense
+                                counter
+                                maxlength="256"
                                 label="Edit Name"
                                 append-icon="mdi-square-edit-outline"
                                 @keydown.enter.native="HandleUpdateName"
