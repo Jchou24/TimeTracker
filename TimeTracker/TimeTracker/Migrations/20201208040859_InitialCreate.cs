@@ -52,7 +52,7 @@ namespace TimeTracker.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GuId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -217,11 +217,11 @@ namespace TimeTracker.Migrations
 
             migrationBuilder.InsertData(
                 table: "User",
-                columns: new[] { "Id", "AccountStatus", "Email", "GuId", "Name", "PasswordHash" },
+                columns: new[] { "Id", "AccountStatus", "Email", "Guid", "Name", "PasswordHash" },
                 values: new object[,]
                 {
-                    { 1, 1, "admin@auth.com", new Guid("8afb2118-32e9-4d41-981f-38dde015d821"), "Admin", "$MYHASH$V1$10000$qTPHgIACRIV+vTT9AXoITnqOH+sgzcue1OeQoDLjuqJY81ZA" },
-                    { 2, 1, "user@auth.com", new Guid("432d5755-3c76-4a0b-bb89-e25e165a4fd2"), "User", "$MYHASH$V1$10000$K3t9UeOFljAxqjRDtToRsehTjFMHTf6U6gY+3B3Q38NCq6zp" }
+                    { 1, 1, "admin@auth.com", new Guid("9979fbf8-0133-4a69-ac5b-1004fd848ec8"), "Admin", "$MYHASH$V1$10000$aZRfDUyJsk92TSaWNzc7CglaNADE9q28k+g8L9bh/fyyltFG" },
+                    { 2, 1, "user@auth.com", new Guid("20b9cee2-4d0f-42b7-97b6-cba2c7e6101e"), "User", "$MYHASH$V1$10000$rlVvJGM0T/ohIyIXm8f7eLVD3TBye5dAUXW7cxvSWXqwYVTT" }
                 });
 
             migrationBuilder.InsertData(
@@ -294,9 +294,9 @@ namespace TimeTracker.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_GuId",
+                name: "IX_User_Guid",
                 table: "User",
-                column: "GuId",
+                column: "Guid",
                 unique: true);
 
             migrationBuilder.CreateIndex(

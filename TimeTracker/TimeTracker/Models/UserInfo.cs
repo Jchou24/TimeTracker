@@ -10,6 +10,7 @@ namespace TimeTracker.Models
 {
     public class UserInfo
     {
+        public Guid Guid { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
 
@@ -19,6 +20,7 @@ namespace TimeTracker.Models
 
         public UserInfo(User user)
         {
+            this.Guid = user.Guid;
             this.Name = user.Name;
             this.Email = user.Email;
             this.AccountStatus = user.AccountStatus;

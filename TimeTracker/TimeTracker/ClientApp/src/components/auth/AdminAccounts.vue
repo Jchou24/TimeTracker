@@ -18,6 +18,7 @@
             <v-data-table class="px-6" color="primary"
                 v-model="selected.value"
                 show-select
+                item-key="guid"
                 :headers="headers"
                 :items="accountsExtend"
                 :search="search"
@@ -37,16 +38,16 @@
                 </template>
 
                 <template v-slot:item.admin="{ item }">
-                    <v-simple-checkbox v-model="accountsRoles[item.id][UserRoles.Admin]" color="primary" />
+                    <v-simple-checkbox v-model="accountsRoles[item.guid][UserRoles.Admin]" color="primary" />
                 </template>
 
                 <template v-slot:item.user="{ item }">
-                    <v-simple-checkbox v-model="accountsRoles[item.id][UserRoles.User]" color="primary" />
+                    <v-simple-checkbox v-model="accountsRoles[item.guid][UserRoles.User]" color="primary" />
                 </template>
 
                 <template v-slot:item.accountStatus="{ item }">
                     <v-select rounded dense class="mt-2 mb-n3"
-                        v-model="accountsStatus[item.id].value"
+                        v-model="accountsStatus[item.guid].value"
                         :items="selectOptions">
                         <template v-slot:item="{ item }">
                             <div class="text-center">
@@ -92,17 +93,17 @@
     import { DataItemsPerPageOption, DataTableHeader } from 'vuetify'
 
     import { IUpdateAccounts, GetUncheckAccounts, GetAccounts, UpdateAccounts } from '@/api/admin.ts'
-    import { IUserInfoDetail, IUserRole } from '@/models/authentication.ts'
+    import { IClaims, IUserRole } from '@/models/authentication.ts'
     import { accountStatusIcon, accountStatusColor, AccountStatus, UserRoles, GetAccountStatusKey, GetUserRolesKey } from '@/models/constants/authentication.ts'
 
-    interface IUserInfoDetailExtend extends IUserInfoDetail{
+    interface IUserInfoDetailExtend extends IClaims{
         admin: string;
         user: string;
         isSelectable: boolean;
     }
 
     interface IProps{
-        accounts: Array<IUserInfoDetail>;
+        accounts: Array<IClaims>;
     }
 
     interface IMapUserRoles{
@@ -155,26 +156,17 @@
                 accountExtend.admin = ""
                 accountExtend.user  = ""
                 return accountExtend
-            }) as Array<IUserInfoDetailExtend>)   
-            // =================================================================
-            // uncheckAccounts            
-            const uncheckAccounts = ref([] as Array<IUserInfoDetail>)
-            function HandlerGetUncheckAccounts(){
-                GetUncheckAccounts(isLoading, (response)=>{
-                    uncheckAccounts.value = response.data
-                })
-            }
-            HandlerGetUncheckAccounts()
+            }) as Array<IUserInfoDetailExtend>)
             // =================================================================
             // accountsRoles
-            const accountsRoles = reactive({} as Record<number, Record<number, boolean> >)
-            function InitAccountsRoles(accounts: Array<IUserInfoDetail>){
-                accounts.forEach( (account: IUserInfoDetail) =>{
+            const accountsRoles = reactive({} as Record<string, Record<number, boolean> >)
+            function InitAccountsRoles(accounts: Array<IClaims>){
+                accounts.forEach( (account: IClaims) =>{
                     const tmpRoles = reactive(GetEmptyUserRoles())
                     account.userRoles.forEach( (role: IUserRole) =>{
                         tmpRoles[role.id] = true
                     })
-                    accountsRoles[account.id] = tmpRoles
+                    accountsRoles[account.guid] = tmpRoles
                 })
             }
             InitAccountsRoles(props.accounts)
@@ -183,9 +175,9 @@
             })
             // =================================================================
             // accountsStatus
-            const accountsStatus = reactive({} as Record<number, Ref>)
-            function InitAccountsStatus(accounts: Array<IUserInfoDetail>){
-                accounts.forEach( account => accountsStatus[account.id] = ref(account.accountStatus) )
+            const accountsStatus = reactive({} as Record<string, Ref>)
+            function InitAccountsStatus(accounts: Array<IClaims>){
+                accounts.forEach( account => accountsStatus[account.guid] = ref(account.accountStatus) )
             }
             InitAccountsStatus(props.accounts)
             watch( () => props.accounts, (accounts) =>{
@@ -195,8 +187,8 @@
             // HandleUpdateAccounts
 
             const updateRolesIds = computed(()=>{
-                const result = [] as Array<number>
-                props.accounts.forEach( (account: IUserInfoDetail) =>{
+                const result = [] as Array<string>
+                props.accounts.forEach( (account: IClaims) =>{
                     const tmpRoles = GetEmptyUserRoles()
                     account.userRoles.forEach( (role: IUserRole) =>{
                         tmpRoles[role.id] = true
@@ -204,8 +196,8 @@
 
                     // check whether updatable by user roles 
                     for (const [key, value] of Object.entries(tmpRoles)) {
-                        if (accountsRoles[account.id][parseInt(key)] != value) {
-                            result.push(account.id)
+                        if (accountsRoles[account.guid][parseInt(key)] != value) {
+                            result.push(account.guid)
                         }
                     }
                 })
@@ -213,11 +205,11 @@
             })
 
             const updateAccountStatusIds = computed(()=>{
-                const result = [] as Array<number>
-                props.accounts.forEach( (account: IUserInfoDetail) =>{
+                const result = [] as Array<string>
+                props.accounts.forEach( (account: IClaims) =>{
                     // check whether updatable by user account status 
-                    if( account.accountStatus !== accountsStatus[account.id].value ){
-                        result.push(account.id)
+                    if( account.accountStatus !== accountsStatus[account.guid].value ){
+                        result.push(account.guid)
                     }  
                 })
                 return result
@@ -225,9 +217,9 @@
 
             const isUpdateAccounts = computed(()=> updateRolesIds.value.length > 0 || updateAccountStatusIds.value.length > 0 )
             
-            function GetEmptyUpdateAccounts(id: number): IUpdateAccounts{
+            function GetEmptyUpdateAccounts(guid: string): IUpdateAccounts{
                 return {
-                    Id: id,
+                    Guid: guid,
                     Name: "",
                     IsUpdateName: false,
                     AccountStatus:   AccountStatus.Approved,
@@ -241,20 +233,19 @@
                     return
                 }
 
-                const tmpUpdateAccounts = {} as Record<number, IUpdateAccounts>
-                updateRolesIds.value.forEach( (id: number) => {
-                    tmpUpdateAccounts[id] = GetEmptyUpdateAccounts(id)
-                    tmpUpdateAccounts[id].IsUpdateUserRoles = true
-                    tmpUpdateAccounts[id].UserRoles = Object.keys(accountsRoles[id]).map(Number).filter( key => accountsRoles[id][key] )
+                const tmpUpdateAccounts = {} as Record<string, IUpdateAccounts>
+                updateRolesIds.value.forEach( (guid: string) => {
+                    tmpUpdateAccounts[guid] = GetEmptyUpdateAccounts(guid)
+                    tmpUpdateAccounts[guid].IsUpdateUserRoles = true
+                    tmpUpdateAccounts[guid].UserRoles = Object.keys(accountsRoles[guid]).map(Number).filter( key => accountsRoles[guid][key] )
                 })
 
-                updateAccountStatusIds.value.forEach( (id: number) => {
-                    if( !(id in tmpUpdateAccounts) ){
-                        tmpUpdateAccounts[id] = GetEmptyUpdateAccounts(id)
+                updateAccountStatusIds.value.forEach( (guid: string) => {
+                    if( !(guid in tmpUpdateAccounts) ){
+                        tmpUpdateAccounts[guid] = GetEmptyUpdateAccounts(guid)
                     }
-                    
-                    tmpUpdateAccounts[id].IsUpdateAccountStatus = true
-                    tmpUpdateAccounts[id].AccountStatus = accountsStatus[id].value
+                    tmpUpdateAccounts[guid].IsUpdateAccountStatus = true
+                    tmpUpdateAccounts[guid].AccountStatus = accountsStatus[guid].value
                 })
 
                 const updateAccounts = Object.values(tmpUpdateAccounts) as Array<IUpdateAccounts>
@@ -267,12 +258,12 @@
             // selected: store changed row
 
             const selected = computed( () =>{
-                const changedIds = {} as Record<number, any>
-                updateRolesIds.value.forEach( id => changedIds[id] = "" )
-                updateAccountStatusIds.value.forEach( id => changedIds[id] = "" )
-                const result = ref( accountsExtend.value.filter( accounts => accounts.id in changedIds ) as Array<IUserInfoDetailExtend> )
+                const changedIds = {} as Record<string, any>
+                updateRolesIds.value.forEach( guid => changedIds[guid] = "" )
+                updateAccountStatusIds.value.forEach( guid => changedIds[guid] = "" )
+                const result = ref( accountsExtend.value.filter( accounts => accounts.guid in changedIds ) as Array<IUserInfoDetailExtend> )
                 return result
-            })            
+            })
 
             return {
                 props,

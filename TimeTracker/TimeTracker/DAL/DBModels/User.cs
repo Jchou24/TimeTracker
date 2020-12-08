@@ -13,7 +13,7 @@ namespace TimeTracker.DAL.DBModels
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid GuId { get; set; }
+        public Guid Guid { get; set; }
 
         [Column(TypeName = "NVARCHAR")]
         [StringLength(256)]

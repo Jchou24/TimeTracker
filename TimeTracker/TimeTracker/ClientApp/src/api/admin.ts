@@ -5,7 +5,7 @@ import { HttpGet, HttpPost } from '@/util/apiHandler.ts'
 import { AccountStatus } from '@/models/constants/authentication.ts'
 
 interface IUpdateAccounts{
-    Id: number;
+    Guid: string;
     Name: string;
     IsUpdateName: boolean;
 

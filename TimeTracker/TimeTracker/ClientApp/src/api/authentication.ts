@@ -1,7 +1,8 @@
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import { Store } from 'vuex'
 import { Ref } from '@vue/composition-api'
 import { HttpGet, HttpPost } from '@/util/apiHandler.ts'
+import { IClaims } from '@/models/authentication'
 
 interface ILogin{
     email: string;
@@ -21,7 +22,7 @@ function GetUserInfo(store: Store<any>, isLoading: Ref<boolean>,
         if(SuccessFunc){
             SuccessFunc(response)
         }
-        store.commit("authentication/SetClaims", response.data)
+        store.commit("authentication/SetClaims", response.data as IClaims )
     }, ErrorFunc)
 }
 

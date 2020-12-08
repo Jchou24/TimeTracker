@@ -283,7 +283,7 @@ namespace TimeTracker.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("NVARCHAR(256)");
 
-                    b.Property<Guid>("GuId")
+                    b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -305,7 +305,7 @@ namespace TimeTracker.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("GuId")
+                    b.HasIndex("Guid")
                         .IsUnique();
 
                     b.ToTable("User");
@@ -317,9 +317,9 @@ namespace TimeTracker.Migrations
                             AccountStatus = 1,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@auth.com",
-                            GuId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Admin",
-                            PasswordHash = "$MYHASH$V1$10000$qTPHgIACRIV+vTT9AXoITnqOH+sgzcue1OeQoDLjuqJY81ZA",
+                            PasswordHash = "$MYHASH$V1$10000$aZRfDUyJsk92TSaWNzc7CglaNADE9q28k+g8L9bh/fyyltFG",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -328,9 +328,9 @@ namespace TimeTracker.Migrations
                             AccountStatus = 1,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@auth.com",
-                            GuId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "User",
-                            PasswordHash = "$MYHASH$V1$10000$K3t9UeOFljAxqjRDtToRsehTjFMHTf6U6gY+3B3Q38NCq6zp",
+                            PasswordHash = "$MYHASH$V1$10000$rlVvJGM0T/ohIyIXm8f7eLVD3TBye5dAUXW7cxvSWXqwYVTT",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });

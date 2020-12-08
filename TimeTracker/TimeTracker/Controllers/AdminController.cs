@@ -32,10 +32,10 @@ namespace TimeTracker.Controllers
         public IActionResult GetUncheckAccounts()
         {
             var unCheckAccounts = this._context.User.Where(x => x.AccountStatus == AccountStatus.Uncheck).AsNoTracking();
-            var returnData = new List<UserInfoDetail>();
+            var returnData = new List<UserInfo>();
             foreach (var unCheckAccount in unCheckAccounts)
             {
-                returnData.Add(new UserInfoDetail(unCheckAccount));
+                returnData.Add(new UserInfo(unCheckAccount));
             }
             return Ok(returnData);
         }
@@ -44,10 +44,10 @@ namespace TimeTracker.Controllers
         public IActionResult GetAccounts()
         {
             var accounts = this._context.User.Select(x => x).Include(x => x.UserRoles).AsNoTracking().ToList();
-            var returnData = new List<UserInfoDetail>();
+            var returnData = new List<UserInfo>();
             foreach (var account in accounts)
             {
-                returnData.Add(new UserInfoDetail(account));
+                returnData.Add(new UserInfo(account));
             }
             return Ok(returnData);
         }
@@ -57,8 +57,7 @@ namespace TimeTracker.Controllers
         {
             foreach (var updateAccount in updateAccounts)
             {
-                updateAccount.DecryptId();
-                var user = this._context.User.SingleOrDefault(x => x.Id == updateAccount.Id);
+                var user = this._context.User.SingleOrDefault(x => x.Guid == updateAccount.Guid);
                 if (user == null)
                 {
                     continue;
@@ -80,12 +79,12 @@ namespace TimeTracker.Controllers
                 {
                     var model = _context.User
                         .Include(x => x.MapUserRoles)
-                        .FirstOrDefault(x => x.Id == updateAccount.Id);
+                        .FirstOrDefault(x => x.Id == user.Id);
 
                     _context.TryUpdateManyToMany(model.MapUserRoles, updateAccount.UserRoles
                         .Select(x => new DAL.DBModels.MapUserRole
                         {
-                            UserId = updateAccount.Id,
+                            UserId = user.Id,
                             UserRolesId = x,
                         }), x => x.Id);
                 }

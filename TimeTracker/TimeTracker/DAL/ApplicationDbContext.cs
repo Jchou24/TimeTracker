@@ -30,11 +30,11 @@ namespace TimeTracker.DAL
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.GuId)
+                .HasIndex(u => u.Guid)
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-                .Property(u => u.GuId)
+                .Property(u => u.Guid)
                 .ValueGeneratedOnAdd()
                 .HasValueGenerator<GuidValueGenerator>();
 

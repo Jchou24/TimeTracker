@@ -11,7 +11,7 @@ namespace TimeTracker.Models
     public class UpdateAccount
     {
         [Required]
-        public int Id { get; set; }
+        public Guid Guid { get; set; }
 
         public string Name { get; set; }
         public bool IsUpdateName { get; set; }
@@ -22,9 +22,5 @@ namespace TimeTracker.Models
         public ICollection<int> UserRoles { get; set; }
         public bool IsUpdateUserRoles { get; set; }
 
-        public void DecryptId()
-        { 
-        
-        }
     }
 }

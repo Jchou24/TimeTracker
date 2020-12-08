@@ -11,7 +11,7 @@
     import Center from './layouts/Center.vue'
     import AdminAccounts from '@/components/auth/AdminAccounts.vue'
     import AdminUncheckAccounts from '@/components/auth/AdminUncheckAccounts.vue'
-    import { IUserInfoDetail, IUserRole } from '@/models/authentication'
+    import { IClaims, IUserRole } from '@/models/authentication'
     import { GetAccounts } from '@/api/admin'
 
     export default defineComponent({
@@ -27,10 +27,10 @@
         setup(props){
 
             const isLoading = ref(false)
-            const accounts = ref([] as Array<IUserInfoDetail>)
+            const accounts = ref([] as Array<IClaims>)
             function HandleGetAccounts(){
                 return GetAccounts(isLoading, ( response )=>{
-                        accounts.value = response.data
+                        accounts.value = response.data as Array<IClaims>
                     })
             }
             HandleGetAccounts()

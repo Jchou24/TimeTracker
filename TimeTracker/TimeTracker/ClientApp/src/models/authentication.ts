@@ -7,8 +7,9 @@ interface IUserRole{
 }
 
 interface IClaims{
-    email: string;
+    guid: string;
     name: string;
+    email: string;
     accountStatus: AccountStatus;
     userRoles: Array<IUserRole>;
 }
@@ -16,14 +17,6 @@ interface IClaims{
 interface IAuthentication{
     isAuthenticated: boolean;
     claims: IClaims;
-}
-
-interface IUserInfoDetail{
-    id: number;
-    name: string;
-    email: string;
-    accountStatus: AccountStatus;
-    userRoles: Array<IUserRole>;
 }
 
 function GetAccountRemind(accountStatus: AccountStatus){
@@ -45,6 +38,5 @@ export {
     IUserRole,
     IClaims,
     IAuthentication,
-    IUserInfoDetail,
     GetAccountRemind,
 }

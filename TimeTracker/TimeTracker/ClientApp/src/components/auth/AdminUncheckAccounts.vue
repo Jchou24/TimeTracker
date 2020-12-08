@@ -53,7 +53,7 @@
     import { DataTableHeader } from 'vuetify/types'
 
     import { IUpdateAccounts, GetUncheckAccounts, UpdateAccounts } from '@/api/admin.ts'
-    import { IUserInfoDetail } from '@/models/authentication.ts'
+    import { IClaims } from '@/models/authentication.ts'
     import { AccountStatus } from '@/models/constants/authentication.ts'
 
     export default defineComponent({
@@ -65,10 +65,10 @@
             const toast = useToast()
 
             const isLoading = ref(false)
-            const uncheckAccounts = ref([] as Array<IUserInfoDetail>)
+            const uncheckAccounts = ref([] as Array<IClaims>)
             function HandlerGetUncheckAccounts(){
                 GetUncheckAccounts(isLoading, (response)=>{
-                    uncheckAccounts.value = response.data
+                    uncheckAccounts.value = response.data as Array<IClaims>
                 })
             }
             HandlerGetUncheckAccounts()
@@ -78,9 +78,9 @@
                 emit("GetAccounts")
             }            
 
-            function UpdateUncheckAccounts( uncheckAccount: IUserInfoDetail, isApproved: boolean ){
+            function UpdateUncheckAccounts( uncheckAccount: IClaims, isApproved: boolean ){
                 const updateAccounts  = [{
-                    Id: uncheckAccount.id,
+                    Guid: uncheckAccount.guid,
                     Name: "",
                     IsUpdateName: false,
                     AccountStatus: isApproved? AccountStatus.Approved : AccountStatus.Rejected,
@@ -97,11 +97,11 @@
                     })
             }
 
-            function ApproveUncheckAccounts(uncheckAccount: IUserInfoDetail){
+            function ApproveUncheckAccounts(uncheckAccount: IClaims){
                 UpdateUncheckAccounts(uncheckAccount, true)
             }
 
-            function DenyUncheckAccounts(uncheckAccount: IUserInfoDetail){
+            function DenyUncheckAccounts(uncheckAccount: IClaims){
                 UpdateUncheckAccounts(uncheckAccount, false)
             }
 

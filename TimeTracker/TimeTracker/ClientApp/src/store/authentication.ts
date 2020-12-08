@@ -5,6 +5,7 @@ function GetInitAuthentication(): IAuthentication{
     return {
         isAuthenticated: false,
         claims: {
+            guid: "",
             email: "",
             name: "",
             accountStatus: 0,
