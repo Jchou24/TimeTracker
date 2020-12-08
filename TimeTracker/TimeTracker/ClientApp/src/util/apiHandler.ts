@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
 import { Ref } from '@vue/composition-api'
 import { Store } from 'vuex/types/index'
-import { IStore } from '@/models/store';
-import VueRouter from 'vue-router';
-import { GetRedirectPath } from '@/router/routeConfigs';
-import { ValidationResults } from '@/models/authValidation';
+import { IStore } from '@/models/store'
+import VueRouter from 'vue-router'
+import { GetRedirectPath } from '@/router/routeConfigs'
+import { ValidationResults } from '@/models/authValidation'
+import { ToastWarning } from './notification'
 
 axios.defaults.withCredentials = true
 
@@ -60,13 +61,18 @@ class APIHandler{
         }
 
         const errorStatusCode = error?.response?.status || undefined
+        const toast = this._store.state.notificator
         switch (errorStatusCode) {
             case 401:
                 this.LogoutProcess()
+                ToastWarning(toast, `Sorry! You don't have sufficient permission. You will be signed out automatically.` )
+                console.log( "401" )
                 break;
 
             case 403:
                 this._rootRouter.push(GetRedirectPath(ValidationResults.invalidRole))
+                ToastWarning(toast, `Sorry! You don't have sufficient permission.` )
+                console.log( "403" )
                 break;
         
             default:

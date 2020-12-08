@@ -47,7 +47,7 @@ namespace TimeTracker.Helper.Auth
             bool isAccountValid = user.AccountStatus == AccountStatus.Approved;
             if (!isAccountValid)
             {
-                context.Result = new ForbidResult();
+                context.Result = new UnauthorizedResult();
                 return;
             }
 
