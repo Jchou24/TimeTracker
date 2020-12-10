@@ -38,3 +38,13 @@ $color-error: #ff5722;
 $color-warning: #ff9800;
 $color-info: #2196f3;
 $color-success: #4caf50;
+
+.theme-table.theme--light.v-data-table tbody tr.v-data-table__selected{
+    background: $color-accent;
+    color: #d3d3d3;
+
+    &:hover{
+        background: $color-primary !important;
+        color: #d3d3d3 !important;
+    }
+}   
