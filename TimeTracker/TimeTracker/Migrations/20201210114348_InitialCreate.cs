@@ -81,6 +81,7 @@ namespace TimeTracker.Migrations
                     Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StartDate = table.Column<DateTime>(type: "Date", nullable: false),
                     EndDate = table.Column<DateTime>(type: "Date", nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()")
                 },
@@ -390,17 +391,17 @@ namespace TimeTracker.Migrations
             migrationBuilder.InsertData(
                 table: "DayWorkLimitTime",
                 columns: new[] { "Guid", "LimitWorkTime" },
-                values: new object[] { new Guid("062f78ea-e19b-4ad3-98da-3120a2f8e155"), 7.5 });
+                values: new object[] { new Guid("04cbfe94-9a64-473c-b984-2e0d4de82042"), 7.5 });
 
             migrationBuilder.InsertData(
                 table: "TaskSource",
                 columns: new[] { "Guid", "CodeName", "DisplayName" },
                 values: new object[,]
                 {
-                    { new Guid("92ae98a8-94db-4b78-b0fb-817ba33a273e"), "Girl friend", "Girl friend" },
-                    { new Guid("771d6da8-ffda-4b22-b14d-2450de10400b"), "Mother", "Mother" },
-                    { new Guid("c01d3004-5151-4a53-b23f-abb9f7bb59fb"), "Boss", "Boss" },
-                    { new Guid("5a7d368d-4027-4d5c-93bf-f611fd10271f"), "Father", "Father" }
+                    { new Guid("0ea3fc61-cb91-4d99-96ba-02bfdc21daa5"), "Girl friend", "Girl friend" },
+                    { new Guid("9c44500e-c1a3-4e9f-92be-4838721deaea"), "Mother", "Mother" },
+                    { new Guid("7f17e9b1-a6dd-45a5-a415-271252e46d1b"), "Boss", "Boss" },
+                    { new Guid("970dd577-c8fc-4925-9197-2aa7c0637b5e"), "Father", "Father" }
                 });
 
             migrationBuilder.InsertData(
@@ -408,12 +409,12 @@ namespace TimeTracker.Migrations
                 columns: new[] { "Guid", "CodeName", "DisplayName" },
                 values: new object[,]
                 {
-                    { new Guid("760588d2-efb1-42bd-b32b-613be4f60448"), "Wash Floors", "Wash Floors" },
-                    { new Guid("8e2e715a-bb68-49a8-ad43-b9badc51e8da"), "Play Baseball", "Play Baseball" },
-                    { new Guid("2f6dcd67-3363-4168-9399-391cab3060ff"), "Shopping", "Shopping" },
-                    { new Guid("8234b7fb-b1c0-4dd0-8d18-708df72d6853"), "Coding", "Coding" },
-                    { new Guid("0f94246e-0816-473b-95e6-91a8fe8325bf"), "Play PC Game", "Play PC Game" },
-                    { new Guid("f77417ad-f044-4b6e-a52a-e1983d34edeb"), "Reading", "Reading" }
+                    { new Guid("05f9eaad-59e3-4558-80c3-00752a0fb809"), "Wash Floors", "Wash Floors" },
+                    { new Guid("97ea913a-a096-4ea6-8b44-a52bb56a20ee"), "Play Baseball", "Play Baseball" },
+                    { new Guid("2d31d15c-4b05-4399-a934-6408f5a4a092"), "Shopping", "Shopping" },
+                    { new Guid("72c52a8b-7f53-404f-a3de-3803f41ec2fb"), "Coding", "Coding" },
+                    { new Guid("e9b0d908-80ac-44c6-b8d3-93f2f88b54e7"), "Play PC Game", "Play PC Game" },
+                    { new Guid("aaf76239-c469-4826-aa6f-ef328cf3a0bc"), "Reading", "Reading" }
                 });
 
             migrationBuilder.InsertData(
@@ -421,10 +422,10 @@ namespace TimeTracker.Migrations
                 columns: new[] { "Id", "AccountStatus", "Email", "Guid", "Name", "PasswordHash" },
                 values: new object[,]
                 {
-                    { 4, 3, "test2@auth.com", new Guid("92a3618a-2017-41a4-bcfb-928037299e96"), "Test2", "$MYHASH$V1$10000$Pa7BVcx3Tuu6vJASpizaGFESIjz+5NzXFmJ3chZzLDESAE9N" },
-                    { 3, 0, "test@auth.com", new Guid("52f56c28-cc9e-48cb-bdd3-8a14c5df0fe7"), "Test", "$MYHASH$V1$10000$O/Sq9t1wdaCVMPA/x9MOoZKDzQpoe5ANnFRhCujXecJ2T80k" },
-                    { 2, 1, "user@auth.com", new Guid("307f3c5c-67c1-49b0-b59e-451978ca5bd5"), "User", "$MYHASH$V1$10000$wRZjC06Ehk4ayuY+WjYP4z0EpBia/1in85LJl2gjknJQFvi1" },
-                    { 1, 1, "admin@auth.com", new Guid("3f9dd402-4945-4b6d-9e55-3aef9bcf7867"), "Admin", "$MYHASH$V1$10000$BKXI/mzdiZMsu+xnMFXBO/+ONI31pjk9SCy7K3UZCZPe6scp" }
+                    { 4, 3, "test2@auth.com", new Guid("aede61c4-5476-47f0-b642-79f46197ae63"), "Test2", "$MYHASH$V1$10000$7nZEfAf98N3l2N5CFgMC56m3o3z0uFSsmK1CBU+nwsK8vqlH" },
+                    { 3, 0, "test@auth.com", new Guid("0377a7c4-8d91-4b78-9436-3adf8e9687c7"), "Test", "$MYHASH$V1$10000$KVyXX69Ud4VKailitOg3Gq4SdMFzIuLxGuv3O5tRNcfu3g0C" },
+                    { 2, 1, "user@auth.com", new Guid("b5fda9b8-98e1-43ff-abca-a32639244df1"), "User", "$MYHASH$V1$10000$mBhmoyztuhebEYYoGcpx2MAo/5dlIR6pAb3zA3+6BKVAJoyR" },
+                    { 1, 1, "admin@auth.com", new Guid("bf33fbaa-38b8-4055-a9c5-9ef6ce547f66"), "Admin", "$MYHASH$V1$10000$O1gJccN+bi4FDasghs0d9t7E7wYyPzoCUVMu3AsZqLCkSPgJ" }
                 });
 
             migrationBuilder.InsertData(

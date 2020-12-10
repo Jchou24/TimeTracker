@@ -28,5 +28,9 @@ namespace TimeTracker.DAL.DBModels.Task
         [Column(TypeName = "Date")]
         [Required]
         public DateTime EndDate { get; set; }
+
+        [Column(TypeName = "NVARCHAR")]
+        [StringLength(256)]
+        public string Name { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 <template>
     <v-card class="GeneralCard"
         elevation="10"
-        :width="props.width"
-        :loading="props.loading"
+        :width="width"
+        :loading="loading"
         outlined
         shaped
         >
         <v-card-title class="flex-center text-h4 my-4">
-            <v-icon class="text-h4" left v-if="props.titleIcon">{{props.titleIcon}}</v-icon>
-            {{props.title}}
+            <v-icon class="text-h4" left v-if="titleIcon">{{titleIcon}}</v-icon>
+            {{title}}
         </v-card-title>
         <v-divider class="mb-4" />
 
@@ -53,7 +53,6 @@
             const isCardActionEmpty = computed( () => !slots["action"] )
 
             return {
-                props,
                 isCardActionEmpty,
             }
         }
