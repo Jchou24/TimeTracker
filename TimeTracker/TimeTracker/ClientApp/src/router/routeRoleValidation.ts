@@ -1,4 +1,4 @@
-import { VueRouter } from 'vue-router/types/router'
+import { VueRouter, Route } from 'vue-router/types/router'
 import { Store } from 'vuex/types/index'
 
 import { IStore } from '@/models/store'
@@ -9,8 +9,7 @@ import { GetRedirectPath, routeConfigs } from './routeConfigs'
 import { ToastWarning } from '@/util/notification'
 
 function ConfigRouteValidation(router: VueRouter, store: Store<IStore> ){
-    router.beforeEach((to, from, next) => { 
-        // console.log( from.path, to.path )
+    router.beforeEach((to, from, next) => {
         if (from.path == to.path) {
             next()
             return            
@@ -24,8 +23,19 @@ function ConfigRouteValidation(router: VueRouter, store: Store<IStore> ){
             return
         }
 
-        // store.state.notificator?.success("TEST OKKKK")
         next()
+    })
+
+    function HasQueryParams(route: Route) {
+        return !!Object.keys(route.query).length
+    }
+
+    router.beforeEach((to, from, next) => {
+        if( !HasQueryParams(to) && HasQueryParams(from) ){
+            next({ name: to.name as string, query: from.query })
+        } else {
+            next()
+        }
     })
 }
 
