@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.Collections.Generic;
 using System.Linq;
 using TimeTracker.DAL;
-using TimeTracker.DAL.DBModels;
+using TimeTracker.DAL.DBModels.Auth;
 using TimeTracker.DAL.Models;
 using TimeTracker.Helper.Extensions;
 

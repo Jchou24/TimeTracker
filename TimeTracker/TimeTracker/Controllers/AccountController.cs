@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.DAL;
-using TimeTracker.DAL.DBModels;
+using TimeTracker.DAL.DBModels.Auth;
 using TimeTracker.Helper.Auth;
 using TimeTracker.Helper.Extensions;
 using TimeTracker.Models;

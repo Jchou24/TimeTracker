@@ -15,7 +15,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using TimeTracker.DAL;
-using TimeTracker.DAL.DBModels;
+using TimeTracker.DAL.DBModels.Auth;
 using TimeTracker.Hubs;
 using VueCliMiddleware;
 

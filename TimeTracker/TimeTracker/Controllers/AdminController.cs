@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.DAL;
+using TimeTracker.DAL.DBModels.Auth;
 using TimeTracker.DAL.Models;
 using TimeTracker.Helper.Auth;
 using TimeTracker.Helper.Extensions;
@@ -88,7 +89,7 @@ namespace TimeTracker.Controllers
                         .FirstOrDefault(x => x.Id == user.Id);
 
                     _context.TryUpdateManyToMany(model.MapUserRoles, updateAccount.UserRoles
-                        .Select(x => new DAL.DBModels.MapUserRole
+                        .Select(x => new MapUserRole
                         {
                             UserId = user.Id,
                             UserRolesId = x,

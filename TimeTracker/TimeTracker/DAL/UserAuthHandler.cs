@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using TimeTracker.DAL.DBModels;
+using TimeTracker.DAL.DBModels.Auth;
 using TimeTracker.DAL.Models;
 
 namespace TimeTracker.DAL

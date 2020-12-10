@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using TimeTracker.DAL.DBModels;
+using TimeTracker.DAL.DBModels.Auth;
 using TimeTracker.DAL.Models;
 
 namespace TimeTracker.Models

@@ -34,7 +34,6 @@ function ValidateAuthentication(pathName: string, store: Store<IStore>, routeCon
 }
 
 function ValidateRole(pathName: string, store: Store<IStore>, routeConfigs: IRouteConfigs){
-    console.log("ValidateRole")
     const requiredRoles = routeConfigs[pathName].auth.requiredRoles
     const userRoleIds = store.state.authentication.claims.userRoles.map( x => x.id )
 

@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 using System.Reflection;
 using TimeTracker.DAL.Attributes;
-using TimeTracker.DAL.DBModels;
+using TimeTracker.DAL.DBModels.Auth;
+using TimeTracker.DAL.DBModels.Task;
 using TimeTracker.DAL.Models;
 
 namespace TimeTracker.DAL
@@ -19,19 +20,21 @@ namespace TimeTracker.DAL
         public DbSet<User> User { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<MapUserRole> MapUserRoles { get; set; }
+        
+        public DbSet<Period> Period { get; set; }
+        public DbSet<TaskDay> TaskDay { get; set; }
+        public DbSet<Task> Task { get; set; }
+        public DbSet<TaskTimeRange> TaskTimeRange { get; set; }
+        public DbSet<TaskType> TaskType { get; set; }
+        public DbSet<TaskSource> TaskSource { get; set; }
+        public DbSet<NonWorkDays> NonWorkDays { get; set; }
+        public DbSet<DayWorkLimitTime> DayWorkLimitTime { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             InitSqlDefaultValue(modelBuilder);
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Guid)
-                .IsUnique();
+            InitUnique(modelBuilder);
 
             modelBuilder.Entity<User>()
                 .Property(u => u.Guid)
@@ -55,9 +58,22 @@ namespace TimeTracker.DAL
                         j.HasKey(t => new { t.UserId, t.UserRolesId });
                     });
 
-            modelBuilder.Entity<UserRole>()
-                .HasIndex(u => u.CodeName)
-                .IsUnique();
+            modelBuilder.Entity<User>()
+                .HasMany(t => t.TaskDay)
+                .WithOne(d => d.User)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<TaskDay>()
+                .HasMany(t => t.Task)
+                .WithOne(d => d.TaskDay)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<TaskDay>()
+                .HasMany(t => t.TaskTimeRange)
+                .WithOne(d => d.TaskDay)
+                .OnDelete(DeleteBehavior.SetNull);
+
+
 
             SeedData(modelBuilder);
         }
@@ -78,12 +94,28 @@ namespace TimeTracker.DAL
             }
         }
 
-        protected void SeedData(ModelBuilder modelBuilder)
+        protected void InitUnique(ModelBuilder modelBuilder)
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    var memberInfo = property.PropertyInfo ?? (MemberInfo)property.FieldInfo;
+                    if (memberInfo == null) continue;
+                    var defaultValue = Attribute.GetCustomAttribute(memberInfo, typeof(UniqueAttribute)) as UniqueAttribute;
+                    if (defaultValue == null) continue;
+
+                    entityType.AddIndex(property).IsUnique = true;
+                }
+            }
+        }
+
+            protected void SeedData(ModelBuilder modelBuilder)
         {
             // add admin, user
             modelBuilder
                 .Entity<User>()
-                .HasData(new User("admin@auth.com", "@Dmin")
+                .HasData(new User("admin@auth.com", "test")
                 {
                     Id = 1,
                     Name = "Admin",
@@ -92,11 +124,29 @@ namespace TimeTracker.DAL
 
             modelBuilder
                 .Entity<User>()
-                .HasData(new User("user@auth.com", "user1234")
+                .HasData(new User("user@auth.com", "test")
                 {
                     Id = 2,
                     Name = "User",
                     AccountStatus = AccountStatus.Approved
+                });
+
+            modelBuilder
+                .Entity<User>()
+                .HasData(new User("test@auth.com", "test")
+                {
+                    Id = 3,
+                    Name = "Test",
+                    AccountStatus = AccountStatus.Uncheck
+                });
+
+            modelBuilder
+                .Entity<User>()
+                .HasData(new User("test2@auth.com", "test")
+                {
+                    Id = 4,
+                    Name = "Test2",
+                    AccountStatus = AccountStatus.Suspend
                 });
 
             // add role
@@ -110,8 +160,8 @@ namespace TimeTracker.DAL
                 });
 
             modelBuilder
-                .Entity<DBModels.UserRole>()
-                .HasData(new DBModels.UserRole
+                .Entity<UserRole>()
+                .HasData(new UserRole
                 {
                     Id = (int)Models.UserRoles.User,
                     CodeName = Models.UserRoles.User.ToString(),
@@ -127,13 +177,55 @@ namespace TimeTracker.DAL
                     UserRolesId = (int)Models.UserRoles.Admin
                 });
 
+            for (int i = 2; i <= 4; i++)
+            {
+                modelBuilder
+                    .Entity<MapUserRole>()
+                    .HasData(new MapUserRole
+                    {
+                        UserId = i,
+                        UserRolesId = (int)Models.UserRoles.User
+                    });
+            }
+            
+            // add DayWorkLimitTime
             modelBuilder
-                .Entity<MapUserRole>()
-                .HasData(new MapUserRole
+                .Entity<DayWorkLimitTime>()
+                .HasData(new DayWorkLimitTime()
                 {
-                    UserId = 2,
-                    UserRolesId = (int)Models.UserRoles.User
+                    Guid = Guid.NewGuid(),
+                    LimitWorkTime = 7.5,
                 });
+
+            // add TaskType
+            string[] taskTypes = { "Coding", "Shopping", "Play Baseball", "Wash Floors", "Reading", "Play PC Game" };
+
+            foreach (var taskType in taskTypes)
+            {
+                modelBuilder
+                    .Entity<TaskType>()
+                    .HasData(new TaskType()
+                    {
+                        Guid = Guid.NewGuid(),
+                        CodeName = taskType,
+                        DisplayName = taskType
+                    });
+            }
+
+            // add TaskSource
+            string[] taskSources = { "Boss", "Girl friend", "Father", "Mother" };
+
+            foreach (var taskSource in taskSources)
+            {
+                modelBuilder
+                    .Entity<TaskSource>()
+                    .HasData(new TaskSource()
+                    {
+                        Guid = Guid.NewGuid(),
+                        CodeName = taskSource,
+                        DisplayName = taskSource
+                    });
+            }
         }
     }
 }
