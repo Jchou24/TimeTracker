@@ -1,8 +1,7 @@
 import { IAuthentication, IClaims } from '@/models/authentication'
 import { Module } from "vuex";
 
-function GetInitAuthentication(): IAuthentication{
-    return {
+const GetInitAuthentication = (): IAuthentication => ({
         isAuthenticated: false,
         claims: {
             guid: "",
@@ -11,8 +10,7 @@ function GetInitAuthentication(): IAuthentication{
             accountStatus: 0,
             userRoles: [],
         },
-    }
-}
+    })
 
 function SetClaims( state: IAuthentication, claims: IClaims ){
     Object.keys(claims).forEach( key => Reflect.set( state.claims, key, Reflect.get(claims, key) ) )

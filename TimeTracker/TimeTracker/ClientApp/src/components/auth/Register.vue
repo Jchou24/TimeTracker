@@ -120,13 +120,12 @@
             const isPasswordComfirmed = computed( () => password.value == comfirmPassword.value && password.value.length > 0 )
             const isLoading = ref(false)
 
-            const GetEmptyErrorMessages = () => {
-                return {
+            const GetEmptyErrorMessages = () => ({
                     Email: [],
                     Password: [],
                     Fail: [],
-                }
-            }
+                })
+            
             const errorMessages = reactive(GetEmptyErrorMessages())
             function EmptyErrorMessages(){
                 errorMessages.Email = []
@@ -134,12 +133,10 @@
                 errorMessages.Fail = []
             }
 
-            const logindata = computed(() => { 
-                return {
+            const logindata = computed(() => ({
                     email: email.value,
                     password: password.value,
-                } as ILogin
-            }) 
+                } as ILogin))
 
             function HandleRegist(){
                 if (!isPasswordComfirmed.value){

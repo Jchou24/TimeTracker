@@ -1,15 +1,13 @@
 import { IdleDetermineStates, IPageIdle } from '@/models/pageIdle'
 
-function GetInitPageIdle(): IPageIdle{
-    return {
+const GetInitPageIdle = (): IPageIdle => ({
         startIdleTimestamp: undefined,
         startUserConfirmTimestamp: undefined,
         isShowUserConfirm: false,
         isShowLogOutNotification: false,
         idleTimes: 0,
         idleDetermineStates: IdleDetermineStates.ByPass,
-    }
-}
+    })
 
 export default{
     namespaced: true,

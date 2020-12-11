@@ -212,8 +212,7 @@
 
             const isUpdateAccounts = computed(()=> updateRolesIds.value.length > 0 || updateAccountStatusIds.value.length > 0 )
             
-            function GetEmptyUpdateAccounts(guid: string): IUpdateAccounts{
-                return {
+            const GetEmptyUpdateAccounts = (guid: string): IUpdateAccounts => ({
                     Guid: guid,
                     Name: "",
                     IsUpdateName: false,
@@ -221,8 +220,7 @@
                     IsUpdateAccountStatus: false,
                     IsUpdateUserRoles: false,
                     UserRoles: []
-                }
-            }
+                })
             
             function HandleUpdateAccounts(){
                 if(!isUpdateAccounts.value){

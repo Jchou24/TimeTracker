@@ -90,13 +90,12 @@
                 }
             })
 
-            const GetEmptyErrorMessages = () => {
-                return {
+            const GetEmptyErrorMessages = () => ({
                     Email: [],
                     Password: [],
                     Fail: [],
-                }
-            }
+                })
+
             const errorMessages = reactive(GetEmptyErrorMessages())
             function EmptyErrorMessages(){
                 errorMessages.Email = []
@@ -104,12 +103,10 @@
                 errorMessages.Fail = []
             }
 
-            const logindata = computed(() => { 
-                return {
+            const logindata = computed(() => ({
                     email: email.value,
                     password: password.value,
-                } as ILogin
-            }) 
+                } as ILogin))
 
             const isOpenModalRef = computed({
                 get(){

@@ -38,7 +38,7 @@
             NavItem
         },
         setup( props ){
-            const to = routeConfigs[props.routeConfigsKey].path
+            const to = computed( () => routeConfigs[props.routeConfigsKey].path )
             const navIcon = computed( () => props.mdiIcon ? routeConfigs[props.routeConfigsKey].nav.mdiIcon : "" )
             const navDisplayName = computed( () => props.displayName ? routeConfigs[props.routeConfigsKey].nav.displayName : "" )
             return {
