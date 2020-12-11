@@ -11,7 +11,6 @@
             <!-- -->
         <!-- </v-navigation-drawer> -->
 
-        <NavProgress/>
         <Nav />
 
         <v-main>
@@ -40,7 +39,6 @@
     import { defineComponent, computed, watch, ref, onMounted } from '@vue/composition-api'
 
     import Nav from '@/components/nav/Nav.vue'
-    import NavProgress from '@/components/nav/NavProgress.vue'
     import PageIdle from '@/components/auth/PageIdle.vue'
 
     import debounce from 'lodash.debounce'
@@ -62,7 +60,6 @@
         name: 'App',
         components:{
             Nav,
-            NavProgress,
             PageIdle,
         },
         setup(props, { root }){

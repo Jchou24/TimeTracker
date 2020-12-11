@@ -20,12 +20,15 @@
         <NavItem mdiIcon="mdi-logout" left @click.native="SignOut" v-if="isAuthenticated">登出</NavItem>
         <NavItem mdiIcon="mdi-login" left @click.native="isOpenModal=true" v-else>登入</NavItem>
         <SignIn :isOpenModal.sync="isOpenModal" />
+
+        <NavProgress/>
     </v-app-bar>
 </template>
 
 <script lang="ts">
     import { defineComponent, computed, watch, ref } from '@vue/composition-api'
 
+    import NavProgress from '@/components/nav/NavProgress.vue'
     import NavLinkItem from "./NavLinkItem.vue"
     import NavItem from "./NavItem.vue"
     import SignIn from "@/components/auth/SignIn.vue"    
@@ -44,6 +47,7 @@
 
         },
         components:{
+            NavProgress,
             NavLinkItem,
             NavItem,
             SignIn,

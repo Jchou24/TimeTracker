@@ -1,5 +1,6 @@
 <template>
-    <v-progress-linear class="NavProgress" indeterminate stream  v-if="isNavLoading"/>
+    <v-progress-linear class="NavProgress" indeterminate stream fixed top v-if="isNavLoading"/>
+    <!-- <v-progress-linear class="NavProgress" indeterminate stream color="error" fixed bottom v-if="isNavLoading"/> -->
 </template>
 
 <script lang="ts">
@@ -23,12 +24,4 @@
 </script>
 
 <style lang="scss" scoped>
-    .NavProgress{
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100vw;
-        height: 5px;
-        z-index: 99999;
-    }
 </style>
