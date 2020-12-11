@@ -46,8 +46,6 @@
 <script lang="ts">
     import { computed, defineComponent, Ref, ref, watch } from '@vue/composition-api'
 
-    import GeneralCard from '@/components/card/GeneralCard.vue'
-
     import { DataTableHeader } from 'vuetify/types'
     import { TaskEditorAPIHandler } from '@/api/taskEditor.ts'
     import { IClaims } from '@/models/authentication.ts'
@@ -68,9 +66,6 @@
                 type: Number,
                 default: 500,
             }
-        },
-        components:{
-            GeneralCard
         },
         setup( props, { emit, root } ){
             const { $store, $router, $route } = root

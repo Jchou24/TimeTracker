@@ -1,12 +1,10 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import { Store } from 'vuex/types/index'
-// import Home from '../views/Home.vue'
 import { routeConfigs } from './routeConfigs'
 import ConfigRouteValidation from './routeRoleValidation' 
 
 Vue.use(VueRouter)
-
 
 const routes: Array<RouteConfig> = Object.values(routeConfigs).map( routeConfig => ({
         path: routeConfig.path,

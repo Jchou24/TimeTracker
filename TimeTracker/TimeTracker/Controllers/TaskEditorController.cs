@@ -31,7 +31,7 @@ namespace TimeTracker.Controllers
         [HttpPost]
         public IActionResult GetAccounts()
         {
-            var accounts = this._context.User.Select(x => x).AsNoTracking().ToList();
+            var accounts = this._context.User.Where(x => x.AccountStatus == AccountStatus.Approved).AsNoTracking().ToList();
             var returnData = new List<ApprovedUser>();
             foreach (var account in accounts)
             {
