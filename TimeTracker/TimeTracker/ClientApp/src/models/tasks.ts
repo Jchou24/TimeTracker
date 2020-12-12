@@ -13,8 +13,22 @@ interface IPeriod{
     name: string;
 }
 
+interface ITaskOption{
+    id: number;
+    guid: string;
+    codeName: string;
+    displayName: string;
+}
+
+interface ITaskParameters{
+    taskTypes: Array<ITaskOption>;
+    taskSources: Array<ITaskOption>;
+}
+
 
 export {
     IDateRange,
     IPeriod,
+    ITaskOption,
+    ITaskParameters,
 }

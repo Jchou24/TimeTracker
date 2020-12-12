@@ -6,7 +6,8 @@ import createMultiTabState from 'vuex-multi-tab-state'
 import { IStore, IStoreRoot } from '@/models/store'
 import authentication from './authentication'
 import pageIdle from './pageIdle'
-import ToastInterface from 'vue-toastification/dist/types/src/ts/interface'
+import taskParameters from './taskParameters'
+import notification from './notification'
 import { WSHandler } from '@/api/webSocket'
 
 Vue.use(Vuex)
@@ -14,7 +15,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         isLoading: false,
-        notificator: undefined,
         wsHandler: undefined,
     },
     mutations: {
@@ -24,9 +24,6 @@ export default new Vuex.Store({
         TurnOffLoading: ( state: IStoreRoot ) => {
             state.isLoading = false 
         },
-        SetNotificator: ( state: IStoreRoot, notificator: ReturnType<typeof ToastInterface> ) => {
-            state.notificator = notificator
-        },
         SetWSHandler: ( state: IStoreRoot, wsHandler: WSHandler ) => {
             state.wsHandler = wsHandler
         },
@@ -34,8 +31,10 @@ export default new Vuex.Store({
     actions: {
     },
     modules: {
+        taskParameters,
         authentication,
         pageIdle,
+        notification,
     },
     plugins: [
         createMultiTabState({

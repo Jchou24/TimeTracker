@@ -5,13 +5,12 @@ import { IStore } from '@/models/store'
 import VueRouter from 'vue-router'
 import { GetRedirectPath } from '@/router/routeConfigs'
 import { ValidationResults } from '@/models/authentication'
-import { ToastWarning } from './notification'
 
 axios.defaults.withCredentials = true
 
 class APIHandler{
     protected _store: Store<IStore>
-    private _rootRouter: VueRouter
+    protected _rootRouter: VueRouter
     
     constructor( store: Store<IStore>, router: VueRouter ) {
         this._store = store
@@ -33,20 +32,22 @@ class APIHandler{
 
     HttpPost(url: string, isLoading?: Ref<boolean>, data?: any, 
             SuccessFunc?: (response: AxiosResponse<any>) => void, 
-            ErrorFunc?: (error: any) => void ){
+            ErrorFunc?: (error: any) => void,
+            isHandle4XX = true){
         if (isLoading) {
             isLoading.value = true
         }
         
         axios.post(`${process.env.VUE_APP_SERVER_URL}${url}`.toLowerCase(), data )
             .then( response => this.Then( response, SuccessFunc ))
-            .catch( error => this.Catch( error, ErrorFunc ))
+            .catch( error => this.Catch( error, ErrorFunc, isHandle4XX ))
             .finally( () => this.Finally( isLoading ))
     }
 
     LogoutProcess(){
         this._store.commit("authentication/Init")
         this._store.commit("pageIdle/Init")
+        this.HttpPost('api/Account/Logout')
     }
 
     private Then( response: AxiosResponse<any>, SuccessFunc?: (response: AxiosResponse<any>) => void ){
@@ -55,22 +56,26 @@ class APIHandler{
         }
     }
 
-    private Catch( error: any, ErrorFunc?: (error: any) => void ){
+    private Catch( error: any, ErrorFunc?: (error: any) => void, isHandle4XX = true ){
         if( ErrorFunc ){
             ErrorFunc(error)
         }
 
+        if( !isHandle4XX ){
+            return
+        }
+
         const errorStatusCode = error?.response?.status || undefined
-        const toast = this._store.state.notificator
+        const toast = this._store.state.notification
         switch (errorStatusCode) {
             case 401:
                 this.LogoutProcess()
-                ToastWarning( `Sorry! You don't have sufficient permission. You will be signed out automatically.`, toast )
+                toast.Notificate401()                    
                 break;
 
             case 403:
                 this._rootRouter.push(GetRedirectPath(ValidationResults.invalidRole))
-                ToastWarning( `Sorry! You don't have sufficient permission.`, toast )
+                toast.Notificate403()
                 break;
         
             default:

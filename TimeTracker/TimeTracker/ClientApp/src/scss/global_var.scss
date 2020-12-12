@@ -48,3 +48,37 @@ $color-success: #4caf50;
         color: #d3d3d3 !important;
     }
 }   
+
+html {
+    // background: $background;
+    // background: red;
+    // background-attachment: fixed;
+
+    overflow-x: auto;
+    
+    // @media (max-width: $mediaquery-width-sm) { 
+    //     &::-webkit-scrollbar { 
+    //         display: none; 
+    //     }
+    // }
+
+    // @media (min-width: $mediaquery-width-sm) { 
+        &::-webkit-scrollbar
+        {
+            width: 14px;
+            height: 12px;
+            background-color: #eaeaea;
+        }
+    
+        &::-webkit-scrollbar-thumb
+        {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #d8d8d8;
+
+            &:hover{
+                background-color: #ecebeb;
+            }
+        }
+    // }
+}

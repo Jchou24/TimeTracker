@@ -18,7 +18,7 @@ function ConfigRouteValidation(router: VueRouter, store: Store<IStore> ){
         const result = ValidateAuth(to.name as string, store, routeConfigs)
         if( result != ValidationResults.ok ){
             // setTimeout( () => ToastWarning(store.state.notificator, `Insufficient permision found: ${ValidationResults[result]}`), 2000 )
-            ToastWarning(`Insufficient permision found: ${ValidationResults[result]}`, store.state.notificator)
+            ToastWarning(`Insufficient permision found: ${ValidationResults[result]}`, store.state.notification.notificator)
             next(GetRedirectPath(result))
             return
         }

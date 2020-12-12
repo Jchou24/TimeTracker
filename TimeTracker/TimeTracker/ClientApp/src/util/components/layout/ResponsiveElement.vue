@@ -9,7 +9,12 @@
     // 設置breakpoint
     // 作成可以 directive 也可以 import 進來當作components
     // 可以參考 vue-responsive-components https://github.com/kelin2025/vue-responsive-components
-    // 設置 emit 將 resize 給emit出來
+    // 設置 emit
+    //     當 resize 時觸發
+    //         帶出現在的 size
+
+    // 增加 named-slot，這樣就可以在不同的size下使用不同的組件
+    // 增加 scoped-slot，將現在的size等等一些變數export出來
     import settings from "../../settings.js"
     import throttle from 'lodash.throttle'
     

@@ -74,7 +74,7 @@
             
             provideToast({ toastClassName: "toast-notification" })
             const toast = useToast()
-            store.commit("SetNotificator", toast)
+            store.commit("notification/SetNotificator", toast)
             
             const isLoading = ref(false)
             authenticationAPIHandler.IsLogin(isLoading)
@@ -139,6 +139,17 @@
 
     .toast-notification{
         width: 400px;
+    }
+
+    .MetaDisplayer{
+        position: fixed;
+        top: 90px;
+        left: 40px;
+        z-index: 5;
+    }
+
+    .TaskEditor{
+        padding-left: 350px;
     }
 </style>
 
