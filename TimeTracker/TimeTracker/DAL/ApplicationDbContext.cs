@@ -198,7 +198,7 @@ namespace TimeTracker.DAL
                 });
 
             // add TaskType
-            string[] taskTypes = { "Coding", "Shopping", "Play Baseball", "Wash Floors", "Reading", "Play PC Game" };
+            string[] taskTypes = { "", "Coding", "Shopping", "Play Baseball", "Wash Floors", "Reading", "Play PC Game" };
 
             foreach (var taskType in taskTypes)
             {
@@ -213,7 +213,7 @@ namespace TimeTracker.DAL
             }
 
             // add TaskSource
-            string[] taskSources = { "Boss", "Girl friend", "Father", "Mother" };
+            string[] taskSources = { "", "Boss", "Girl friend", "Father", "Mother" };
 
             foreach (var taskSource in taskSources)
             {
