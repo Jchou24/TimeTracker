@@ -7,6 +7,9 @@ import VueCompositionAPI from '@vue/composition-api'
 
 import vuetify from './vuetify'
 
+import 'jctk-table-form'
+import 'jctk-table-form/dist/jctk-table-form.css'
+
 // for icon
 import 'material-design-icons/iconfont/material-icons.css'
 import '@mdi/font/css/materialdesignicons.css'

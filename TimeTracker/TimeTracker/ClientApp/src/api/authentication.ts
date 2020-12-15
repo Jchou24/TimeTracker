@@ -5,6 +5,7 @@ import { APIHandler } from '@/util/apiHandler.ts'
 import { IClaims, ILogin, IUpdatePassword } from '@/models/authentication'
 import { IStore } from '@/models/store'
 import VueRouter from 'vue-router'
+import { TaskEditorAPIHandler } from './taskEditor'
 
 class AuthenticationAPIHandler extends APIHandler{
     
@@ -47,6 +48,10 @@ class AuthenticationAPIHandler extends APIHandler{
             this.GetUserInfo( isLoading, () => {
                 this._store.commit("authentication/SetIsAuthenticated", true)
             })
+
+            const taskEditorAPIHandler = new TaskEditorAPIHandler( this._store, this._rootRouter )
+            taskEditorAPIHandler.GetTaskSources(isLoading)
+            taskEditorAPIHandler.GetTaskTypes(isLoading)
         }, ErrorFunc)
     }
 

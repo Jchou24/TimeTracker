@@ -2,8 +2,10 @@
     <div class="TaskEditor">
         <MetaDisplayer :selectedUser.sync="targetUser" :selectedDates.sync="targetDates" :width="widthMetaDisplayer" />
 
-        <p>targetUser {{targetUser}}</p>
-        <p>targetDates {{targetDates}}</p>
+        <TaskDayTimeline :user="targetUser" :dateRange="targetDates" />
+
+        <!-- <p>targetUser {{targetUser}}</p>
+        <p>targetDates {{targetDates}}</p> -->
     </div>
 </template>
 
@@ -11,6 +13,7 @@
     import { computed, defineComponent, reactive, ref } from '@vue/composition-api'
 
     import MetaDisplayer from '@/components/trackTask/toolbar/MetaDisplayer.vue'
+    import TaskDayTimeline from '@/components/trackTask/taskForm/TaskDayTimeline.vue'
 
     import { IClaims } from '@/models/authentication.ts'
     import { IDateRange } from '@/models/tasks'
@@ -25,6 +28,7 @@
         },
         components:{
             MetaDisplayer,
+            TaskDayTimeline
         },
         setup(){
             const targetUser = ref({} as IClaims)
@@ -41,5 +45,8 @@
 </script>
 
 <style lang="scss">
-    
+    .TaskEditor{
+        width: 100%;
+        // overflow-x: scroll;
+    }
 </style>
