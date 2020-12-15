@@ -9,6 +9,7 @@ import pageIdle from './pageIdle'
 import taskParameters from './taskParameters'
 import notification from './notification'
 import { WSHandler } from '@/api/webSocket'
+import { GetGuid } from '@/util/authentication'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     state: {
         isLoading: false,
         wsHandler: undefined,
+        tabGuid: GetGuid(),
     },
     mutations: {
         TurnOnLoading: ( state: IStoreRoot ) => {

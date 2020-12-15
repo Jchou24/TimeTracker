@@ -4,7 +4,7 @@
         
         <div>
             <v-row>
-                <v-btn class="btn-select-target"
+                <v-btn class="btn-select btn-select-target"
                     color="primary"
                     tile outlined fab depressed
                     :width="width" 
@@ -16,7 +16,7 @@
             <v-row>
                 <DateMenuSelector :selectedDates.sync="targetDates" >
                     <template v-slot:activator="{ activator }">
-                        <v-btn class="btn-select-date mt-1"
+                        <v-btn class="btn-select btn-select-date mt-1"
                             color="primary"
                             tile outlined fab depressed
                             v-bind="activator.attrs"
@@ -27,7 +27,7 @@
                             <v-container>
                                 <v-row no-gutters justify="center" v-if="isShowPeriodName">
                                     <v-col class="mt-2">
-                                        <v-icon class="mr-1">mdi-calendar</v-icon>{{targetDates.periodName}}
+                                        <v-icon class="mr-1">mdi-calendar-multiple</v-icon>{{targetDates.periodName}}
                                     </v-col>
                                 </v-row>
                                 <v-row no-gutters justify="center" v-if="isShowPeriodName">
@@ -109,9 +109,12 @@
     .MetaDisplayer .v-btn{
         text-transform: initial;
     }
+    
+    .MetaDisplayer .btn-select{
+        background: whitesmoke;        
+    }
 
     $border-radius: 15px;
-
     .MetaDisplayer .btn-select-target{
         border-top-left-radius: $border-radius;
         border-top-right-radius: $border-radius;

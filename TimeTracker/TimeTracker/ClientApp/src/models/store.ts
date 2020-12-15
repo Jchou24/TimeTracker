@@ -8,6 +8,7 @@ import { ITaskParameters } from './tasks'
 interface IStoreRoot{
     isLoading: boolean,
     wsHandler: WSHandler | undefined,
+    tabGuid: string,
 }
 
 interface IStore extends IStoreRoot{
