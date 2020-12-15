@@ -335,7 +335,7 @@ namespace TimeTracker.Migrations
                             Email = "admin@auth.com",
                             Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Admin",
-                            PasswordHash = "$MYHASH$V1$10000$6CPRlRIz1KU/pd/zqCfOeR2Xb1pJX5WwtghEagP6T0SQBCrS",
+                            PasswordHash = "$MYHASH$V1$10000$oGVbCMGhuybVZjC/4kZyQC2jS2pAP/rlz3iQ+RbL/ZOwp0Av",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -346,7 +346,7 @@ namespace TimeTracker.Migrations
                             Email = "user@auth.com",
                             Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "User",
-                            PasswordHash = "$MYHASH$V1$10000$d09IsBH+lsx2MHvXY4KfgynSojZQTvqx+nrKCRWriKnNOn1z",
+                            PasswordHash = "$MYHASH$V1$10000$dGx1xEJAWbvpyfwpNjMFcQn18GFQYZavCU4e3SFgVA/1Dmk7",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -357,7 +357,7 @@ namespace TimeTracker.Migrations
                             Email = "test@auth.com",
                             Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Test",
-                            PasswordHash = "$MYHASH$V1$10000$dInA86i7EZmTW59xxqNmGLXvyly+BTvrBW5anLqZpkoc34la",
+                            PasswordHash = "$MYHASH$V1$10000$KQvY9JgfmUrdjFBAAX8PHSNrYJOxuWiJL1NL6isDkO5UqL0a",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -368,7 +368,7 @@ namespace TimeTracker.Migrations
                             Email = "test2@auth.com",
                             Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Test2",
-                            PasswordHash = "$MYHASH$V1$10000$t0l2neZads7fSQ3LD0RRLI0WurVqqui1bSyrwjWiXAd3r0Hb",
+                            PasswordHash = "$MYHASH$V1$10000$ZG8AWlu88pNNOy+4wknMosIV9aeAuDitji2BCPmfUNoVmpMK",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -451,7 +451,7 @@ namespace TimeTracker.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("a0cd64de-c4c8-40f3-a2a3-a5a3e9ce5831"),
+                            Guid = new Guid("fb67e5cc-90c1-4394-b579-4b8203be3374"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LimitWorkTime = 7.5,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -529,6 +529,9 @@ namespace TimeTracker.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("Date");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
 
                     b.Property<string>("TaskContent")
                         .HasMaxLength(256)
@@ -630,15 +633,15 @@ namespace TimeTracker.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("f57d8e1c-f54d-4e23-812e-95165804ade1"),
-                            CodeName = "",
+                            Guid = new Guid("fbf9bcfd-f443-4d01-8364-6d50337714ab"),
+                            CodeName = "default",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("b43be632-1a12-4997-8dbd-3b1f7d7d52e6"),
+                            Guid = new Guid("8ad3a826-e524-41ca-a305-e4eec449f39c"),
                             CodeName = "Boss",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Boss",
@@ -646,7 +649,7 @@ namespace TimeTracker.Migrations
                         },
                         new
                         {
-                            Guid = new Guid("f905bfb4-d06b-4401-9534-5b16253caf89"),
+                            Guid = new Guid("97af70b3-f5c9-4e9d-964c-3d1c713d5b96"),
                             CodeName = "Girl friend",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Girl friend",
@@ -654,7 +657,7 @@ namespace TimeTracker.Migrations
                         },
                         new
                         {
-                            Guid = new Guid("a10b373a-5e78-4dc2-b76c-23e1e4d465b1"),
+                            Guid = new Guid("7626436e-596a-42f2-8053-3e9b1c696f23"),
                             CodeName = "Father",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Father",
@@ -662,7 +665,7 @@ namespace TimeTracker.Migrations
                         },
                         new
                         {
-                            Guid = new Guid("78353ec8-aba7-4785-9651-ce639c400827"),
+                            Guid = new Guid("3d3828da-eb55-4625-88dc-854193f1bf3e"),
                             CodeName = "Mother",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Mother",
@@ -683,6 +686,9 @@ namespace TimeTracker.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("Date");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -758,15 +764,15 @@ namespace TimeTracker.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("da70bf5d-482b-4650-8035-6e79cf8436c2"),
-                            CodeName = "",
+                            Guid = new Guid("d0143f5b-f764-42b8-be69-0991db5e68ea"),
+                            CodeName = "default",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("ddddaa1b-cb3d-46ae-b4c9-aad7ac1b6992"),
+                            Guid = new Guid("542c0388-5e13-4036-900a-8e2d335eabb1"),
                             CodeName = "Coding",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Coding",
@@ -774,7 +780,7 @@ namespace TimeTracker.Migrations
                         },
                         new
                         {
-                            Guid = new Guid("c6aec83d-a245-4706-b3df-9d67cf97a005"),
+                            Guid = new Guid("fbbde38a-6f1e-4869-92c7-610e0801193c"),
                             CodeName = "Shopping",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Shopping",
@@ -782,7 +788,7 @@ namespace TimeTracker.Migrations
                         },
                         new
                         {
-                            Guid = new Guid("1d7804b0-7116-4311-9a42-c4ba14e9ea03"),
+                            Guid = new Guid("f680f01c-9b4e-4004-8231-3164e9b96d2b"),
                             CodeName = "Play Baseball",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Play Baseball",
@@ -790,7 +796,7 @@ namespace TimeTracker.Migrations
                         },
                         new
                         {
-                            Guid = new Guid("61fbbc89-55e2-4c1a-9146-d65e4f01ade5"),
+                            Guid = new Guid("c8d080e7-4c12-4d68-a2ab-3800db829248"),
                             CodeName = "Wash Floors",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Wash Floors",
@@ -798,7 +804,7 @@ namespace TimeTracker.Migrations
                         },
                         new
                         {
-                            Guid = new Guid("06ccec0d-9de8-4e57-9836-130817cbc484"),
+                            Guid = new Guid("42d5aa55-139a-433a-8d58-f034ad8a7e05"),
                             CodeName = "Reading",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Reading",
@@ -806,7 +812,7 @@ namespace TimeTracker.Migrations
                         },
                         new
                         {
-                            Guid = new Guid("f051a481-6e66-4fea-838b-5b34f75fb889"),
+                            Guid = new Guid("fc572033-ca5d-434e-b1b0-cbe569ad774a"),
                             CodeName = "Play PC Game",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Play PC Game",

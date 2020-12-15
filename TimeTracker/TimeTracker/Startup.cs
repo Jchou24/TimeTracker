@@ -46,6 +46,7 @@ namespace TimeTracker
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUserAuthHandler<User, int>, UserAuthHandler>();
+            services.AddScoped<TaskHandler>();
 
             services.AddTransient<WSHubHandler<WSHub>>();
             services.AddSignalR();

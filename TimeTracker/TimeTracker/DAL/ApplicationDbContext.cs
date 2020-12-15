@@ -198,7 +198,16 @@ namespace TimeTracker.DAL
                 });
 
             // add TaskType
-            string[] taskTypes = { "", "Coding", "Shopping", "Play Baseball", "Wash Floors", "Reading", "Play PC Game" };
+            string[] taskTypes = { "Coding", "Shopping", "Play Baseball", "Wash Floors", "Reading", "Play PC Game" };
+
+            modelBuilder
+                .Entity<TaskType>()
+                .HasData(new TaskType()
+                {
+                    Guid = Guid.NewGuid(),
+                    CodeName = "default",
+                    DisplayName = ""
+                });
 
             foreach (var taskType in taskTypes)
             {
@@ -213,7 +222,16 @@ namespace TimeTracker.DAL
             }
 
             // add TaskSource
-            string[] taskSources = { "", "Boss", "Girl friend", "Father", "Mother" };
+            string[] taskSources = { "Boss", "Girl friend", "Father", "Mother" };
+
+            modelBuilder
+                .Entity<TaskSource>()
+                .HasData(new TaskSource()
+                {
+                    Guid = Guid.NewGuid(),
+                    CodeName = "default",
+                    DisplayName = ""
+                });
 
             foreach (var taskSource in taskSources)
             {
