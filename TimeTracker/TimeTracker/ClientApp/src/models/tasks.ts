@@ -36,6 +36,17 @@ interface ITask{
     taskContent: string;
 }
 
+interface IDeleteTasks{
+    ownerGuid: string;
+    date: string;
+    taskGuids: Array<string>;
+}
+
+interface IUpdateIsLeave{
+    ownerGuid: string;
+    date: string;
+    isLeave: boolean;
+}
 
 interface IUpdateTask{
     guid: string;
@@ -49,12 +60,16 @@ interface IUpdateTask{
 }
 
 interface IUpdateTaskRowOrder{
-    guid: string;
+    ownerGuid: string;
+    guid: string; // task guid
+    date: string;
     displayOrder: number;
 }
 
 interface IUpdateTaskCol{
-    guid: string;
+    ownerGuid: string;
+    guid: string; // task guid
+    date: string;
     relatedKey: string;
     value: any;
 }
@@ -103,6 +118,8 @@ export {
     ITaskOption,
     ITaskParameters,
     ITask,
+    IDeleteTasks,
+    IUpdateIsLeave,
     IUpdateTask,
     IUpdateTaskRowOrder,
     IUpdateTaskCol,

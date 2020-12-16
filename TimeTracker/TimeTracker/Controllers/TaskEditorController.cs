@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.DAL;
-using TimeTracker.DAL.DBModels.Task;
 using TimeTracker.DAL.Models;
 using TimeTracker.Helper.Auth;
 using TimeTracker.Models;
 using TimeTracker.Models.Task;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TimeTracker.Controllers
 {
@@ -29,7 +25,6 @@ namespace TimeTracker.Controllers
             this._context = applicationDbContext;
             this._taskHandler = taskHandler;
         }
-
 
         [HttpPost]
         public IActionResult GetAccounts()
@@ -64,12 +59,10 @@ namespace TimeTracker.Controllers
             return Ok(result);
         }
         
-
         [HttpPost]
         public IActionResult GetDaysData(QueryTasks queryTasks)
         {
             var result = this._taskHandler.GetDaysData(queryTasks);
-
             return Ok(result);
         }
 
@@ -81,9 +74,6 @@ namespace TimeTracker.Controllers
             this._taskHandler.CreateTasks(createTask.Tasks, taskDays);
 
             var tasksGuids = createTask.Tasks.Select(x => x.Guid).ToList();
-
-            // TODO
-            // 要用 WS 把新增的訊息派送給有訂閱的client
 
             return Ok(tasksGuids);
         }

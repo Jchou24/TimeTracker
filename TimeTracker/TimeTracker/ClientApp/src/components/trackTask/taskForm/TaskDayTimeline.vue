@@ -49,11 +49,14 @@
 
     import debounce from 'lodash.debounce'
     import { Store } from 'vuex/types/index'
-    import { TaskEditorAPIHandler, TaskEditorWSHandler } from '@/api/taskEditor'
+    import { TaskEditorAPIHandler, TaskEditorWSHandler, TaskEditorWSListener } from '@/api/taskEditor'
     import { IStore } from '@/models/store'
     import { IClaims } from '@/models/authentication'
-    import { IDateRange, IDayData, IGetDaysDataResponse, IQueryTasks, ITaskOption } from '@/models/tasks'
+    import { ICreateTask, IDateRange, IDayData, IDeleteTasks, IGetDaysDataResponse, 
+        IQueryTasks, ITask, ITaskOption, IUpdateTaskCol, IUpdateTaskRowOrder } from '@/models/tasks'
     import { FormatDate, GetDateRange } from '@/util/taskDate'
+    import { WSMapCode } from '@/models/constants/webSocket'
+    import { GetOptionIdByGuid, GetOptionIdByOption } from '@/util/taskParameters'
 
     export default defineComponent({
         name: 'TaskDayTimeline',
@@ -75,12 +78,13 @@
             const router = $router
             const taskEditorAPIHandler = new TaskEditorAPIHandler( store, router )
             const taskEditorWSHandler = new TaskEditorWSHandler( store )
+            const taskEditorWSListener = new TaskEditorWSListener( store )
 
             const daysData = ref([] as Array<IDayData>)
             // ======================================================================
             function HandleIconClick() {
                 // click to scroll top
-                console.log("click icon")
+                // console.log("click icon")
             }
 
             // ======================================================================
@@ -140,19 +144,19 @@
                     return result
                 }
 
-            const GetOptionIdByOption = ( storeTasksOptions: Array<ITaskOption>, value: ITaskOption ) => storeTasksOptions.find( x => x.guid === value.guid )?.id
-
             function SetDaysData() {
                 const dateRange = GetDateRange(props.dateRange?.startDate, props.dateRange?.endDate)
                 if( dateRange.length == 0 ){
                     return
                 }
 
-                taskEditorAPIHandler.GetDaysData({
-                        ownerGuid: props.user?.guid,
-                        startDate: props.dateRange?.startDate,
-                        endDate: props.dateRange?.endDate,
-                    } as IQueryTasks, isLoading, (response) => {
+                const queryTasks = {
+                    ownerGuid: props.user?.guid,
+                    startDate: props.dateRange?.startDate,
+                    endDate: props.dateRange?.endDate,
+                } as IQueryTasks
+
+                taskEditorAPIHandler.GetDaysData(queryTasks, isLoading, (response) => {
                         const tasksDays = response.data as Array<IGetDaysDataResponse>
                         tasksDays.forEach( tasksDay => tasksDay.formData.forEach( task => {
                             task.date = tasksDay.date
@@ -162,6 +166,9 @@
                         // console.log(tasksDays)
                         daysData.value = GetDaysData(dateRange, tasksDays as Array<IDayData>)
                     })
+
+                taskEditorWSHandler.Unsubscribe()
+                taskEditorWSHandler.Subscribe(queryTasks)
             }
 
             watch( () => [ props.user, props.dateRange ], debounce( () => {
@@ -171,14 +178,9 @@
             }, 500 ))
             
             // ======================================================================
-            // TODO 
-            //     要在這邊設置 ws on 接收後端派送的更新訊息
-            // HandleWSAddRows
-            // HandleWSRemoveRows
-            // HandleWSMoveRows
-            // HandleWSEmptyCells
-            // HandleWSModifyCells
+            // Hadnler ws message
             
+            taskEditorWSListener.InitListener(daysData)            
 
             return {
                 isLoading,

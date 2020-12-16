@@ -17,6 +17,7 @@
 
     import { IClaims } from '@/models/authentication.ts'
     import { IDateRange } from '@/models/tasks'
+    import { TaskEditorAPIHandler, TaskEditorWSHandler } from '@/api/taskEditor'
 
     export default defineComponent({
         name: 'TaskEditor',
@@ -29,6 +30,13 @@
         components:{
             MetaDisplayer,
             TaskDayTimeline
+        },
+        beforeRouteLeave(to, from, next) {
+            // const taskEditorAPIHandler = new TaskEditorAPIHandler( this.$store, this.$router )
+            // taskEditorAPIHandler.UnsubscribeWSGroup()
+            const taskEditorWSHandler = new TaskEditorWSHandler( this.$store )
+            taskEditorWSHandler.Unsubscribe()
+            next();
         },
         setup(){
             const targetUser = ref({} as IClaims)

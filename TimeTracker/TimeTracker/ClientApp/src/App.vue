@@ -83,7 +83,7 @@
             })
 
             const wsHandler = new WSHandler(store, router)
-            store.commit("SetWSHandler", wsHandler)
+            store.commit("webSocket/SetWSHandler", wsHandler)
             // =================================================================
             // Watch Account Status
             watch( () => store.state.authentication.claims.accountStatus, debounce((accountStatus: AccountStatus) => {

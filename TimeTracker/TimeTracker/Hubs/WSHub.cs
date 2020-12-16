@@ -1,67 +1,88 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TimeTracker.DAL;
 using TimeTracker.DAL.Models;
 using TimeTracker.Helper.Auth;
-using TimeTracker.Hubs;
+using TimeTracker.Hubs.Models;
 using TimeTracker.Models.Task;
 
-namespace ChatSample.Hubs
+namespace TimeTracker.Hubs
 {
-    public class WSHub : Hub
+    public class WSHub : BaseWSHub
     {
-        private readonly WSHubHandler<WSHub> _hubMethods;
-        private readonly ApplicationDbContext _context;
-        private readonly TaskHandler _taskHandler;
-
-        public WSHub(WSHubHandler<WSHub> hubMethods, ApplicationDbContext context, TaskHandler taskHandler)
+        public WSHub(ApplicationDbContext context, TaskHandler taskHandler, WSHubHandler<WSHub> wsHubHandler)
+            :base(context, taskHandler, wsHubHandler)
         {
-            _hubMethods = hubMethods;
-            this._context = context;
-            this._taskHandler = taskHandler;
         }
 
         [Authorize]
         [AuthorizeRole(UserRoles.User)]
-        public async Task Send(string name, string message)
+        public async Task SubscribeTaskEditor(QueryTasks queryTasks)
         {
-            // Call the broadcastMessage method to update clients.
-            await Clients.All.SendAsync("broadcastMessage", name, message);
-            // TODO
-            //    測試用 function，要記得刪掉
-        }
-
-
-        [Authorize]
-        [AuthorizeRole(UserRoles.User)]
-        public async Task DeleteTasks(List<Guid> taskGuids)
-        {
-            this._taskHandler.DeleteTasks(taskGuids);
-            // TODO
-            // 要通知 client 誰被刪掉了
+            await this.RangeAddToTaskEditorGroup(queryTasks);
         }
 
         [Authorize]
         [AuthorizeRole(UserRoles.User)]
-        public async Task UpdateTaskRowOrder(List<UpdateTaskRowOrder> updateTaskRowOrder)
+        public async Task UnsubscribeTaskEditor(QueryTasks queryTasks)
         {
-            var updatedRow = this._taskHandler.UpdateTaskRowOrder(updateTaskRowOrder);
-            // TODO
-            // 要通知 client 哪些row的order要更新
+            await this.RangeRemoveFromTaskEditorGroup(queryTasks);
+        }
+
+        [Authorize]
+        [AuthorizeRole(UserRoles.User)]
+        public async Task UpdateIsLeave(UpdateIsLeave updateIsLeave)
+        {
+            await GroupBroadcast(
+                _wsHubHandler.GetTaskEditorGroupName(updateIsLeave.OwnerGuid, updateIsLeave.Date),
+                WSMapCode.TaskEditorUpdateIsLeave.ToString(),
+                updateIsLeave);
+
+            this._taskHandler.CreateOrUpdateTaskDay(updateIsLeave.Date, updateIsLeave.OwnerGuid, updateIsLeave.IsLeave);
+        }
+
+        [Authorize]
+        [AuthorizeRole(UserRoles.User)]
+        public async Task CreateTask(CreateTask createTask)
+        {
+            await GroupBroadcast(
+                _wsHubHandler.GetTaskEditorGroupName(createTask.OwnerGuid, createTask.Tasks[0].Date),
+                WSMapCode.TaskEditorCreateTask.ToString(),
+                createTask);
+        }
+
+        [Authorize]
+        [AuthorizeRole(UserRoles.User)]
+        public async Task DeleteTasks(DeleteTasks deleteTasks)
+        {
+            await GroupBroadcast(
+                _wsHubHandler.GetTaskEditorGroupName(deleteTasks.OwnerGuid, deleteTasks.Date), 
+                WSMapCode.TaskEditorDeleteTasks.ToString(), 
+                deleteTasks);
+            this._taskHandler.DeleteTasks(deleteTasks);
+        }
+
+        [Authorize]
+        [AuthorizeRole(UserRoles.User)]
+        public async Task UpdateTaskRowOrder(List<UpdateTaskRowOrder> updateTaskRowOrders)
+        {
+            await GroupBroadcast(
+                _wsHubHandler.GetTaskEditorGroupName(updateTaskRowOrders[0].OwnerGuid, updateTaskRowOrders[0].Date),
+                WSMapCode.TaskEditorUpdateTaskRowOrder.ToString(),
+                updateTaskRowOrders);
+            var updatedRow = this._taskHandler.UpdateTaskRowOrder(updateTaskRowOrders);
         }
 
         [Authorize]
         [AuthorizeRole(UserRoles.User)]
         public async Task UpdateTaskCol(List<UpdateTaskCol> updateTaskCol)
         {
+            await GroupBroadcast(
+                _wsHubHandler.GetTaskEditorGroupName(updateTaskCol[0].OwnerGuid, updateTaskCol[0].Date),
+                WSMapCode.TaskEditorUpdateTaskCol.ToString(),
+                updateTaskCol);
             this._taskHandler.UpdateTaskCol(updateTaskCol);
-            // TODO
-            // 要通知 client 哪些 cell 要被更新
         }
-
     }
 }

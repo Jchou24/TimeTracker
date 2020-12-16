@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ChatSample.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -25,14 +24,13 @@ namespace TimeTracker.Controllers
     {
         protected readonly ApplicationDbContext _context;
         private readonly IHubContext<WSHub> _hubContext;
-        private readonly WSHubHandler<WSHub> _hubMethods;
+        protected readonly WSHubHandler<WSHub> _wsHubHandler;
 
-        public AdminController(ApplicationDbContext applicationDbContext, IHubContext<WSHub> hubContext, WSHubHandler<WSHub> hubMethods)
+        public AdminController(ApplicationDbContext applicationDbContext, IHubContext<WSHub> hubContext, WSHubHandler<WSHub> wsHubHandler)
         {
             this._context = applicationDbContext;
             this._hubContext = hubContext;
-
-            _hubMethods = hubMethods;
+            this._wsHubHandler = wsHubHandler;
         }
 
         [HttpPost]
@@ -100,7 +98,7 @@ namespace TimeTracker.Controllers
 
             foreach (var updateAccount in updateAccounts)
             {
-                _hubMethods.ClientGetUserInfo(updateAccount.Guid);
+                _wsHubHandler.ClientGetUserInfo(updateAccount.Guid);
             }
                 
             return Ok();

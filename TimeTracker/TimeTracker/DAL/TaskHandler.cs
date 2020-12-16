@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TimeTracker.DAL.DBModels.Auth;
 using TimeTracker.DAL.DBModels.Task;
 using TimeTracker.Models.Task;
 
@@ -66,13 +65,31 @@ namespace TimeTracker.DAL
         }
 
 
-        public TaskDay CreateTaskDay(DateTime date, Guid ownerGuid)
+        public TaskDay CreateTaskDay(DateTime date, Guid ownerGuid, bool isLeave = false)
         {
-            var owner = _context.User.Where(x => x.Guid == ownerGuid).SingleOrDefault();
-            var taskDay = new TaskDay(date, owner);
+            var owner = this._context.User.Where(x => x.Guid == ownerGuid).SingleOrDefault();
+            var taskDay = new TaskDay(date, owner)
+            {
+                IsLeave = isLeave
+            };
             _context.TaskDay.Add(taskDay);
             _context.SaveChanges();
             return taskDay;
+        }
+
+        public void CreateOrUpdateTaskDay(DateTime date, Guid ownerGuid, bool isLeave)
+        {
+            var taskDay = this._context.TaskDay.Where(x => x.User.Guid == ownerGuid && x.Date.Date == date.Date).SingleOrDefault();
+
+            if (taskDay == null)
+            {
+                this.CreateTaskDay(date, ownerGuid, isLeave);
+            }
+            else {
+                taskDay.IsLeave = isLeave;
+                taskDay.SetUpdatedDate();
+                _context.SaveChanges();
+            }
         }
 
         public IEnumerable<TaskDay> CreateAndSelectTaskDay(List<Task> tasks, Guid ownerGuid)
@@ -93,9 +110,9 @@ namespace TimeTracker.DAL
             return taskDays;
         }
 
-        public void DeleteTasks(List<Guid> taskGuids)
+        public void DeleteTasks(DeleteTasks deleteTasks)
         {
-            var tasks = this._context.Task.Where(x => taskGuids.Contains(x.Guid));
+            var tasks = this._context.Task.Where(x => deleteTasks.TaskGuids.Contains(x.Guid));
             if (tasks == null)
             {
                 return;

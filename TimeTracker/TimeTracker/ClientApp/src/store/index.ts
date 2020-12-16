@@ -8,7 +8,7 @@ import authentication from './authentication'
 import pageIdle from './pageIdle'
 import taskParameters from './taskParameters'
 import notification from './notification'
-import { WSHandler } from '@/api/webSocket'
+import webSocket from './webSocket'
 import { GetGuid } from '@/util/authentication'
 
 Vue.use(Vuex)
@@ -16,7 +16,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         isLoading: false,
-        wsHandler: undefined,
         tabGuid: GetGuid(),
     },
     mutations: {
@@ -26,9 +25,6 @@ export default new Vuex.Store({
         TurnOffLoading: ( state: IStoreRoot ) => {
             state.isLoading = false 
         },
-        SetWSHandler: ( state: IStoreRoot, wsHandler: WSHandler ) => {
-            state.wsHandler = wsHandler
-        },
     },
     actions: {
     },
@@ -37,6 +33,7 @@ export default new Vuex.Store({
         authentication,
         pageIdle,
         notification,
+        webSocket,
     },
     plugins: [
         createMultiTabState({

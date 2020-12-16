@@ -10,17 +10,6 @@ namespace TimeTracker.Helper.Extensions
 {
     public static class SessionAuthExtensions
     {
-        public static void SetObjectAsJson(this ISession session, string key, object value)
-        {
-            session.SetString(key, JsonConvert.SerializeObject(value));
-        }
-
-        public static T GetObjectFromJson<T>(this ISession session, string key)
-        {
-            var value = session.GetString(key);
-            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
-        }
-
         /// <summary>
         /// return null if not log in
         /// </summary>
@@ -37,6 +26,24 @@ namespace TimeTracker.Helper.Extensions
             }
 
             return id;
+        }
+
+        /// <summary>
+        /// return null if not log in
+        /// </summary>
+        /// <param name="claimsPrincipal"></param>
+        /// <returns></returns>
+        public static Guid? GetUserGuid(this ClaimsPrincipal claimsPrincipal)
+        {
+            string idString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid guid;
+
+            if (Guid.TryParse(idString, out guid))
+            {
+                return null;
+            }
+
+            return guid;
         }
     }
 }

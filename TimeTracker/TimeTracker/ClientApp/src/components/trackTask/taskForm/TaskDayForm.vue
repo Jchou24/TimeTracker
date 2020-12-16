@@ -4,6 +4,7 @@
             v-model="dayData.isLeave"
             label="Leave"
             color="primary"
+            @click="HandleClickIsLeave(dayData, dayData.isLeave)"
         />
 
         <TableForm class="table-form"
@@ -33,9 +34,11 @@
     import { TaskEditorAPIHandler, TaskEditorWSHandler } from '@/api/taskEditor'
     import { IStore } from '@/models/store'
     import { IClaims } from '@/models/authentication'
-    import { ICreateTask, IDateRange, IDayData, ITaskOption, IUpdateTask, IUpdateTaskCol, IUpdateTaskRowOrder } from '@/models/tasks'
+    import { ICreateTask, IDateRange, IDayData, IDeleteTasks, ITaskOption, 
+        IUpdateIsLeave, IUpdateTask, IUpdateTaskCol, IUpdateTaskRowOrder } from '@/models/tasks'
     import { GetOptions } from '@/models/constants/task'
     import { GetGuid } from '@/util/authentication'
+    import { GetOptionById, GetOptionGuidById } from '@/util/taskParameters'
 
     import { IAddRow, IMoveRow, IRemoveRow, IUpdateCell } from './taskform'
 
@@ -97,13 +100,18 @@
                 emit('handleClickTableForm', props.dayData)
             }
 
+            function HandleClickIsLeave(dayData: IDayData, isLeave: boolean){
+                // console.log("Handle Click IsLeave")
+                taskEditorWSHandler.UpdateIsLeave({
+                    ownerGuid: props.user?.guid,
+                    date: dayData.date,
+                    isLeave: isLeave,
+                } as IUpdateIsLeave)
+            }
             // ======================================================================
-            const GetOptionById = ( storeTasksOptions: Array<ITaskOption>, value: number ) => storeTasksOptions.find( x => x.id === value )
-            const GetOptionGuidById = ( storeTasksOptions: Array<ITaskOption>, value: number ) => storeTasksOptions.find( x => x.id === value )?.guid
-
             function HandleAddRows(dayData: IDayData, emitData: Array<IAddRow>){
-                console.log("Handle Add Rows")
-                console.table(emitData)
+                // console.log("Handle Add Rows")
+                // console.table(emitData)
 
                 const tasks = emitData.map( x => ({
                         guid: GetGuid(),
@@ -116,40 +124,49 @@
                     } as IUpdateTask ))
 
                 const createTask = {
+                    ownerGuid: props.user?.guid,
                     tasks,
-                    ownerGuid: props.user?.guid, 
-                } as ICreateTask                    
-
+                } as ICreateTask
+                
                 taskEditorAPIHandler.CreateTask(createTask, isLoading, 
                     ( response ) => {
                         const guids = response.data as Array<string>
                         emitData.forEach( ( row, idx ) => {
                             dayData.formData[row.newIndex].guid = guids[idx]
                         })
+
+                        createTask.tasks.forEach( (task, idx) => task.guid = guids[idx] )
+                        taskEditorWSHandler.CreateTask(createTask)
                     })
             }
 
             function HandleRemoveRows(dayData: IDayData, emitData: Array<IRemoveRow>){
-                console.log("Handle Remove Rows")
-                console.table(emitData)
+                // console.log("Handle Remove Rows")
+                // console.table(emitData)
 
-                taskEditorWSHandler.DeleteTasks(emitData.map( x => x.value.guid ))
+                taskEditorWSHandler.DeleteTasks({
+                    ownerGuid: props.user?.guid,
+                    date: dayData.date,
+                    taskGuids: emitData.map( x => x.value.guid ),
+                } as IDeleteTasks)
             }
 
             function HandleMoveRows(dayData: IDayData, emitData: Array<IMoveRow>){
-                console.log("Handle Move Rows")
-                console.table(emitData)
+                // console.log("Handle Move Rows")
+                // console.table(emitData)
 
                 taskEditorWSHandler.UpdateTaskRowOrder(emitData.map( moveRow => ({ 
+                        ownerGuid: props.user?.guid,
                         guid: dayData.formData[moveRow.newIndex].guid,
+                        date: dayData.date,
                         displayOrder: moveRow.newIndex
                     } as IUpdateTaskRowOrder ))
                 )
             }
 
             function HandleModifyCells(dayData: IDayData, emitData: Array<IUpdateCell>){
-                console.log("Handle Modify Cells")
-                console.table(emitData)
+                // console.log("Handle Modify Cells")
+                // console.table(emitData)
 
                 function GetValue(relatedKey: string, value: any){
                     if( relatedKey == "taskType" ){
@@ -167,7 +184,9 @@
                 emitData.forEach( cell => {
                     if( cell.newValue !== null ){
                         updateTaskCols.push({
+                            ownerGuid: props.user?.guid,
                             guid: dayData.formData[cell.rowIndex].guid,
+                            date: dayData.date,
                             relatedKey: cell.relatedKey,
                             value: GetValue(cell.relatedKey, cell.newValue),
                         } as IUpdateTaskCol)
@@ -192,6 +211,7 @@
 
                 GetFormClass,
                 HandleClickTableForm,
+                HandleClickIsLeave,
                 HandleAddRows,
                 HandleRemoveRows,
                 HandleMoveRows,
