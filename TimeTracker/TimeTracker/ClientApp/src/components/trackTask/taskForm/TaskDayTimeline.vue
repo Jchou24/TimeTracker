@@ -1,43 +1,24 @@
 <template>
-    <div class="TaskDayTimeline">
-        <v-timeline align-top v-if="daysData.length > 0">
-            <RippleTransitionFlip>
-                <v-timeline-item
+    <div class="TaskDayTimeline" align-top v-if="daysData.length > 0">
+        <div class="task-timeline-line" />
+        <div class="task-timeline-body" >
+            <RippleTransitionFlip v-if="isShowContent">
+                <div class="timeline-row" :class="{ 'focus-row': dayData.isFormClicked }"
                     v-for="(dayData, idx) in daysData"
                     :key="idx"
                     :data-index="idx"
-                    fill-dot
-                    
-                    right
                     >
-                    <template v-slot:icon>
-                        <v-btn
-                            class="ma-2"
-                            
-                            fab
-                            color="primary"
-                            :loading="false"
-                            @click="HandleIconClick"
-                            >
-                            <v-icon>mdi-pencil</v-icon>
-                        </v-btn>
-                    </template>
-                    <template v-slot:opposite>
-                        <v-card class="opposite-body" color="primary">
-                            <v-card-title class="title">
-                                {{FormatDate(dayData.date, "MM/DD")}}
-                            </v-card-title>
-                        </v-card>
-                    </template>
+                    
+                    <TaskDayTimelineTitle class="timeline-row-title" :dayData="dayData" :user="user" />
 
-                    <TaskDayForm 
+                    <TaskDayForm class="timeline-row-form"
                         :dayData="dayData"
                         :user="user"
                         @handleClickTableForm="HandleClickTableForm"
                         />
-                </v-timeline-item>
+                </div>
             </RippleTransitionFlip>
-        </v-timeline>
+        </div>
     </div>
 </template>
 
@@ -45,6 +26,9 @@
     import { computed, defineComponent, Ref, ref, watch } from '@vue/composition-api'
 
     import TaskDayForm from './TaskDayForm.vue'
+    import TaskDayTimelineTitle from './TaskDayTimelineTitle.vue'
+    // import TaskDayLeaveIcon from './TaskDayLeaveIcon.vue'
+    // import TaskDayLeaveCheckbox from './TaskDayLeaveCheckbox.vue'
     import RippleTransitionFlip from '@/util/components/transition/RippleTransitionFlip.vue'
 
     import debounce from 'lodash.debounce'
@@ -52,11 +36,10 @@
     import { TaskEditorAPIHandler, TaskEditorWSHandler, TaskEditorWSListener } from '@/api/taskEditor'
     import { IStore } from '@/models/store'
     import { IClaims } from '@/models/authentication'
-    import { ICreateTask, IDateRange, IDayData, IDeleteTasks, IGetDaysDataResponse, 
-        IQueryTasks, ITask, ITaskOption, IUpdateTaskCol, IUpdateTaskRowOrder } from '@/models/tasks'
+    import { IDateRange, IDayData, IGetDaysDataResponse, 
+        IQueryTasks, ITask, ITaskOption } from '@/models/tasks'
     import { FormatDate, GetDateRange } from '@/util/taskDate'
-    import { WSMapCode } from '@/models/constants/webSocket'
-    import { GetOptionIdByGuid, GetOptionIdByOption } from '@/util/taskParameters'
+    import { GetOptionIdByOption } from '@/util/taskParameters'
 
     export default defineComponent({
         name: 'TaskDayTimeline',
@@ -70,6 +53,9 @@
         },
         components:{
             TaskDayForm,
+            TaskDayTimelineTitle,
+            // TaskDayLeaveIcon,
+            // TaskDayLeaveCheckbox,
             RippleTransitionFlip,
         },
         setup( props, { emit, root } ){
@@ -144,6 +130,7 @@
                     return result
                 }
 
+            const isShowContent = ref(false)
             function SetDaysData() {
                 const dateRange = GetDateRange(props.dateRange?.startDate, props.dateRange?.endDate)
                 if( dateRange.length == 0 ){
@@ -169,12 +156,15 @@
 
                 taskEditorWSHandler.Unsubscribe()
                 taskEditorWSHandler.Subscribe(queryTasks)
+                setTimeout( () => isShowContent.value = true, 500)
             }
 
             watch( () => [ props.user, props.dateRange ], debounce( () => {
+                isShowContent.value = false
                 SetDaysData()
                 // TODO
                 // 要做差異讀取
+                
             }, 500 ))
             
             // ======================================================================
@@ -184,9 +174,9 @@
 
             return {
                 isLoading,
+                isShowContent,
                 daysData,
 
-                FormatDate,
                 HandleIconClick,
                 HandleClickTableForm,
             }
@@ -194,42 +184,43 @@
     })
 </script>
 
-<style lang="scss">
-    $sticky-top: 100px; // TODO 要用js控制這個值，或訂好這個值，或許可以用 css variable 來控制
-
-    
-    $form-width: 900px;
-    // $timeline-date-width: 135px;
-    $timeline-date-width: 85px;
-    $form-margin-left: calc( ( ( ( #{$form-width} - 96px ) / 2 ) - #{$timeline-date-width} ) * -1 );
-
+<style lang="scss" scoped>
     .TaskDayTimeline{
-        width: $form-width;
-        margin-left: $form-margin-left;
+        display: flex;
+        flex-direction: row;
+        padding-left: 80px;
+        min-width: 1100px;
     }
 
-    .TaskDayTimeline .v-timeline-item__opposite{
-        align-self: unset;
-        flex: initial;
-        width: $timeline-date-width;
-        max-width: $timeline-date-width;
+    $ilne-margin-right: 80px;
 
-        .opposite-body{
-            position: sticky;
-            top: $sticky-top;
+    .TaskDayTimeline .task-timeline-line{
+        width: 10px;
+        margin-right: $ilne-margin-right;
+        background: #e0e0e0;
+        border-radius: 15px;
+    }
+
+    .TaskDayTimeline .task-timeline-body .timeline-row{
+        margin-bottom: 25px;
+        position: relative;
+
+        &.focus-row{
+            z-index: 1;
         }
     }
 
-    .TaskDayTimeline .v-timeline-item__body{
-        flex: initial;
+    .TaskDayTimeline .task-timeline-body .timeline-row .timeline-row-title{
+        position: absolute;
+        left: calc( ( #{$ilne-margin-right} + 67px ) * -1 );
+        top: 0px;
+        border-radius: 15px;
     }
 
-    .TaskDayTimeline .v-timeline-item__dot{
-        position: sticky;
-        // margin-left: -30px;
-        left: 0px;
-        top: calc( #{$sticky-top} + 15px );
-        // top: $sticky-top;
-        margin-top: 15px;
+    .TaskDayTimeline .task-timeline-body .timeline-row .timeline-row-form{
+        @include vm-drop-shadow-1(5px, 5px, 5px, #c5c3c3);
     }
+</style>
+
+<style lang="scss" scoped>
 </style>

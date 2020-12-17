@@ -1,17 +1,20 @@
 <template>
     <div class="TaskEditor">
-        <MetaDisplayer :selectedUser.sync="targetUser" :selectedDates.sync="targetDates" :width="widthMetaDisplayer" />
-
-        <TaskDayTimeline :user="targetUser" :dateRange="targetDates" />
-
-        <!-- <p>targetUser {{targetUser}}</p>
-        <p>targetDates {{targetDates}}</p> -->
+        <TwoColumn>
+            <template v-slot:left>
+                <MetaDisplayer :selectedUser.sync="targetUser" :selectedDates.sync="targetDates" :width="widthMetaDisplayer" />
+            </template>
+            <template v-slot:right>
+                <TaskDayTimeline :user="targetUser" :dateRange="targetDates" />
+            </template>
+        </TwoColumn>
     </div>
 </template>
 
 <script lang="ts">
     import { computed, defineComponent, reactive, ref } from '@vue/composition-api'
 
+    import TwoColumn from '@/views/layouts/TwoColumn.vue'
     import MetaDisplayer from '@/components/trackTask/toolbar/MetaDisplayer.vue'
     import TaskDayTimeline from '@/components/trackTask/taskForm/TaskDayTimeline.vue'
 
@@ -28,8 +31,9 @@
             }
         },
         components:{
+            TwoColumn,
             MetaDisplayer,
-            TaskDayTimeline
+            TaskDayTimeline,
         },
         beforeRouteLeave(to, from, next) {
             // const taskEditorAPIHandler = new TaskEditorAPIHandler( this.$store, this.$router )
@@ -55,6 +59,7 @@
 <style lang="scss">
     .TaskEditor{
         width: 100%;
-        // overflow-x: scroll;
+        min-width: 1400px;
+        padding-top: 30px;
     }
 </style>

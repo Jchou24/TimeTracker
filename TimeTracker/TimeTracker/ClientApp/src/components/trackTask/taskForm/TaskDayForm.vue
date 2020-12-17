@@ -1,12 +1,5 @@
 <template>
     <div class="TaskDayForm">
-        <v-checkbox
-            v-model="dayData.isLeave"
-            label="Leave"
-            color="primary"
-            @click="HandleClickIsLeave(dayData, dayData.isLeave)"
-        />
-
         <TableForm class="table-form"
             :class="GetFormClass(dayData)"
             v-model="dayData.formData"
@@ -35,7 +28,7 @@
     import { IStore } from '@/models/store'
     import { IClaims } from '@/models/authentication'
     import { ICreateTask, IDateRange, IDayData, IDeleteTasks, ITaskOption, 
-        IUpdateIsLeave, IUpdateTask, IUpdateTaskCol, IUpdateTaskRowOrder } from '@/models/tasks'
+        IUpdateTask, IUpdateTaskCol, IUpdateTaskRowOrder } from '@/models/tasks'
     import { GetOptions } from '@/models/constants/task'
     import { GetGuid } from '@/util/authentication'
     import { GetOptionById, GetOptionGuidById } from '@/util/taskParameters'
@@ -48,9 +41,6 @@
             user:{
                 type: Object as () => IClaims,
             },
-            // dateRange:{
-            //     type: Object as () => IDateRange,
-            // },
             dayData:{
                 type: Object as () => IDayData,
             }
@@ -92,21 +82,12 @@
                 }
 
                 return { 
-                    'light-form': CheckIsLightForm(dayData)
+                    'light-form': CheckIsLightForm(dayData),
                 }
             }
             // ======================================================================
             function HandleClickTableForm(){
                 emit('handleClickTableForm', props.dayData)
-            }
-
-            function HandleClickIsLeave(dayData: IDayData, isLeave: boolean){
-                // console.log("Handle Click IsLeave")
-                taskEditorWSHandler.UpdateIsLeave({
-                    ownerGuid: props.user?.guid,
-                    date: dayData.date,
-                    isLeave: isLeave,
-                } as IUpdateIsLeave)
             }
             // ======================================================================
             function HandleAddRows(dayData: IDayData, emitData: Array<IAddRow>){
@@ -211,7 +192,6 @@
 
                 GetFormClass,
                 HandleClickTableForm,
-                HandleClickIsLeave,
                 HandleAddRows,
                 HandleRemoveRows,
                 HandleMoveRows,
@@ -228,8 +208,10 @@
         margin-left: -2px;
     }
 
-    .TaskDayForm .table-form.light-form{
-        opacity: 0.4;
+    .TaskDayForm .table-form{
+        &.light-form{
+            opacity: 0.2;
+        }
     }
 
     .TaskDayForm .multiselect__content{

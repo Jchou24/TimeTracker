@@ -166,11 +166,6 @@
         background-color: rgba(255, 255, 255, 0);
     }
 
-    // .v-btn:not(.v-btn--outlined).primary{
-    //     font-weight: bold !important;
-    //     color: $color !important;
-    // }
-
     .v-btn:not(.v-btn--round).v-size--x-large{
         min-width: 50px;
         padding: 0 10px;

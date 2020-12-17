@@ -4,8 +4,8 @@
         
         <div>
             <v-row>
-                <v-btn class="btn-select btn-select-target"
-                    color="primary"
+                <v-btn class="btn-select btn-select-target font-weight-black"
+                    color="accent"
                     tile outlined fab depressed
                     :width="width" 
                     @click="isOpenTargetSelector = true">
@@ -17,7 +17,7 @@
                 <DateMenuSelector :selectedDates.sync="targetDates" >
                     <template v-slot:activator="{ activator }">
                         <v-btn class="btn-select btn-select-date mt-1"
-                            color="primary"
+                            color="accent"
                             tile outlined fab depressed
                             v-bind="activator.attrs"
                             v-on="activator.on"
@@ -34,7 +34,7 @@
                                     <v-divider class="mt-3 mb-2" />
                                 </v-row>
                                 <v-row no-gutters justify="center">
-                                    <v-col class="text-button">
+                                    <v-col class="text-button font-weight-bold">
                                         <v-icon class="mr-1">mdi-calendar</v-icon> <span>{{targetDates.startDate}}</span>
                                         <v-icon class="mx-2" >mdi-arrow-left-right-bold</v-icon>
                                         <v-icon class="mr-1" >mdi-calendar</v-icon> <span>{{targetDates.endDate}}</span>
@@ -106,6 +106,10 @@
 </script>
 
 <style lang="scss">
+    .MetaDisplayer{
+        min-width: 300px;
+        margin-left: 20px;
+    }
     .MetaDisplayer .v-btn{
         text-transform: initial;
     }
@@ -118,9 +122,16 @@
     .MetaDisplayer .btn-select-target{
         border-top-left-radius: $border-radius;
         border-top-right-radius: $border-radius;
+
+        // background-image: radial-gradient(circle, #ffffff00 80%, #a09e9e), $img-vichy;
+        background-image: radial-gradient(circle, #ffffff00 80%, #a09e9e), $img-xv;
+        background-repeat: repeat;
     }
     .MetaDisplayer .btn-select-date{
         border-bottom-left-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
+
+        background-image: radial-gradient(circle, #ffffff00 80%, #a09e9e), $img-xv;
+        background-repeat: repeat;
     }
 </style>

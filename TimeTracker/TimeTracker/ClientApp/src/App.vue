@@ -141,16 +141,6 @@
         width: 400px;
     }
 
-    .MetaDisplayer{
-        position: fixed;
-        top: 90px;
-        left: 40px;
-        z-index: 5;
-    }
-
-    .TaskEditor{
-        padding-left: 350px;
-    }
 </style>
 
 <style lang="scss" scoped>
