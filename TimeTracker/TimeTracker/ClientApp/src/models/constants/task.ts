@@ -15,7 +15,9 @@ const GetOptions = ( taskParameters: ITaskParameters ) =>({
                 "min-width": "80px",
             },
             options:{
-                step: 0.5
+                step: 0.5,
+                min: 0.0,
+                max: 12.0,
             },
         },{
             title: "工作類型",

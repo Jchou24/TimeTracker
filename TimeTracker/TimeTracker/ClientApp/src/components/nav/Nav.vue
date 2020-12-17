@@ -149,7 +149,8 @@
             color: $color !important;
         }        
 
-        &.router-link-exact-active .v-btn{
+        // &.router-link-exact-active .v-btn{
+        &.router-link-custom-active .v-btn{
             color: $active-link-color !important;
             @include vm-text-shadow-1( 12px, #ffffff );
         }

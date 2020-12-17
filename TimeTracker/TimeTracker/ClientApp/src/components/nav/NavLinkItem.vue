@@ -1,5 +1,5 @@
 <template>
-    <router-link class="NavLinkItem" :to="to">
+    <router-link class="NavLinkItem" :class="{ 'router-link-custom-active': isActiveLink }" :to="to">
         <NavItem :mdiIcon="navIcon" :left="left" v-if="displayName">
             {{ navDisplayName }}
         </NavItem>
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent } from '@vue/composition-api'
+    import { computed, defineComponent, watch } from '@vue/composition-api'
     import NavItem from './NavItem.vue'
     import { routeConfigs } from '@/router/routeConfigs'
 
@@ -37,10 +37,17 @@
         components:{
             NavItem
         },
-        setup( props ){
+        computed:{
+            isActiveLink(){
+                return routeConfigs[this.routeConfigsKey].path == this.$route.path
+            }
+        },
+        setup( props, { root } ){
+            const { $router, $route } = root
             const to = computed( () => routeConfigs[props.routeConfigsKey].path )
             const navIcon = computed( () => props.mdiIcon ? routeConfigs[props.routeConfigsKey].nav.mdiIcon : "" )
             const navDisplayName = computed( () => props.displayName ? routeConfigs[props.routeConfigsKey].nav.displayName : "" )
+
             return {
                 to,
                 navIcon,
