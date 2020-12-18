@@ -4,10 +4,12 @@ import { Module } from "vuex";
 
 const TASKTYPES = "taskTypes"
 const TASKSOURCES = "taskSources"
+const DAYWORKLIMITTIME = "dayWorkLimitTime"
 
 const GetInitState = (): ITaskParameters => ({
         taskTypes: [],
         taskSources: [],
+        dayWorkLimitTime: undefined,
     })
 
 const SetOptions = ( state: ITaskParameters, tasktype: string, taskOptions: Array<ITaskOption> ) => {
@@ -31,9 +33,11 @@ const module: Module<any, any> = {
             const initState = GetInitState()
             Vue.set(state, TASKTYPES, initState.taskTypes)
             Vue.set(state, TASKSOURCES, initState.taskSources)
+            Vue.set(state, DAYWORKLIMITTIME, initState.dayWorkLimitTime)
         },
         SetTaskTypes: ( state: ITaskParameters, taskTypes: Array<ITaskOption> ) => SetOptions(state, TASKTYPES, taskTypes),
         SetTaskSources: ( state: ITaskParameters, taskSources: Array<ITaskOption> ) => SetOptions(state, TASKSOURCES, taskSources),
+        SetDayWorkLimitTime: ( state: ITaskParameters, dayWorkLimitTime: number ) => state.dayWorkLimitTime = dayWorkLimitTime,
     },
     actions: {
     },

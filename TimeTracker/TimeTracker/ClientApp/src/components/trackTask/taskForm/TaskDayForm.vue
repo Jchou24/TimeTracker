@@ -13,6 +13,7 @@
             @moveRows="HandleMoveRows(dayData, $event)"
             @emptyCells="HandleEmptyCells(dayData, $event)"
             @modifyCells="HandleModifyCells(dayData, $event)"
+            @input="$emit('input')"
 
             v-if="isOptionsReady"
             />

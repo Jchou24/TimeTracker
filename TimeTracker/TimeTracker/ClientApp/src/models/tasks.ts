@@ -23,6 +23,7 @@ interface ITaskOption{
 interface ITaskParameters{
     taskTypes: Array<ITaskOption>;
     taskSources: Array<ITaskOption>;
+    dayWorkLimitTime: number | undefined;
 }
 
 interface ITask{

@@ -41,6 +41,18 @@ class TaskEditorAPIHandler extends APIHandler{
         }, ErrorFunc, false)
     }
 
+    GetDayWorkLimitTime(isLoading: Ref<boolean>, 
+            SuccessFunc?: (response: AxiosResponse<any>) => void, 
+            ErrorFunc?: (error: any) => void){
+        this.HttpPost('api/TaskEditor/GetDayWorkLimitTime', isLoading, undefined, (response) => {
+            this._store.commit("taskParameters/SetDayWorkLimitTime", response.data)
+            
+            if(SuccessFunc){
+                SuccessFunc(response)
+            }           
+        }, ErrorFunc, false)
+    }
+
     GetTaskSources(isLoading: Ref<boolean>, 
             SuccessFunc?: (response: AxiosResponse<any>) => void, 
             ErrorFunc?: (error: any) => void){
@@ -117,15 +129,15 @@ class TaskEditorWSListener{
         this.connection = store.state.webSocket.wsHandler?.connection
     }
     
-    public InitListener( daysData: Ref<Array<IDayData>> ) {
-        this.ListenIsLeave(daysData)
-        this.ListenAddRows(daysData)
-        this.ListenRemoveRows(daysData)
-        this.ListenMoveRows(daysData)
-        this.ListenUpdateTaskCol(daysData)
+    public InitListener( daysData: Ref<Array<IDayData>>, EmitUpdateDaysData: Function ) {
+        this.ListenIsLeave(daysData, EmitUpdateDaysData)
+        this.ListenAddRows(daysData, EmitUpdateDaysData)
+        this.ListenRemoveRows(daysData, EmitUpdateDaysData)
+        this.ListenMoveRows(daysData, EmitUpdateDaysData)
+        this.ListenUpdateTaskCol(daysData, EmitUpdateDaysData)
     }
 
-    public ListenIsLeave( daysData: Ref<Array<IDayData>> ){
+    public ListenIsLeave( daysData: Ref<Array<IDayData>>, EmitUpdateDaysData: Function ){
         this.connection?.on(WSMapCode[WSMapCode.TaskEditorUpdateIsLeave], (message) => {
             // console.log("Click IsLeave", message)
 
@@ -138,10 +150,11 @@ class TaskEditorWSListener{
             }
 
             targetDayData.isLeave = updateIsLeave.isLeave
+            EmitUpdateDaysData()
         })
     }
 
-    public ListenAddRows( daysData: Ref<Array<IDayData>> ){
+    public ListenAddRows( daysData: Ref<Array<IDayData>>, EmitUpdateDaysData: Function ){
         this.connection?.on(WSMapCode[WSMapCode.TaskEditorCreateTask], (message) => {
             // console.log("CreateTasks", message)
     
@@ -166,10 +179,11 @@ class TaskEditorWSListener{
             task.forEach( newTask => {                    
                 targetDayData.formData.splice(newTask.displayOrder, 0, newTask)
             })
+            EmitUpdateDaysData()
         })
     }
 
-    public ListenRemoveRows( daysData: Ref<Array<IDayData>> ){
+    public ListenRemoveRows( daysData: Ref<Array<IDayData>>, EmitUpdateDaysData: Function ){
         this.connection?.on(WSMapCode[WSMapCode.TaskEditorDeleteTasks], (message) => {
             // console.log("DeleteTasks", message)
     
@@ -182,10 +196,11 @@ class TaskEditorWSListener{
             }
     
             targetDayData.formData = targetDayData.formData.filter( task => !deleteTasks.taskGuids.includes(task.guid) )
+            EmitUpdateDaysData()
         })
     }
 
-    public ListenMoveRows( daysData: Ref<Array<IDayData>> ){
+    public ListenMoveRows( daysData: Ref<Array<IDayData>>, EmitUpdateDaysData: Function ){
         this.connection?.on(WSMapCode[WSMapCode.TaskEditorUpdateTaskRowOrder], (message) => {
             // console.log("UpdateTaskRowOrder", message)
     
@@ -214,10 +229,11 @@ class TaskEditorWSListener{
                 }
                 return 0
             })
+            EmitUpdateDaysData()
         })
     }
     
-    public ListenUpdateTaskCol( daysData: Ref<Array<IDayData>> ){
+    public ListenUpdateTaskCol( daysData: Ref<Array<IDayData>>, EmitUpdateDaysData: Function ){
         // HandleWSEmptyCells
         // HandleWSModifyCells
         this.connection?.on(WSMapCode[WSMapCode.TaskEditorUpdateTaskCol], (message) => {
@@ -252,6 +268,7 @@ class TaskEditorWSListener{
                 }
                 Reflect.set(targetTask, newTask.relatedKey, value)                    
             })
+            EmitUpdateDaysData()
         })
     }
 }

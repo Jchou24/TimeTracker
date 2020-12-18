@@ -77,5 +77,14 @@ namespace TimeTracker.Controllers
 
             return Ok(tasksGuids);
         }
+
+        [HttpPost]
+        public IActionResult GetDayWorkLimitTime()
+        {
+            var tmp = this._context.DayWorkLimitTime.OrderByDescending(x => x.CreatedDate).Take(1).ToList()[0];
+
+            return Ok(tmp.LimitWorkTime);
+        }
+
     }
 }

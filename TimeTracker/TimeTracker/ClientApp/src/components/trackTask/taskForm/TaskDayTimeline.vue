@@ -15,6 +15,7 @@
                         :dayData="dayData"
                         :user="user"
                         @handleClickTableForm="HandleClickTableForm"
+                        @input="EmitUpdateDaysData"
                         />
                 </div>
             </RippleTransitionFlip>
@@ -68,12 +69,6 @@
 
             const daysData = ref([] as Array<IDayData>)
             // ======================================================================
-            function HandleIconClick() {
-                // click to scroll top
-                // console.log("click icon")
-            }
-
-            // ======================================================================
             const isLoading = ref(false)
             watch( isLoading, () => {
                 if(isLoading.value){
@@ -83,28 +78,11 @@
                 }
             })
             // ======================================================================
-
-            function InitTaskParameter(){
-                if( store.state.taskParameters.taskSources.length == 0 ){
-                    taskEditorAPIHandler.GetTaskSources(isLoading)
-                }
-                if( store.state.taskParameters.taskTypes.length == 0 ){
-                    taskEditorAPIHandler.GetTaskTypes(isLoading)
-                }
-            }
-            InitTaskParameter()
-            // ======================================================================
-
             function HandleClickTableForm(dayData: IDayData){
                 daysData.value.forEach( d => d.isFormClicked = false)
                 dayData.isFormClicked = true
             }
-
             // ======================================================================
-
-
-            
-            
             const GetDaysData = ( dateRange: Array<string>, tasksDays: Array<IDayData> ) => {
                     const result = [] as Array<IDayData>
                     const mapper = {} as Record<string, IDayData>
@@ -152,33 +130,42 @@
                         }))
                         // console.log(tasksDays)
                         daysData.value = GetDaysData(dateRange, tasksDays as Array<IDayData>)
+
+                        setTimeout( () => isShowContent.value = true, 150)
+                        // emit("updateDaysData", daysData.value)
                     })
 
                 taskEditorWSHandler.Unsubscribe()
                 taskEditorWSHandler.Subscribe(queryTasks)
-                setTimeout( () => isShowContent.value = true, 500)
             }
 
             watch( () => [ props.user, props.dateRange ], debounce( () => {
                 isShowContent.value = false
                 SetDaysData()
+
                 // TODO
                 // 要做差異讀取
                 
             }, 500 ))
+
+            function EmitUpdateDaysData() {
+                emit("updateDaysData", daysData.value)
+                // console.log("updateDaysData")
+            }
+            watch( () => [daysData.value], () => EmitUpdateDaysData() )
             
             // ======================================================================
             // Hadnler ws message
             
-            taskEditorWSListener.InitListener(daysData)            
+            taskEditorWSListener.InitListener(daysData, EmitUpdateDaysData) 
 
             return {
                 isLoading,
                 isShowContent,
                 daysData,
 
-                HandleIconClick,
                 HandleClickTableForm,
+                EmitUpdateDaysData,
             }
         }        
     })

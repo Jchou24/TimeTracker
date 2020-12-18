@@ -4,6 +4,22 @@
         <v-icon class="icon" v-if="dayData.isLeave">mdi-marker-cancel</v-icon>
         <v-icon class="icon" v-else>mdi-pencil</v-icon>
         {{FormatDate(dayData.date, "MM/DD")}}
+
+        <transition   
+            mode="out-in"
+            enter-active-class="animate__animated animate__fadeIn animate__faster"
+            leave-active-class="animate__animated animate__fadeOut animate__faster"
+        >
+            <div class="is-leave" v-if="dayData.isLeave">
+                <v-checkbox
+                    input-value="false"
+                    label="Leave"
+                    :disabled="true"
+                    color="blue lighten-5"
+                    v-ripple
+                />
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -72,6 +88,28 @@
         .icon{
             color: $color;
             top: -2px
+        }
+
+        .is-leave{
+            position: absolute;
+            
+            $color: whitesmoke;
+            .v-input__slot{
+                height: 30px;
+                margin-left: -3px;
+                padding-left: 10px;
+                padding-right: 14px;
+                border-radius: 5px;
+                background: $color-warning;
+
+                label{
+                    color: $color;
+                }
+            }
+
+            .theme--light.v-input--selection-controls.v-input--is-disabled:not(.v-input--indeterminate) .v-icon{
+                color: $color !important;
+            }
         }
     }
 </style>

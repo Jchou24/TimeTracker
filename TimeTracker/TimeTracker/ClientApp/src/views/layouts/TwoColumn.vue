@@ -30,10 +30,20 @@
         height: 100vh;
         display: flex;
         justify-content: center;
+        z-index: 1;
 
         .fixed-sidebar-content{
             display: flex;
+            flex-direction: column;
             padding-top: 100px;
+            padding-bottom: 20px;
+            overflow: auto;
+
+            &::-webkit-scrollbar
+            {
+                width: 0px;
+                height: 0px;
+            }
         }
 
         .fixed-sidebar-background{
@@ -50,5 +60,6 @@
 
     .two-column .content{
         padding-left: $width-sidebar;
+        z-index: 0;
     }
 </style>
