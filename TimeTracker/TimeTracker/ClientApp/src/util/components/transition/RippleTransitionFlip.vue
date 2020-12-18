@@ -1,5 +1,5 @@
 <template>
-    <transition-group
+    <transition-group :tag="tag"
         appear
         v-on:before-enter="beforeEnter"
         v-on:enter="enter"
@@ -18,7 +18,14 @@
             isFirstActive:{
                 type: Boolean,
                 default: false
-            }
+            },
+            tag:{
+                type: String,
+            },
+            setNumber:{
+                type: Number,
+                default: 20,
+            },
         },
         methods:{
             beforeEnter(el) {
@@ -29,7 +36,7 @@
             },
             enter(el, done) {
                 import('velocity-animate/velocity').then(Velocity => {
-                    const idx = el.dataset.index % 20
+                    const idx = el.dataset.index % this.setNumber
                     const delay = idx * 150 + 300
                     setTimeout(function() {
                         // el.className += " animated flipInX"

@@ -15,13 +15,9 @@
 
         <v-main>
             <v-container fluid fill-height >
-                <transition   
-                    mode="out-in"
-                    enter-active-class="animate__animated animate__fadeIn animate__faster"
-                    leave-active-class="animate__animated animate__fadeOut animate__faster"
-                >
+                <FadeInOutTransition mode="out-in">
                     <router-view></router-view>
-                </transition>
+                </FadeInOutTransition>
             </v-container>
         </v-main>
 
@@ -40,6 +36,7 @@
 
     import Nav from '@/components/nav/Nav.vue'
     import PageIdle from '@/components/auth/PageIdle.vue'
+    import FadeInOutTransition from '@/util/components/transition/FadeInOutTransition.vue'
 
     import debounce from 'lodash.debounce'
     import { provideToast, useToast } from "vue-toastification/composition";
@@ -61,6 +58,7 @@
         components:{
             Nav,
             PageIdle,
+            FadeInOutTransition,
         },
         setup(props, { root }){
             const { $store, $router, $route } = root

@@ -1,42 +1,51 @@
 <template>
     <div class="TaskPeriodSimpleSummary">
-        <v-simple-table class="summary" dense fixed-header height="100%">
-            <template v-slot:default>
-                <thead>
-                    <tr>
-                        <th class="text-center date">
-                            Date
-                        </th>
-                        <th class="text-center">
-                            Time
-                        </th>
-                        <th class="text-center">
-                            Over Time
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(dayCount, idx) in summary"
-                        :class="GetClass(dayCount)"
-                        :key="idx"
-                        >
-                        <td class="text-center">{{ dayCount.date }}</td>
-                        <td class="text-center">{{ dayCount.consumeTime }}</td>
-                        <td class="text-center">{{ dayCount.overtime }}</td>
-                    </tr>
-                    <tr class="total">
-                        <td class="text-center">Total</td>
-                        <td class="text-center">{{total.consumeTime}}</td>
-                        <td class="text-center">{{total.overtime}}</td>
-                    </tr>
-                </tbody>
-            </template>
-        </v-simple-table>
+        <FadeInOutTransition mode="out-in">
+            <v-simple-table class="summary" dense fixed-header height="100%" v-if="isShowContent && summary.length > 0">
+                <template v-slot:default>
+                    <thead>
+                        <tr>
+                            <th class="text-center date">
+                                Date
+                            </th>
+                            <th class="text-center">
+                                Time
+                            </th>
+                            <th class="text-center">
+                                Over Time
+                            </th>
+                        </tr>
+                    </thead>
+                    <RippleTransitionFlip tag="tbody" :setNumber="7">
+                        <tr v-for="(dayCount, idx) in summary"
+                            :class="GetClass(dayCount)"
+                            :key="idx"
+                            :data-index="idx"
+                            >
+                            <td class="text-center">{{ dayCount.date }}</td>
+                            <td class="text-center">{{ dayCount.consumeTime }}</td>
+                            <td class="text-center">{{ dayCount.overtime }}</td>
+                        </tr>
+                        <tr class="total"
+                            :key="summary.length"
+                            :data-index="0"
+                            >
+                            <td class="text-center">Total</td>
+                            <td class="text-center">{{total.consumeTime}}</td>
+                            <td class="text-center">{{total.overtime}}</td>
+                        </tr>
+                    </RippleTransitionFlip>
+                </template>
+            </v-simple-table>
+        </FadeInOutTransition>
     </div>
 </template>
 
 <script lang="ts">
     import { computed, defineComponent, reactive, ref, watch, nextTick  } from '@vue/composition-api'
+
+    import FadeInOutTransition from '@/util/components/transition/FadeInOutTransition.vue'
+    import RippleTransitionFlip from '@/util/components/transition/RippleTransitionFlip.vue'
 
     import { TaskEditorAPIHandler } from '@/api/taskEditor'
     import { IStore } from '@/models/store'
@@ -56,6 +65,10 @@
                 type: Array as () => Array<IDayData>,
             }
         },
+        components:{
+            FadeInOutTransition,
+            RippleTransitionFlip,
+        },
         setup( props, { emit, root, refs } ){
             const { $store, $router, $route } = root
             const store = $store as Store<IStore>
@@ -71,7 +84,17 @@
             
             const overTime = computed( () => store.state.taskParameters.dayWorkLimitTime || 7.5 )
 
+            const isShowContent = ref(false)
+            let currentStartDate = ""
+            let currentLength = 0
             function InitSummary() {
+                if (props.daysData?.length != currentLength || 
+                    (props.daysData?.length > 0 && props.daysData[0].date != currentStartDate) ) {
+                    isShowContent.value = false
+                    currentLength = (props.daysData as Array<IDayData>).length
+                    currentStartDate = (props.daysData as Array<IDayData>)[0].date
+                }
+
                 const tmpSummary = [] as Array<IDayCount>
                 props.daysData?.forEach( dayData => {
                     const dayCount = {
@@ -86,6 +109,8 @@
                     tmpSummary.push(dayCount)
                 })
                 summary.value = tmpSummary
+
+                setTimeout( () => isShowContent.value = true, 150)
             }
             InitSummary()
 
@@ -103,6 +128,7 @@
             return {
                 summary,
                 total,
+                isShowContent,
                 InitSummary,
                 GetClass,
             }

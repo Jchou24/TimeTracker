@@ -5,11 +5,7 @@
         <v-icon class="icon" v-else>mdi-pencil</v-icon>
         {{FormatDate(dayData.date, "MM/DD")}}
 
-        <transition   
-            mode="out-in"
-            enter-active-class="animate__animated animate__fadeIn animate__faster"
-            leave-active-class="animate__animated animate__fadeOut animate__faster"
-        >
+        <FadeInOutTransition mode="out-in">
             <div class="is-leave" v-if="dayData.isLeave">
                 <v-checkbox
                     input-value="false"
@@ -19,12 +15,14 @@
                     v-ripple
                 />
             </div>
-        </transition>
+        </FadeInOutTransition>
     </div>
 </template>
 
 <script lang="ts">
     import { computed, defineComponent, Ref, ref, watch } from '@vue/composition-api'
+
+    import FadeInOutTransition from '@/util/components/transition/FadeInOutTransition.vue'
 
     import { Store } from 'vuex/types/index'
     import { TaskEditorWSHandler } from '@/api/taskEditor'
@@ -43,6 +41,9 @@
             dayData:{
                 type: Object as () => IDayData,
             }
+        },
+        components:{
+            FadeInOutTransition,
         },
         setup( props, { emit, root } ){
             const { $store, $router, $route } = root

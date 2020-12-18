@@ -1,5 +1,5 @@
 <template>
-    <transition-group
+    <transition-group :tag="tag"
         appear
         v-on:before-enter="beforeEnter"
         v-on:enter="enter"
@@ -19,7 +19,10 @@
             isActive:{
                 type: Boolean,
                 default: true,
-            }
+            },
+            tag:{
+                type: String,
+            },
         },
         methods:{
             beforeEnter(el){
