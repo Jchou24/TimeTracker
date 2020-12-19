@@ -3,7 +3,7 @@
         <TwoColumn>
             <template v-slot:left>
                 <MetaDisplayer :selectedUser.sync="targetUser" :selectedDates.sync="targetDates" :width="widthMetaDisplayer" />
-                <TaskPeriodSimpleSummary :daysData="daysData" ref="summary" />
+                <TaskPeriodSimpleSummary :daysData="daysData" :selectedDates="targetDates" isReactiveMode ref="summary" />
             </template>
             <template v-slot:right>
                 <TaskDayTimeline :user="targetUser" :dateRange="targetDates" @updateDaysData="HandleUpdateDaysData" />

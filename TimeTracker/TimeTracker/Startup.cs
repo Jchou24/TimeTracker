@@ -50,6 +50,7 @@ namespace TimeTracker
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUserAuthHandler<User, int>, UserAuthHandler>();
             services.AddScoped<TaskHandler>();
+            services.AddScoped<TaskReportHandler>();
 
             // Web Socket
             services.AddTransient<WSHubHandler<WSHub>>();

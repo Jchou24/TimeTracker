@@ -42,95 +42,52 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent, reactive, ref, watch, nextTick  } from '@vue/composition-api'
+    import { computed, defineComponent, Ref, ref, watch  } from '@vue/composition-api'
 
     import FadeInOutTransition from '@/util/components/transition/FadeInOutTransition.vue'
     import RippleTransitionFlip from '@/util/components/transition/RippleTransitionFlip.vue'
 
     import { TaskEditorAPIHandler } from '@/api/taskEditor'
     import { IStore } from '@/models/store'
-    import { IDayData } from '@/models/tasks'
+    import { IDateRange, IDayData } from '@/models/tasks'
     import { Store } from 'vuex/types/index'
+    import { IDayCount, UseReactiveSummary, UseDirectiveSummary } from './taskPeriodSimpleSummary'
 
-    interface IDayCount{
-        date: string;
-        consumeTime: number;
-        overtime: number;
-    }
+    
 
     export default defineComponent({
         name: 'TaskPeriodSimpleSummary',
         props:{
             daysData:{
                 type: Array as () => Array<IDayData>,
-            }
+            },
+            isReactiveMode:{
+                type: Boolean,
+                default: true,
+            },
+            sourceSummary:{
+                type: Array as () => Array<IDayCount>
+            },
+            selectedDates:{
+                type: Object as () => IDateRange,
+            },            
         },
         components:{
             FadeInOutTransition,
             RippleTransitionFlip,
         },
-        setup( props, { emit, root, refs } ){
-            const { $store, $router, $route } = root
+        setup( props, { emit, root } ){
+            const { $store } = root
             const store = $store as Store<IStore>
-            const router = $router
-            const taskEditorAPIHandler = new TaskEditorAPIHandler( store, router )
 
-            const summary = ref([] as Array<IDayCount>)
-            const total = computed( () =>  ({
-                date: "",
-                consumeTime: summary.value.map( x => x.consumeTime ).reduce((a, b) => a + b, 0),
-                overtime: summary.value.map( x => x.overtime ).reduce((a, b) => a + b, 0),
-            } as IDayCount))
-            
-            const overTime = computed( () => store.state.taskParameters.dayWorkLimitTime || 7.5 )
-
-            const isShowContent = ref(false)
-            let currentStartDate = ""
-            let currentLength = 0
-            function InitSummary() {
-                if (props.daysData?.length != currentLength || 
-                    (props.daysData?.length > 0 && props.daysData[0].date != currentStartDate) ) {
-                    isShowContent.value = false
-                    currentLength = (props.daysData as Array<IDayData>).length
-                    currentStartDate = (props.daysData as Array<IDayData>)[0].date
-                }
-
-                const tmpSummary = [] as Array<IDayCount>
-                props.daysData?.forEach( dayData => {
-                    const dayCount = {
-                        date: dayData.date,
-                        consumeTime: 0,
-                        overtime: 0
-                    } as IDayCount
-
-                    dayData.formData.forEach( task => dayCount.consumeTime += task.consumeTime )
-                    dayCount.overtime = dayCount.consumeTime - overTime.value
-                    dayCount.overtime = dayCount.overtime < 0 ? 0 : dayCount.overtime
-                    tmpSummary.push(dayCount)
-                })
-                summary.value = tmpSummary
-
-                setTimeout( () => isShowContent.value = true, 150)
-            }
-            InitSummary()
-
-            watch( () => props.daysData, () => {
-                InitSummary()
-            })
-
-            function GetClass(dayCount: IDayCount){
-                return {
-                    inactive: dayCount && dayCount.consumeTime == 0,
-                    overTime: dayCount && dayCount.consumeTime > 0 && dayCount.overtime > 0,
-                }
-            }
-
-            return {
-                summary,
-                total,
-                isShowContent,
-                InitSummary,
-                GetClass,
+            const daysData = computed( () => props?.daysData || [])
+            const sourceSummary = computed( () => props?.sourceSummary || [] )
+            const selectedDates = computed( () => props?.selectedDates || {} as IDateRange )
+            if ( props.isReactiveMode ) {                
+                return UseReactiveSummary(store, daysData, selectedDates)
+            }else{
+                
+                return UseDirectiveSummary(store, sourceSummary, selectedDates)
             }
         }        
     })
