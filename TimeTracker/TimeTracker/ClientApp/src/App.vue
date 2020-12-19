@@ -95,7 +95,8 @@
                 }
             }, 250))
 
-            watch( () => store.state.authentication.isAuthenticated, debounce((isAuthenticated: boolean) => {                
+            watch( () => store.state.authentication.isAuthenticated, debounce((isAuthenticated: boolean) => {
+                // Handle log out
                 if( !isAuthenticated ){
                     // ToastWarning("", toast)
                     router.push(GetRedirectPath(ValidationResults.invalidAuthentication))
@@ -117,7 +118,6 @@
                 }
             }, 250) )
             // =================================================================
-
             return {
 
             }

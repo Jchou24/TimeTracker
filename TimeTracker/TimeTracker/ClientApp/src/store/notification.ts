@@ -1,5 +1,5 @@
 import { INotification } from '@/models/notification';
-import { ToastWarning } from '@/util/notification';
+import { ToastSuccess, ToastWarning } from '@/util/notification';
 import debounce from 'lodash.debounce';
 import Vue from 'vue'
 import ToastInterface from 'vue-toastification/dist/types/src/ts/interface';
@@ -9,15 +9,28 @@ const GetInitState = (): INotification => ({
         notificator: undefined,
         Notificate401: undefined, 
         Notificate403: undefined, 
+        NotificateWSReconnected: undefined,
+        NotificateWSReconnecting: undefined,
+        NotificateWSClose: undefined,
     })
 
-function SetNotificate401(state: INotification){
-    state.Notificate401 = debounce( () => ToastWarning( `Sorry! You don't have sufficient permission. You will be signed out automatically.`, state.notificator ), 1000 )
-}
+const GetDebounceNoter = ( state: INotification, message: string, debouncTime = 1000 ) => 
+    debounce( () => ToastWarning( message, state.notificator ), debouncTime )
 
-function SetNotificate403(state: INotification){
-    state.Notificate403 = debounce( () => ToastWarning( `Sorry! You don't have sufficient permission.`, state.notificator ), 1000 )
-}
+const SetNotificate401 = (state: INotification) =>
+    state.Notificate401 = GetDebounceNoter( state, `Sorry! You don't have sufficient permission. You will be signed out automatically.`)
+
+const SetNotificate403 = (state: INotification) =>
+    state.Notificate403 = GetDebounceNoter( state, `Sorry! You don't have sufficient permission.`)
+
+const SetNotificateWSReconnected = (state: INotification) =>
+    state.NotificateWSReconnected = debounce( () => ToastSuccess( `The connection is restored successfully.`, state.notificator ), 1000 )
+
+const SetNotificateWSReconnecting = (state: INotification) =>
+    state.NotificateWSReconnecting = GetDebounceNoter( state, `Sorry! The connection is unstable now. Please wait for the connection.`)
+
+const SetNotificateWSClose = (state: INotification) =>
+    state.NotificateWSClose = GetDebounceNoter( state, `Sorry! The connection is break unpredictably. Please refresh the browser to continue.`)
 
 const module: Module<any, any> = {
     namespaced: true,
@@ -31,6 +44,9 @@ const module: Module<any, any> = {
             state.notificator = notificator
             SetNotificate401( state )
             SetNotificate403( state )
+            SetNotificateWSReconnected( state )
+            SetNotificateWSReconnecting( state )
+            SetNotificateWSClose( state )
         },
     },
     actions: {

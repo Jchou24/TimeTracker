@@ -10,6 +10,7 @@ import { WSHandler } from './webSocket'
 import { WSMapCode } from '@/models/constants/webSocket'
 import { FormatDate } from '@/util/taskDate'
 import { GetOptionIdByGuid, GetOptionIdByOption } from '@/util/taskParameters'
+import { HubConnectionState } from '@microsoft/signalr/dist/esm/HubConnection'
 
 class TaskEditorAPIHandler extends APIHandler{
     
@@ -89,35 +90,87 @@ class TaskEditorWSHandler{
     }
 
     public Subscribe( queryTasks: IQueryTasks ){
+        if( !this.ValidateState() ){
+            return
+        }
         this._wsHandler?.connection.invoke("SubscribeTaskEditor", queryTasks)
         this._store.commit( "webSocket/SetTaskEditorGroup", queryTasks )
     }
 
     public Unsubscribe(){
-        if( this._store.state.webSocket.taskEditorQueryTasks ){
-            this._wsHandler?.connection.invoke("UnsubscribeTaskEditor", this._store.state.webSocket.taskEditorQueryTasks)
+        if( !this.ValidateState() ){
+            return
         }
+
+        if( !this._store.state.webSocket.taskEditorQueryTasks ){
+            return
+        }
+        this._wsHandler?.connection.invoke("UnsubscribeTaskEditor", this._store.state.webSocket.taskEditorQueryTasks)
     }
 
     public UpdateIsLeave( updateIsLeave: IUpdateIsLeave ){
+        if( !this.ValidateState() ){
+            return
+        }
         this._wsHandler?.connection.invoke("UpdateIsLeave", updateIsLeave)
     }
 
     public CreateTask( createTask: ICreateTask ){
+        if( !this.ValidateState() ){
+            return
+        }
         this._wsHandler?.connection.invoke("CreateTask", createTask)
     }
 
     public DeleteTasks( deleteTasks: IDeleteTasks ){
+        if( !this.ValidateState() ){
+            return
+        }
         this._wsHandler?.connection.invoke("DeleteTasks", deleteTasks)
     }
 
     public UpdateTaskRowOrder( taskRows: Array<IUpdateTaskRowOrder> ){
+        if( !this.ValidateState() ){
+            return
+        }
         this._wsHandler?.connection.invoke("UpdateTaskRowOrder", taskRows)
     }    
 
     public UpdateTaskCol( tasks: Array<IUpdateTaskCol> ){
+        if( !this.ValidateState() ){
+            return
+        }
         this._wsHandler?.connection.invoke("UpdateTaskCol", tasks)
-    }    
+    }
+
+    protected ValidateState(){
+        if( !this._wsHandler ){
+            this._store.state.notification.NotificateWSClose()
+            return false
+        }
+
+        const connection = this._wsHandler.connection
+
+        switch (connection.state) {
+            case HubConnectionState.Disconnected:
+                this._store.state.notification.NotificateWSClose()
+                return false
+            case HubConnectionState.Connecting:
+                this._store.state.notification.NotificateWSReconnecting()
+                return false
+            case HubConnectionState.Connected:
+                return true
+            case HubConnectionState.Disconnecting:
+                this._store.state.notification.NotificateWSReconnecting()
+                return false
+            case HubConnectionState.Reconnecting:
+                this._store.state.notification.NotificateWSReconnecting()
+                return false        
+            default:
+                this._store.state.notification.NotificateWSClose()
+                return false
+        }
+    }
 }
 
 class TaskEditorWSListener{

@@ -1,9 +1,9 @@
 using AutoMapper;
-using ChatSample.Hubs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices;
@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TimeTracker.DAL;
 using TimeTracker.DAL.DBModels.Auth;
@@ -35,6 +36,7 @@ namespace TimeTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Auto Mapper
             var mapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new MappingProfile());
@@ -42,15 +44,28 @@ namespace TimeTracker
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            // DB Context
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUserAuthHandler<User, int>, UserAuthHandler>();
             services.AddScoped<TaskHandler>();
 
+            // Web Socket
             services.AddTransient<WSHubHandler<WSHub>>();
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
+
+            // Session
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0#session-options
+                options.Cookie.Name = "TTSK"; // Time Tracker Session Key
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             // NOTE: PRODUCTION Ensure this is the same path that is specified in your webpack output
             services.AddSpaStaticFiles(configuration =>
@@ -126,6 +141,7 @@ namespace TimeTracker
             // Authentication
             app.UseAuthentication();
             app.UseAuthorization();
+            // app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
