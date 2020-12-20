@@ -31,6 +31,9 @@
         display: flex;
         justify-content: center;
         z-index: 3;
+        background: white;
+
+        @include vm-drop-shadow-1( 5px, 0px, 3px, black );
 
         .fixed-sidebar-content{
             display: flex;

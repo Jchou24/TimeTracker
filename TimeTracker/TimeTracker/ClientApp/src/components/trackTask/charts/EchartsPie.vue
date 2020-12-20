@@ -239,7 +239,7 @@
 
     .EchartsPie .card{
         border-radius: 25px;
-        max-width: 400px;
+        max-width: 460px;
 
         .title{
             position: sticky;
