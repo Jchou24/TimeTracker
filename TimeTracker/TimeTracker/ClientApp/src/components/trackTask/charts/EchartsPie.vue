@@ -1,7 +1,7 @@
 <template>
     <div class="EchartsPie">
         <v-card class="card mx-6 py-6 pt-0" elevation="10">
-            <v-card-text class="title text-center text-h3">
+            <v-card-text class="title text-center text-h4 font-weight-black">
                 {{title}}
             </v-card-text>
 
@@ -246,6 +246,7 @@
             top: 0;
             background: white;
             z-index: 1;
+            color: #334b5c;
         }
 
         .data-charts{

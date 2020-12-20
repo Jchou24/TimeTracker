@@ -151,6 +151,14 @@ class TaskEditorWSHandler{
 
         const connection = this._wsHandler.connection
 
+        if(connection.state === HubConnectionState.Connected) {
+            return true
+        }
+
+        if( !this._store.state.authentication.isAuthenticated ){
+            return false
+        }
+
         switch (connection.state) {
             case HubConnectionState.Disconnected:
                 this._store.state.notification.NotificateWSClose()
@@ -158,8 +166,6 @@ class TaskEditorWSHandler{
             case HubConnectionState.Connecting:
                 this._store.state.notification.NotificateWSReconnecting()
                 return false
-            case HubConnectionState.Connected:
-                return true
             case HubConnectionState.Disconnecting:
                 this._store.state.notification.NotificateWSReconnecting()
                 return false
