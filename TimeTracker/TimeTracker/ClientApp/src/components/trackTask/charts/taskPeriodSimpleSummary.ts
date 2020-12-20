@@ -4,13 +4,7 @@ import { Store } from "vuex/types/index";
 import { IStore } from "@/models/store";
 import { IDateRange, IDayData } from "@/models/tasks";
 import { GetDateRange } from "@/util/taskDate";
-
-
-interface IDayCount{
-    date: string;
-    consumeTime: number;
-    overtime: number;
-}
+import { IDayCount } from "@/models/charts";
 
 const GetTotal = ( summary: Ref<Array<IDayCount>> ) => computed( () => ({
     date: "",
@@ -19,8 +13,9 @@ const GetTotal = ( summary: Ref<Array<IDayCount>> ) => computed( () => ({
 } as IDayCount))
 
 const GetClass = (dayCount: IDayCount) => ({
-    inactive: dayCount && dayCount.consumeTime == 0,
-    overTime: dayCount && dayCount.consumeTime > 0 && dayCount.overtime > 0,
+    inactive: dayCount && !dayCount.isLeave && dayCount.consumeTime == 0,
+    overTime: dayCount && !dayCount.isLeave && dayCount.consumeTime > 0 && dayCount.overtime > 0,
+    leave: dayCount && dayCount.isLeave,
 })
 
 const GetOverTime = (store: Store<IStore>) => computed( () => store.state.taskParameters.dayWorkLimitTime || 7.5 )
@@ -65,13 +60,16 @@ function UseReactiveSummary( store: Store<IStore>, daysData: Ref<Array<IDayData>
         const tmpSummary = daysData.value.map( dayData => {
             const dayCount = {
                 date: dayData.date,
-                consumeTime: 0,
-                overtime: 0
+                consumeTime: dayData.isLeave ? overTime.value : 0,
+                overtime: 0,
+                isLeave: dayData.isLeave,
             } as IDayCount
 
-            dayData.formData.forEach( task => dayCount.consumeTime += task.consumeTime )
-            dayCount.overtime = dayCount.consumeTime - overTime.value
-            dayCount.overtime = dayCount.overtime < 0 ? 0 : dayCount.overtime
+            if (!dayData.isLeave) {
+                dayData.formData.forEach( task => dayCount.consumeTime += task.consumeTime )
+                dayCount.overtime = dayCount.consumeTime - overTime.value
+                dayCount.overtime = dayCount.overtime < 0 ? 0 : dayCount.overtime
+            }
             
             return dayCount
         })
@@ -84,7 +82,8 @@ function UseDirectiveSummary( store: Store<IStore>, sourceSummary: Ref<Array<IDa
         const orderedMapSummary = new Map(GetDateRange(selectedDates.value.startDate, selectedDates.value.endDate).map( date => [ date, {
             date: date,
             consumeTime: 0,
-            overtime: 0
+            overtime: 0,
+            isLeave: false,
         } as IDayCount ]))
         sourceSummary.value.forEach( sourceData => orderedMapSummary.set(sourceData.date, sourceData) )
         return Array.from(orderedMapSummary.values())
@@ -92,7 +91,6 @@ function UseDirectiveSummary( store: Store<IStore>, sourceSummary: Ref<Array<IDa
 }
 
 export {
-    IDayCount,
     UseReactiveSummary,
     UseDirectiveSummary,
 }

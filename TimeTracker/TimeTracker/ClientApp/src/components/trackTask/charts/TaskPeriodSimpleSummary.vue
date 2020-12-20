@@ -51,8 +51,8 @@
     import { IStore } from '@/models/store'
     import { IDateRange, IDayData } from '@/models/tasks'
     import { Store } from 'vuex/types/index'
-    import { IDayCount, UseReactiveSummary, UseDirectiveSummary } from './taskPeriodSimpleSummary'
-
+    import { UseReactiveSummary, UseDirectiveSummary } from './taskPeriodSimpleSummary'
+    import { IDayCount } from "@/models/charts";
     
 
     export default defineComponent({
@@ -177,6 +177,10 @@
 
         &.overTime{
             background: $color-warning;
+        }
+
+        &.leave{
+            background: #4ea397;
         }
 
         &.total{

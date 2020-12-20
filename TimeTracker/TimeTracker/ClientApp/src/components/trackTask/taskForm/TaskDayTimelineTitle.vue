@@ -59,6 +59,8 @@
                     date: dayData.date,
                     isLeave: dayData.isLeave,
                 } as IUpdateIsLeave)
+
+                emit("input")
             }
 
             const color = computed( () => props.dayData?.isLeave ? "accent" : "primary" )

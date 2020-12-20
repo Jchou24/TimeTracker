@@ -13,14 +13,14 @@
 </template>
 
 <style lang="scss" scoped>
-    .two-column{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
-    }
-
     $width-sidebar: 350px;
+    $width-scrollbar: 12px;
+
+    .two-column{
+        width: 100%;
+        padding-left: $width-sidebar;
+        padding-right: $width-scrollbar;
+    }
 
     .two-column .fixed-sidebar{
         position: fixed;
@@ -30,7 +30,7 @@
         height: 100vh;
         display: flex;
         justify-content: center;
-        z-index: 1;
+        z-index: 3;
 
         .fixed-sidebar-content{
             display: flex;
@@ -56,10 +56,5 @@
             width: 100%;
             height: 100%;
         }
-    }
-
-    .two-column .content{
-        padding-left: $width-sidebar;
-        z-index: 0;
     }
 </style>

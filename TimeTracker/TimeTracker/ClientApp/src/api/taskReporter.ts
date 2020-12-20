@@ -19,6 +19,24 @@ class TaskReporterAPIHandler extends APIHandler{
             this.HttpPost('api/TaskReporter/GetSimpleSummary', isLoading, data, SuccessFunc, ErrorFunc)
         }
 
+    GetTaskTypeSummary(data: IQueryTasks, isLoading: Ref<boolean>,
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){
+            this.HttpPost('api/TaskReporter/GetTaskTypeSummary', isLoading, data, SuccessFunc, ErrorFunc)
+        }
+
+    GetTaskSourceSummary(data: IQueryTasks, isLoading: Ref<boolean>,
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){
+            this.HttpPost('api/TaskReporter/GetTaskSourceSummary', isLoading, data, SuccessFunc, ErrorFunc)
+        }
+
+    GetTaskTimeSummary(data: IQueryTasks, isLoading: Ref<boolean>,
+        SuccessFunc?: (response: AxiosResponse<any>) => void, 
+        ErrorFunc?: (error: any) => void){
+            this.HttpPost('api/TaskReporter/GetTaskTimeSummary', isLoading, data, SuccessFunc, ErrorFunc)
+        }
+
 }
 
 

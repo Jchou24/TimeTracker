@@ -3,10 +3,14 @@
         <TwoColumn>
             <template v-slot:left>
                 <MetaDisplayer :selectedUser.sync="targetUser" :selectedDates.sync="targetDates" :width="widthMetaDisplayer" />
-                <TaskPeriodSimpleSummary :sourceSummary="summary" :selectedDates="targetDates" :isReactiveMode="false" />
+                <TaskPeriodSimpleSummary :sourceSummary="simpleSummary" :selectedDates="targetDates" :isReactiveMode="false" />
             </template>
             <template v-slot:right>
-                
+                <div class="charts margin-center">
+                    <EchartsPie class="chart" title="工作類型" :isShowLoading="isLoadingTaskType" :pieData="taskTypeSummary" />
+                    <EchartsPie class="chart" title="工作來源" :isShowLoading="isLoadingTaskSource" :pieData="taskSourceSummary" />
+                    <EchartsPie class="chart" title="工時" :isShowLoading="isLoadingTaskTime" :pieData="taskTimeSummary" />
+                </div>
             </template>
         </TwoColumn>
     </div>
@@ -18,13 +22,16 @@
     import TwoColumn from '@/views/layouts/TwoColumn.vue'
     import MetaDisplayer from '@/components/trackTask/toolbar/MetaDisplayer.vue'
     import TaskPeriodSimpleSummary from '@/components/trackTask/charts/TaskPeriodSimpleSummary.vue'
+    import EchartsPie from '@/components/trackTask/charts/EchartsPie.vue'
 
     import { IClaims } from '@/models/authentication.ts'
     import { IDateRange, IDayData, IQueryTasks } from '@/models/tasks'
     import { TaskReporterAPIHandler } from '@/api/taskReporter'
     import { Store } from 'vuex/types/index'
     import { IStore } from '@/models/store'
-    import { IDayCount } from '@/components/trackTask/charts/taskPeriodSimpleSummary'
+    import { IDayCount, IEchartsPieRow } from '@/models/charts'
+    import { ValidateDate } from '@/util/taskDate'
+    import moment from 'moment'
 
     export default defineComponent({
         name: 'TaskReporter',
@@ -38,6 +45,7 @@
             TwoColumn,
             MetaDisplayer,
             TaskPeriodSimpleSummary,
+            EchartsPie,
         },
         setup( props, { refs, root } ){
             const { $store, $router, $route } = root
@@ -53,14 +61,14 @@
                     endDate: targetDates.value.endDate,
                 } as IQueryTasks))
 
-            // const queryTasks = computed( () => ({
-            //         ownerGuid: "3ebe55e4-236e-4782-8df0-5d32f01582f2",
-            //         startDate: "2020-12-10",
-            //         endDate: "2020-12-12",
-            //     } as IQueryTasks))
+            const simpleSummary = ref([] as Array<IDayCount>)
+            const taskTypeSummary = ref([] as Array<IEchartsPieRow>)
+            const taskSourceSummary = ref([] as Array<IEchartsPieRow>)
+            const taskTimeSummary = ref([] as Array<IEchartsPieRow>)
 
-            const summary = ref([] as Array<IDayCount>)
-
+            const isLoadingTaskType = ref(false)
+            const isLoadingTaskSource = ref(false)
+            const isLoadingTaskTime = ref(false)
             // ======================================================================
             const isLoading = ref(false)
             watch( isLoading, () => {
@@ -72,30 +80,72 @@
             })       
             // ======================================================================
             watch( () => queryTasks.value, () => {
+                if( ValidateDate(queryTasks.value.startDate) !== true || ValidateDate(queryTasks.value.endDate) !== true){
+                    return
+                }
+
+                if( !(moment(queryTasks.value.startDate) <= moment(queryTasks.value.endDate)) ){
+                    return
+                }
+
+                if (!queryTasks.value.ownerGuid) {
+                    return
+                }                
+
+                const SetDefaultName = ( rows: Array<IEchartsPieRow> ) => rows.forEach( row => {
+                        if (!row.name) {
+                           row.name = "Default" 
+                        }
+                    })
+                    
                 taskReporterAPIHandler.GetSimpleSummary( queryTasks.value, isLoading, (response) => {
-                    summary.value = response.data
+                    simpleSummary.value = response.data
+                })
+                
+                taskReporterAPIHandler.GetTaskTypeSummary( queryTasks.value, isLoadingTaskType, (response) => {
+                    taskTypeSummary.value = response.data
+                    SetDefaultName(taskTypeSummary.value)
+                })
+
+                taskReporterAPIHandler.GetTaskSourceSummary( queryTasks.value, isLoadingTaskSource, (response) => {
+                    taskSourceSummary.value = response.data
+                    SetDefaultName(taskSourceSummary.value)
+                })
+
+                taskReporterAPIHandler.GetTaskTimeSummary( queryTasks.value, isLoadingTaskTime, (response) => {
+                    taskTimeSummary.value = response.data
+                    SetDefaultName(taskTimeSummary.value)
                 })
             })
-            
             // ======================================================================
-            // function HandleUpdateDaysData( emitData: Array<IDayData> ){
-            //     daysData.value = emitData as Array<IDayData>
-            //     (refs.summary as ISummary).InitSummary()
-            // }
 
             return {
                 targetUser,
                 targetDates,
-                summary,
+                simpleSummary,
+                taskTypeSummary,
+                taskSourceSummary,
+                taskTimeSummary,
+
+                isLoadingTaskType,
+                isLoadingTaskSource,
+                isLoadingTaskTime,
             }
         }        
     })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .TaskReporter{
         width: 100%;
-        min-width: 1400px;
-        padding-top: 30px;
+        .charts{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+
+            .chart{
+                flex: 1;
+            }
+        }
     }
 </style>

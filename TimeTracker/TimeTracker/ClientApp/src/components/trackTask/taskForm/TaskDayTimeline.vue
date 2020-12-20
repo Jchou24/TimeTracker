@@ -9,7 +9,11 @@
                     :data-index="idx"
                     >
                     
-                    <TaskDayTimelineTitle class="timeline-row-title" :dayData="dayData" :user="user" />
+                    <TaskDayTimelineTitle class="timeline-row-title" 
+                        :dayData="dayData"
+                        :user="user"
+                        @input="EmitUpdateDaysData"
+                        />
 
                     <TaskDayForm class="timeline-row-form"
                         :dayData="dayData"
@@ -176,7 +180,7 @@
         display: flex;
         flex-direction: row;
         padding-left: 80px;
-        min-width: 1100px;
+        width: 1100px;
     }
 
     $ilne-margin-right: 80px;

@@ -6,7 +6,7 @@
                 <TaskPeriodSimpleSummary :daysData="daysData" :selectedDates="targetDates" isReactiveMode ref="summary" />
             </template>
             <template v-slot:right>
-                <TaskDayTimeline :user="targetUser" :dateRange="targetDates" @updateDaysData="HandleUpdateDaysData" />
+                <TaskDayTimeline class="margin-center" :user="targetUser" :dateRange="targetDates" @updateDaysData="HandleUpdateDaysData" />
             </template>
         </TwoColumn>
     </div>

@@ -24,13 +24,13 @@ const SetNotificate403 = (state: INotification) =>
     state.Notificate403 = GetDebounceNoter( state, `Sorry! You don't have sufficient permission.`)
 
 const SetNotificateWSReconnected = (state: INotification) =>
-    state.NotificateWSReconnected = debounce( () => ToastSuccess( `The connection is restored successfully.`, state.notificator ), 1000 )
+    state.NotificateWSReconnected = debounce( () => ToastSuccess( `The connection is restored successfully.`, state.notificator ), 3000 )
 
 const SetNotificateWSReconnecting = (state: INotification) =>
-    state.NotificateWSReconnecting = GetDebounceNoter( state, `Sorry! The connection is unstable now. Please wait for the connection.`)
+    state.NotificateWSReconnecting = GetDebounceNoter( state, `Sorry! The connection is unstable now. Please wait for the connection.`, 3000)
 
 const SetNotificateWSClose = (state: INotification) =>
-    state.NotificateWSClose = GetDebounceNoter( state, `Sorry! The connection is break unpredictably. Please refresh the browser to continue.`)
+    state.NotificateWSClose = GetDebounceNoter( state, `Sorry! The connection is break unpredictably. Please refresh the browser to continue.`, 3000)
 
 const module: Module<any, any> = {
     namespaced: true,

@@ -33,5 +33,23 @@ namespace TimeTracker.Controllers
         {
             return Ok(this._taskReportHandler.GetSimpleSummary(queryTasks));
         }
+
+        [HttpPost]
+        public IActionResult GetTaskTypeSummary(QueryTasks queryTasks)
+        {
+            return Ok(this._taskReportHandler.GetTaskTypeSummary(queryTasks));
+        }
+
+        [HttpPost]
+        public IActionResult GetTaskSourceSummary(QueryTasks queryTasks)
+        {
+            return Ok(this._taskReportHandler.GetTaskSourceSummary(queryTasks));
+        }
+
+        [HttpPost]
+        public IActionResult GetTaskTimeSummary(QueryTasks queryTasks)
+        {
+            return Ok(this._taskReportHandler.GetTaskTimeSummary(queryTasks));
+        }
     }
 }
