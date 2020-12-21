@@ -81,7 +81,7 @@ namespace TimeTracker.Controllers
         [HttpPost]
         public IActionResult GetDayWorkLimitTime()
         {
-            var tmp = this._context.DayWorkLimitTime.OrderByDescending(x => x.CreatedDate).Take(1).ToList()[0];
+            var tmp = this._context.DayWorkLimitTime.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
 
             return Ok(tmp.LimitWorkTime);
         }

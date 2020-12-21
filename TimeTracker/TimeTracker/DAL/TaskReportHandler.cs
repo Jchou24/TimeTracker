@@ -19,8 +19,7 @@ namespace TimeTracker.DAL
 
         public double GetLimitWorkTime()
         {
-            return this._context.DayWorkLimitTime.OrderByDescending(x => x.CreatedDate).Take(1).ToList()[0].LimitWorkTime;
-            //return this._context.DayWorkLimitTime.OrderByDescending(x => x.CreatedDate).FirstOrDefault().LimitWorkTime;
+            return this._context.DayWorkLimitTime.OrderByDescending(x => x.CreatedDate).FirstOrDefault().LimitWorkTime;
         }
 
         protected IQueryable<Task> _SelectTask(QueryPeopleTasks queryPeopleTasks, bool? isLeave = null)
@@ -130,7 +129,7 @@ namespace TimeTracker.DAL
                 .GroupBy(x => x.Key).ToList()
                 .Select(x => new PieRow()
                 {
-                    Name = x.Take(1).ToList()[0].TaskTypeDisplayName,
+                    Name = x.FirstOrDefault().TaskTypeDisplayName,
                     Value = x.Sum(y => y.ConsumeTime)
                 });
 
@@ -145,7 +144,7 @@ namespace TimeTracker.DAL
                 .GroupBy(x => x.Key).ToList()
                 .Select(x => new PieRow()
                 {
-                    Name = x.Take(1).ToList()[0].TaskSourceDisplayName,
+                    Name = x.FirstOrDefault().TaskSourceDisplayName,
                     Value = x.Sum(y => y.ConsumeTime)
                 });
 
