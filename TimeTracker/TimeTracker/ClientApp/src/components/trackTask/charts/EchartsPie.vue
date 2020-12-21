@@ -30,7 +30,6 @@
     import 'echarts/lib/component/legend'
     import 'echarts/lib/component/legendScroll'
     import 'echarts/lib/component/title'
-    // import 'echarts/theme'
 
     import theme from './greenTheme.json'
     ECharts.registerTheme('ovilia-green', theme)

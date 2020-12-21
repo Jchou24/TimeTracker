@@ -1,6 +1,9 @@
 <template>
     <div class="MetaDisplayer">
-        <TargetModalSelector :isOpenModal.sync="isOpenTargetSelector" :selectedUser.sync="targetUser" />
+        <TargetModalSelector 
+            :singleSelectTarget="singleSelectTarget" 
+            :isOpenModal.sync="isOpenTargetSelector" 
+            :selectedUsers.sync="targetUsers" />
         
         <div>
             <v-row>
@@ -10,7 +13,7 @@
                     :width="width" 
                     @click="isOpenTargetSelector = true">
                     <v-icon left>mdi-account-edit</v-icon>
-                    {{ targetUser.name && targetUser.name.length > 0 ? targetUser.name : targetUser.email }}
+                    {{ selectedUserInfo }}
                 </v-btn>
             </v-row>
             <v-row>
@@ -61,8 +64,9 @@
     export default defineComponent({
         name: 'MetaDisplayer',
         props:{
-            selectedUser:{
-                type: Object as () => IClaims,
+            selectedUsers:{
+                type: Array as () => Array<IClaims>,
+                default: () => [],
             },
             selectedDates:{
                 type: Object as () => IDateRange,
@@ -70,19 +74,20 @@
             width:{
                 type: Number,
                 default: 300
-            }
+            },
+            singleSelectTarget:{
+                type: Boolean,
+                default: true
+            },
         },
         components:{
             TargetModalSelector,
             DateMenuSelector,
         },
         setup( props, { emit } ){
-            // const targetUser = ref({} as IClaims)
-            // const targetDates = ref({} as IDateRange)
-
-            const targetUser = computed({
-                get: () => props.selectedUser,
-                set: (value) => emit("update:selectedUser", value)
+            const targetUsers = computed({
+                get: () => props.selectedUsers,
+                set: (value) => emit("update:selectedUsers", value)
             })
 
             const targetDates = computed({
@@ -92,14 +97,31 @@
 
             const isOpenTargetSelector = ref(false)
             const isShowPeriodName = computed( () => targetDates?.value?.isUsedPeriod && targetDates?.value?.periodName?.length > 0 )
+            const GetSingleSelectedUserInfo = () => {
+                const singleTarget = targetUsers.value[0]
+                if (!singleTarget) {
+                    return `No user selected.`
+                }
+                return singleTarget.name && singleTarget.name.length > 0 ? singleTarget.name : singleTarget.email
+            }
+            const selectedUserInfo = computed( () => {
+                if ( props.singleSelectTarget ) {
+                    return GetSingleSelectedUserInfo()
+                }
 
-            // console.log( targetUser )
+                if( targetUsers.value.length == 1 ){
+                    return GetSingleSelectedUserInfo()
+                }
+
+                return `Select ${targetUsers.value.length} users.`
+            })
 
             return {
                 isOpenTargetSelector,
                 isShowPeriodName,
-                targetUser,
+                targetUsers,
                 targetDates,
+                selectedUserInfo,
             }
         }        
     })

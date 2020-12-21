@@ -2,8 +2,16 @@
     <div class="TaskReporter">
         <TwoColumn>
             <template v-slot:left>
-                <MetaDisplayer :selectedUser.sync="targetUser" :selectedDates.sync="targetDates" :width="widthMetaDisplayer" />
-                <TaskPeriodSimpleSummary :sourceSummary="simpleSummary" :selectedDates="targetDates" :isReactiveMode="false" />
+                <MetaDisplayer 
+                    :singleSelectTarget="singleSelectTarget" 
+                    :selectedUsers.sync="targetUsers" 
+                    :selectedDates.sync="targetDates" 
+                    :width="widthMetaDisplayer" />
+                <TaskPeriodSimpleSummary 
+                    :selectedUsers="targetUsers"
+                    :sourceSummary="simpleSummary" 
+                    :selectedDates="targetDates" 
+                    :isReactiveMode="false" />
             </template>
             <template v-slot:right>
                 <div class="charts margin-center">
@@ -25,7 +33,7 @@
     import EchartsPie from '@/components/trackTask/charts/EchartsPie.vue'
 
     import { IClaims } from '@/models/authentication.ts'
-    import { IDateRange, IDayData, IQueryTasks } from '@/models/tasks'
+    import { IDateRange, IDayData, IQueryPeopleTasks } from '@/models/tasks'
     import { TaskReporterAPIHandler } from '@/api/taskReporter'
     import { Store } from 'vuex/types/index'
     import { IStore } from '@/models/store'
@@ -39,7 +47,11 @@
             widthMetaDisplayer:{
                 type: Number,
                 default: 300
-            }
+            },
+            singleSelectTarget:{
+                type: Boolean,
+                default: true
+            },
         },
         components:{
             TwoColumn,
@@ -53,13 +65,13 @@
             const router = $router
             const taskReporterAPIHandler = new TaskReporterAPIHandler( store, router )
 
-            const targetUser = ref({} as IClaims)
+            const targetUsers = ref([] as Array<IClaims>)
             const targetDates = ref({} as IDateRange)
-            const queryTasks = computed( () => ({
-                    ownerGuid: targetUser.value.guid,
+            const queryPeopleTasks = computed( () => ({
+                    ownerGuids: targetUsers.value.map( targetUser => targetUser.guid ),
                     startDate: targetDates.value.startDate,
                     endDate: targetDates.value.endDate,
-                } as IQueryTasks))
+                } as IQueryPeopleTasks))
 
             const simpleSummary = ref([] as Array<IDayCount>)
             const taskTypeSummary = ref([] as Array<IEchartsPieRow>)
@@ -79,40 +91,40 @@
                 }
             })       
             // ======================================================================
-            watch( () => queryTasks.value, () => {
-                if( ValidateDate(queryTasks.value.startDate) !== true || ValidateDate(queryTasks.value.endDate) !== true){
+            watch( queryPeopleTasks, () => {
+                if( ValidateDate(queryPeopleTasks.value.startDate) !== true || ValidateDate(queryPeopleTasks.value.endDate) !== true){
                     return
                 }
 
-                if( !(moment(queryTasks.value.startDate) <= moment(queryTasks.value.endDate)) ){
+                if( !(moment(queryPeopleTasks.value.startDate) <= moment(queryPeopleTasks.value.endDate)) ){
                     return
                 }
 
-                if (!queryTasks.value.ownerGuid) {
+                if ( queryPeopleTasks.value.ownerGuids.length === 0 ){
                     return
                 }                
 
                 const SetDefaultName = ( rows: Array<IEchartsPieRow> ) => rows.forEach( row => {
                         if (!row.name) {
-                           row.name = "Default" 
+                           row.name = "None" 
                         }
                     })
                     
-                taskReporterAPIHandler.GetSimpleSummary( queryTasks.value, isLoading, (response) => {
+                taskReporterAPIHandler.GetSimpleSummary( queryPeopleTasks.value, isLoading, (response) => {
                     simpleSummary.value = response.data
                 })
                 
-                taskReporterAPIHandler.GetTaskTypeSummary( queryTasks.value, isLoadingTaskType, (response) => {
+                taskReporterAPIHandler.GetTaskTypeSummary( queryPeopleTasks.value, isLoadingTaskType, (response) => {
                     taskTypeSummary.value = response.data
                     SetDefaultName(taskTypeSummary.value)
                 })
 
-                taskReporterAPIHandler.GetTaskSourceSummary( queryTasks.value, isLoadingTaskSource, (response) => {
+                taskReporterAPIHandler.GetTaskSourceSummary( queryPeopleTasks.value, isLoadingTaskSource, (response) => {
                     taskSourceSummary.value = response.data
                     SetDefaultName(taskSourceSummary.value)
                 })
 
-                taskReporterAPIHandler.GetTaskTimeSummary( queryTasks.value, isLoadingTaskTime, (response) => {
+                taskReporterAPIHandler.GetTaskTimeSummary( queryPeopleTasks.value, isLoadingTaskTime, (response) => {
                     taskTimeSummary.value = response.data
                     SetDefaultName(taskTimeSummary.value)
                 })
@@ -120,7 +132,7 @@
             // ======================================================================
 
             return {
-                targetUser,
+                targetUsers,
                 targetDates,
                 simpleSummary,
                 taskTypeSummary,

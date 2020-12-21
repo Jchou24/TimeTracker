@@ -4,7 +4,7 @@ import { ValidationResults } from '@/models/authentication'
 import { Store } from 'vuex/types/index'
 import { IStore } from './store'
 
-const allNavLeftItems = [ "TaskEditor", "TaskReporter" ]
+const allNavLeftItems = [ "TaskEditor", "TaskReporter", "TaskSummaryReporter" ]
 const allNavRightItems = [ "TrackSettings", "PermissionEditor" ]
 
 function FiltNavItems(candidates: Array<string>, store: Store<IStore>): Array<string>{

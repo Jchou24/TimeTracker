@@ -4,6 +4,8 @@
 //     );
 // }
 
+import { IClaims } from "@/models/authentication";
+
 function GetGuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         const r = Math.random() * 16 | 0,
@@ -12,6 +14,17 @@ function GetGuid() {
     });
 }
 
+const GetGuids = ( users: Array<IClaims>) => users.map( selectedUser => selectedUser.guid )
+
+const IsEqualUsers = ( left: Array<string>, right: Array<string> ) => {
+    const a = new Set(left)
+    const b = new Set(right)
+    const intersection = new Set([ ...a].filter( x => b.has(x) ))
+    return a.size == intersection.size && b.size == intersection.size
+}
+
 export {
-    GetGuid
+    GetGuid,
+    GetGuids,
+    IsEqualUsers,
 }

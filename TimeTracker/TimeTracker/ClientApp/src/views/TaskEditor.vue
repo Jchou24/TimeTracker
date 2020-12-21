@@ -2,8 +2,16 @@
     <div class="TaskEditor">
         <TwoColumn>
             <template v-slot:left>
-                <MetaDisplayer :selectedUser.sync="targetUser" :selectedDates.sync="targetDates" :width="widthMetaDisplayer" />
-                <TaskPeriodSimpleSummary :daysData="daysData" :selectedDates="targetDates" isReactiveMode ref="summary" />
+                <MetaDisplayer 
+                    singleSelectTarget 
+                    :selectedUsers.sync="targetUsers" 
+                    :selectedDates.sync="targetDates" 
+                    :width="widthMetaDisplayer" />
+                <TaskPeriodSimpleSummary isReactiveMode
+                    :selectedUsers="targetUsers" 
+                    :daysData="daysData" 
+                    :selectedDates="targetDates" 
+                    ref="summary" />
             </template>
             <template v-slot:right>
                 <TaskDayTimeline class="margin-center" :user="targetUser" :dateRange="targetDates" @updateDaysData="HandleUpdateDaysData" />
@@ -55,12 +63,10 @@
             const router = $router
             const taskEditorAPIHandler = new TaskEditorAPIHandler( store, router )
 
-            const targetUser = ref({} as IClaims)
+            const targetUsers = ref([] as Array<IClaims>)
+            const targetUser = computed( () => targetUsers.value[0] )
             const targetDates = ref({} as IDateRange)
             const daysData = ref([] as Array<IDayData>)
-
-            // console.log( targetUser )
-
             // ======================================================================
             const isLoading = ref(false)
             watch( isLoading, () => {
@@ -94,6 +100,7 @@
 
             return {
                 targetUser,
+                targetUsers,
                 targetDates,
                 daysData,
                 HandleUpdateDaysData

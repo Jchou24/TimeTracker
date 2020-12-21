@@ -5,6 +5,8 @@ import { IStore } from "@/models/store";
 import { IDateRange, IDayData } from "@/models/tasks";
 import { GetDateRange } from "@/util/taskDate";
 import { IDayCount } from "@/models/charts";
+import { IClaims } from "@/models/authentication";
+import { GetGuids, IsEqualUsers } from "@/util/authentication";
 
 const GetTotal = ( summary: Ref<Array<IDayCount>> ) => computed( () => ({
     date: "",
@@ -20,19 +22,21 @@ const GetClass = (dayCount: IDayCount) => ({
 
 const GetOverTime = (store: Store<IStore>) => computed( () => store.state.taskParameters.dayWorkLimitTime || 7.5 )
 
-function Summary(store: Store<IStore>, selectedDates: Ref<IDateRange>, Executor: () => Array<IDayCount>, WatchData: () => any ) {
+function Summary(store: Store<IStore>, selectedDates: Ref<IDateRange>, selectedUsers: Ref<Array<IClaims>>, Executor: () => Array<IDayCount>, WatchData: () => any ) {
     const summary = ref([] as Array<IDayCount>)
     const total = GetTotal(summary)    
     
     const isShowContent = ref(false)
-
+    let currentUsers = GetGuids(selectedUsers.value)
     let currentStartDate = selectedDates.value.startDate
     let currentEndDate = selectedDates.value.endDate
+    
     function InitSummary() {
-        if (currentStartDate !== selectedDates.value.startDate || currentEndDate !== selectedDates.value.endDate) {
+        if ( !IsEqualUsers(currentUsers, GetGuids(selectedUsers.value)) || currentStartDate !== selectedDates.value.startDate || currentEndDate !== selectedDates.value.endDate) {
             isShowContent.value = false
             currentStartDate = selectedDates.value.startDate
             currentEndDate = selectedDates.value.endDate
+            currentUsers = GetGuids(selectedUsers.value)
         }
 
         summary.value = Executor()
@@ -54,8 +58,8 @@ function Summary(store: Store<IStore>, selectedDates: Ref<IDateRange>, Executor:
     }
 }
 
-function UseReactiveSummary( store: Store<IStore>, daysData: Ref<Array<IDayData>>, selectedDates: Ref<IDateRange> ){
-    return Summary(store, selectedDates, () => {
+function UseReactiveSummary( store: Store<IStore>, daysData: Ref<Array<IDayData>>, selectedDates: Ref<IDateRange>, selectedUsers: Ref<Array<IClaims>> ){
+    return Summary(store, selectedDates, selectedUsers, () => {
         const overTime = GetOverTime(store)
         const tmpSummary = daysData.value.map( dayData => {
             const dayCount = {
@@ -77,8 +81,8 @@ function UseReactiveSummary( store: Store<IStore>, daysData: Ref<Array<IDayData>
     }, () => daysData.value)
 }
 
-function UseDirectiveSummary( store: Store<IStore>, sourceSummary: Ref<Array<IDayCount>>, selectedDates: Ref<IDateRange> ){
-    return Summary(store, selectedDates, () => {
+function UseDirectiveSummary( store: Store<IStore>, sourceSummary: Ref<Array<IDayCount>>, selectedDates: Ref<IDateRange>, selectedUsers: Ref<Array<IClaims>> ){
+    return Summary(store, selectedDates, selectedUsers, () => {
         const orderedMapSummary = new Map(GetDateRange(selectedDates.value.startDate, selectedDates.value.endDate).map( date => [ date, {
             date: date,
             consumeTime: 0,

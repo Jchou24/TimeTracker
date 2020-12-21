@@ -53,11 +53,16 @@
     import { Store } from 'vuex/types/index'
     import { UseReactiveSummary, UseDirectiveSummary } from './taskPeriodSimpleSummary'
     import { IDayCount } from "@/models/charts";
+    import { IClaims } from '@/models/authentication'
     
 
     export default defineComponent({
         name: 'TaskPeriodSimpleSummary',
         props:{
+            selectedUsers:{
+                type: Array as () => Array<IClaims>,
+                default: () => [],
+            },
             daysData:{
                 type: Array as () => Array<IDayData>,
             },
@@ -83,11 +88,12 @@
             const daysData = computed( () => props?.daysData || [])
             const sourceSummary = computed( () => props?.sourceSummary || [] )
             const selectedDates = computed( () => props?.selectedDates || {} as IDateRange )
+            const selectedUsers = computed( () => props.selectedUsers || [] )
             if ( props.isReactiveMode ) {                
-                return UseReactiveSummary(store, daysData, selectedDates)
+                return UseReactiveSummary(store, daysData, selectedDates, selectedUsers)
             }else{
                 
-                return UseDirectiveSummary(store, sourceSummary, selectedDates)
+                return UseDirectiveSummary(store, sourceSummary, selectedDates, selectedUsers)
             }
         }        
     })

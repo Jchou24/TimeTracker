@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TimeTracker.DAL;
-using TimeTracker.DAL.DBModels.Task;
 using TimeTracker.DAL.Models;
 using TimeTracker.Helper.Auth;
-using TimeTracker.Models;
 using TimeTracker.Models.Task;
 
 namespace TimeTracker.Controllers
@@ -29,27 +24,33 @@ namespace TimeTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetSimpleSummary(QueryTasks queryTasks)
+        public IActionResult GetSimpleSummary(QueryPeopleTasks queryPeopleTasks)
         {
-            return Ok(this._taskReportHandler.GetSimpleSummary(queryTasks));
+            return Ok(this._taskReportHandler.GetSimpleSummary(queryPeopleTasks));
         }
 
         [HttpPost]
-        public IActionResult GetTaskTypeSummary(QueryTasks queryTasks)
+        public IActionResult GetTaskTimeSummaryDetail(QueryPeopleTasks queryPeopleTasks)
         {
-            return Ok(this._taskReportHandler.GetTaskTypeSummary(queryTasks));
+            return Ok(this._taskReportHandler.GetTaskTimeSummaryDetail(queryPeopleTasks));
+        }        
+
+        [HttpPost]
+        public IActionResult GetTaskTypeSummary(QueryPeopleTasks queryPeopleTasks)
+        {
+            return Ok(this._taskReportHandler.GetTaskTypeSummary(queryPeopleTasks));
         }
 
         [HttpPost]
-        public IActionResult GetTaskSourceSummary(QueryTasks queryTasks)
+        public IActionResult GetTaskSourceSummary(QueryPeopleTasks queryPeopleTasks)
         {
-            return Ok(this._taskReportHandler.GetTaskSourceSummary(queryTasks));
+            return Ok(this._taskReportHandler.GetTaskSourceSummary(queryPeopleTasks));
         }
 
         [HttpPost]
-        public IActionResult GetTaskTimeSummary(QueryTasks queryTasks)
+        public IActionResult GetTaskTimeSummary(QueryPeopleTasks queryPeopleTasks)
         {
-            return Ok(this._taskReportHandler.GetTaskTimeSummary(queryTasks));
+            return Ok(this._taskReportHandler.GetTaskTimeSummary(queryPeopleTasks));
         }
     }
 }

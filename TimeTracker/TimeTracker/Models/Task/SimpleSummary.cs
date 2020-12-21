@@ -12,36 +12,27 @@ namespace TimeTracker.Models.Task
         [JsonConverter(typeof(DateFormatConverter))]
         public DateTime Date { get; set; }
 
-        public double ConsumeTime
-        {
-            get{
-                return this.IsLeave ? this._LimitWorkTime : this._ConsumeTime;
-            }
-        }
+        public double ConsumeTime { get; set; }
 
-        public double Overtime
-        {
-            get
-            {
-                return this.IsLeave ? 0 :
-                    this.ConsumeTime - this._LimitWorkTime > 0 ? this.ConsumeTime - this._LimitWorkTime : 0;
-            }
-        }
+        public double Overtime { get; set; }
 
         public bool IsLeave { get; set; } = false;
 
-        protected double _ConsumeTime { get; set; }
-
-        protected double _LimitWorkTime { get; set; }
-
         public SimpleSummary(){}
 
-        public SimpleSummary(DateTime date, double consumeTime, double limitWorkTime, bool isLeave)
+        public SimpleSummary(MultiSimpleSummary multiSimpleSummary)
         {
-            this.Date = date;
-            this._ConsumeTime = consumeTime;
-            this._LimitWorkTime = limitWorkTime;
-            this.IsLeave = isLeave;
+            this.Date = multiSimpleSummary.Date;
+            this.ConsumeTime = multiSimpleSummary.TotalConsumeTime;
+            this.Overtime = multiSimpleSummary.TotalOvertime;
+        }
+
+        public SimpleSummary(PersonSummary personSummary)
+        {
+            this.Date = personSummary.Date;
+            this.ConsumeTime = personSummary.ConsumeTime;
+            this.Overtime = personSummary.Overtime;
+            this.IsLeave = personSummary.IsLeave;
         }
     }
 }

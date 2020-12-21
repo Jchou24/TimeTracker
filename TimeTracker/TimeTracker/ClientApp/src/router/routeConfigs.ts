@@ -47,6 +47,20 @@ const routeConfigs: IRouteConfigs = {
             mdiIcon: "mdi-view-quilt-outline",
         }
     },
+    TaskSummaryReporter: {
+        path: '/TaskSummaryReporter',
+        name: 'TaskSummaryReporter',
+        component: () => import('../views/TaskSummaryReporter.vue'),
+        auth:{
+            isRequiredAuthentication: true,
+            isRequiredApprovedAccount: true,
+            requiredRoles:[ UserRoles.User ],
+        },
+        nav:{
+            displayName: "全體工時報表",
+            mdiIcon: "mdi-view-dashboard-variant-outline",
+        }
+    },
     PermissionEditor: {
         path: '/PermissionEditor',
         name: 'PermissionEditor',

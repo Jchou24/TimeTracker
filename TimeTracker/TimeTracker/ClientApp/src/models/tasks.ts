@@ -108,6 +108,12 @@ interface IQueryTasks{
     endDate: string;
 }
 
+interface IQueryPeopleTasks{
+    ownerGuids: Array<string>;
+    startDate: string;
+    endDate: string;
+}
+
 interface ICreateTask{
     tasks: Array<IUpdateTask>;
     ownerGuid: string;
@@ -127,5 +133,6 @@ export {
     IDayData,
     IGetDaysDataResponse,
     IQueryTasks,
+    IQueryPeopleTasks,
     ICreateTask,
 }
