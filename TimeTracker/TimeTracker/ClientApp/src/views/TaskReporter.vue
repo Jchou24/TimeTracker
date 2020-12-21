@@ -3,7 +3,7 @@
         <TwoColumn>
             <template v-slot:left>
                 <MetaDisplayer 
-                    :singleSelectTarget="singleSelectTarget" 
+                    :singleSelectTarget="!multipleMode" 
                     :selectedUsers.sync="targetUsers" 
                     :selectedDates.sync="targetDates" 
                     :width="widthMetaDisplayer" />
@@ -17,7 +17,11 @@
                 <div class="charts margin-center">
                     <EchartsPie class="chart" title="工作類型" :isShowLoading="isLoadingTaskType" :pieData="taskTypeSummary" />
                     <EchartsPie class="chart" title="工作來源" :isShowLoading="isLoadingTaskSource" :pieData="taskSourceSummary" />
-                    <EchartsPie class="chart" title="工時" :isShowLoading="isLoadingTaskTime" :pieData="taskTimeSummary" />
+                    <EchartsPie class="chart" title="工時比例" :isShowLoading="isLoadingTaskTime" :pieData="taskTimeSummary" />
+                    <!-- No idea how to handle null value -->
+                    <!-- <TaskPeriodEchartsLine class="chart" title="工時曲線" :isShowLoading="isLoadingTaskTimeSummaryDetail" :lineData="taskTimeSummaryDetail"                        
+                        v-if="multipleMode"
+                    /> -->
                 </div>
             </template>
         </TwoColumn>
@@ -31,13 +35,14 @@
     import MetaDisplayer from '@/components/trackTask/toolbar/MetaDisplayer.vue'
     import TaskPeriodSimpleSummary from '@/components/trackTask/charts/TaskPeriodSimpleSummary.vue'
     import EchartsPie from '@/components/trackTask/charts/EchartsPie.vue'
+    import TaskPeriodEchartsLine from '@/components/trackTask/charts/TaskPeriodEchartsLine.vue'
 
     import { IClaims } from '@/models/authentication.ts'
     import { IDateRange, IDayData, IQueryPeopleTasks } from '@/models/tasks'
     import { TaskReporterAPIHandler } from '@/api/taskReporter'
     import { Store } from 'vuex/types/index'
     import { IStore } from '@/models/store'
-    import { IDayCount, IEchartsPieRow } from '@/models/charts'
+    import { IDayCount, IEchartsPieRow, ITaskTimeSummaryDetail } from '@/models/charts'
     import { ValidateDate } from '@/util/taskDate'
     import moment from 'moment'
 
@@ -48,9 +53,9 @@
                 type: Number,
                 default: 300
             },
-            singleSelectTarget:{
+            multipleMode:{
                 type: Boolean,
-                default: true
+                default: false
             },
         },
         components:{
@@ -58,6 +63,7 @@
             MetaDisplayer,
             TaskPeriodSimpleSummary,
             EchartsPie,
+            TaskPeriodEchartsLine,
         },
         setup( props, { refs, root } ){
             const { $store, $router, $route } = root
@@ -77,10 +83,12 @@
             const taskTypeSummary = ref([] as Array<IEchartsPieRow>)
             const taskSourceSummary = ref([] as Array<IEchartsPieRow>)
             const taskTimeSummary = ref([] as Array<IEchartsPieRow>)
+            const taskTimeSummaryDetail = ref([] as Array<ITaskTimeSummaryDetail>)
 
             const isLoadingTaskType = ref(false)
             const isLoadingTaskSource = ref(false)
             const isLoadingTaskTime = ref(false)
+            const isLoadingTaskTimeSummaryDetail = ref(false)
             // ======================================================================
             const isLoading = ref(false)
             watch( isLoading, () => {
@@ -128,6 +136,12 @@
                     taskTimeSummary.value = response.data
                     SetDefaultName(taskTimeSummary.value)
                 })
+
+                // if ( props.multipleMode ) {
+                //     taskReporterAPIHandler.GetTaskTimeSummaryDetail( queryPeopleTasks.value, isLoadingTaskTimeSummaryDetail, (response) => {
+                //         taskTimeSummaryDetail.value = response.data
+                //     })
+                // }
             })
             // ======================================================================
 
@@ -138,10 +152,12 @@
                 taskTypeSummary,
                 taskSourceSummary,
                 taskTimeSummary,
+                taskTimeSummaryDetail,
 
                 isLoadingTaskType,
                 isLoadingTaskSource,
                 isLoadingTaskTime,
+                isLoadingTaskTimeSummaryDetail,
             }
         }        
     })

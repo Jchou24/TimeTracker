@@ -36,47 +36,100 @@ namespace TimeTracker.Models.Task
         }
 
 
-        public double AvgConsumeTime
+        public double? AvgConsumeTime
         {
-            get => this.ConsumeTime.Count > 0 ? this.ConsumeTime.Average() : Double.NaN;
+            get
+            {
+                if (this.ConsumeTime.Count > 0)
+                {
+                    return this.ConsumeTime.Average();
+                }
+                return null;
+            }
         }
-        public double AvgOvertime
+        public double? AvgOvertime
         {
-            get => this.Overtime.Count > 0 ? this.Overtime.Average() : Double.NaN;
-        }
-
-
-        public double MedianConsumeTime
-        {
-            get => this.ConsumeTime.Count > 0 ? this.ConsumeTime.Median() : Double.NaN;
-        }
-        public double MedianOvertime
-        {
-            get => this.Overtime.Count > 0 ? this.Overtime.Median() : Double.NaN;
-        }
-
-
-        public double MinConsumeTime
-        {
-            get => this.ConsumeTime.Minimum();
-        }
-        public double MinOvertime
-        {
-            get => this.Overtime.Minimum();
+            get
+            {
+                if (this.Overtime.Count > 0)
+                {
+                    return this.Overtime.Average();
+                }
+                return null;
+            }
         }
 
 
-        public double MaxConsumeTime
+        public double? MedianConsumeTime
         {
-            get => this.ConsumeTime.Maximum();
+            get
+            {
+                if (this.ConsumeTime.Count > 0)
+                {
+                    return this.ConsumeTime.Median();
+                }
+                return null;
+            }
         }
-        public double MaxOvertime
+        public double? MedianOvertime
         {
-            get => this.Overtime.Maximum();
+            get
+            {
+                if (this.Overtime.Count > 0)
+                {
+                    return this.Overtime.Median();
+                }
+                return null;
+            }
         }
 
 
+        public double? MinConsumeTime
+        {
+            get
+            {
+                if (this.ConsumeTime.Count > 0)
+                {
+                    return this.ConsumeTime.Min();
+                }
+                return null;
+            }
+        }
+        public double? MinOvertime
+        {
+            get
+            {
+                if (this.Overtime.Count > 0)
+                {
+                    return this.Overtime.Min();
+                }
+                return null;
+            }
+        }
 
+
+        public double? MaxConsumeTime
+        {
+            get
+            {
+                if (this.ConsumeTime.Count > 0)
+                {
+                    return this.ConsumeTime.Max();
+                }
+                return null;
+            }
+        }
+        public double? MaxOvertime
+        {
+            get
+            {
+                if (this.Overtime.Count > 0)
+                {
+                    return this.Overtime.Max();
+                }
+                return null;
+            }
+        }
 
         public void AddRow(PersonSummary row)
         {

@@ -1,6 +1,6 @@
 <template>
     <div class="TaskSummaryReporter">
-        <TaskReporter :singleSelectTarget="false" />
+        <TaskReporter multipleMode/>
     </div>
 </template>
 
