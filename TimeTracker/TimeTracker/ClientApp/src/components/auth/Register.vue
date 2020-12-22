@@ -1,6 +1,6 @@
 <template>
     <div class="Register">
-        <FadeInOutTransition mode="out-in">
+        <SimpleTransition mode="out-in">
             <v-card
                 :loading="isLoading"
                 :disabled="isLoading"
@@ -82,7 +82,7 @@
                     <v-card-title class="regist-success text-h4 margin-center font-weight-bold"><v-icon class="text-h4" left>mdi-check-circle-outline</v-icon>註冊成功</v-card-title>
                 </v-container>            
             </v-card>
-        </FadeInOutTransition>
+        </SimpleTransition>
         
     </div>
 </template>
@@ -90,7 +90,7 @@
 <script lang="ts">
     import { defineComponent, computed, ref, reactive, onMounted } from '@vue/composition-api';
 
-    import FadeInOutTransition from '@/util/components/transition/FadeInOutTransition.vue'
+    import SimpleTransition from '@/util/components/transition/SimpleTransition.vue'
 
     import { useToast } from "vue-toastification/composition"
     import { ToastSuccess } from '@/util/notification.ts'
@@ -106,7 +106,7 @@
 
         },
         components:{
-            FadeInOutTransition,
+            SimpleTransition,
         },
         setup(props, { emit, root }){
             const { $store, $router } = root

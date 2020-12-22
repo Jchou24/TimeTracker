@@ -1,6 +1,6 @@
 <template>
     <div class="TaskPeriodSimpleSummary">
-        <FadeInOutTransition mode="out-in">
+        <SimpleTransition mode="out-in">
             <v-simple-table class="summary" dense fixed-header height="100%" v-if="isShowContent && summary.length > 0">
                 <template v-slot:default>
                     <thead>
@@ -37,14 +37,14 @@
                     </RippleTransitionFlip>
                 </template>
             </v-simple-table>
-        </FadeInOutTransition>
+        </SimpleTransition>
     </div>
 </template>
 
 <script lang="ts">
     import { computed, defineComponent, Ref, ref, watch  } from '@vue/composition-api'
 
-    import FadeInOutTransition from '@/util/components/transition/FadeInOutTransition.vue'
+    import SimpleTransition from '@/util/components/transition/SimpleTransition.vue'
     import RippleTransitionFlip from '@/util/components/transition/RippleTransitionFlip.vue'
 
     import { TaskEditorAPIHandler } from '@/api/taskEditor'
@@ -78,7 +78,7 @@
             },            
         },
         components:{
-            FadeInOutTransition,
+            SimpleTransition,
             RippleTransitionFlip,
         },
         setup( props, { emit, root } ){

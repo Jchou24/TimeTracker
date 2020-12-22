@@ -15,9 +15,9 @@
 
         <v-main>
             <v-container fluid fill-height >
-                <FadeInOutTransition mode="out-in">
+                <SimpleTransition mode="out-in">
                     <router-view></router-view>
-                </FadeInOutTransition>
+                </SimpleTransition>
             </v-container>
         </v-main>
 
@@ -36,7 +36,7 @@
 
     import Nav from '@/components/nav/Nav.vue'
     import PageIdle from '@/components/auth/PageIdle.vue'
-    import FadeInOutTransition from '@/util/components/transition/FadeInOutTransition.vue'
+    import SimpleTransition from '@/util/components/transition/SimpleTransition.vue'
 
     import debounce from 'lodash.debounce'
     import { provideToast, useToast } from "vue-toastification/composition";
@@ -58,7 +58,7 @@
         components:{
             Nav,
             PageIdle,
-            FadeInOutTransition,
+            SimpleTransition,
         },
         setup(props, { root }){
             const { $store, $router, $route } = root
@@ -82,6 +82,8 @@
 
             const wsHandler = new WSHandler(store, router)
             store.commit("webSocket/SetWSHandler", wsHandler)
+
+            // setInterval( () => console.log("WS state:", wsHandler.connection.state), 2000 )
             // =================================================================
             // Watch Account Status
             watch( () => store.state.authentication.claims.accountStatus, debounce((accountStatus: AccountStatus) => {
