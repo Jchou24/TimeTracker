@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent, reactive, ref, watch } from '@vue/composition-api'
+    import { computed, defineComponent, onUnmounted, reactive, ref, watch } from '@vue/composition-api'
 
     import TwoColumn from '@/views/layouts/TwoColumn.vue'
     import MetaDisplayer from '@/components/trackTask/toolbar/MetaDisplayer.vue'
@@ -52,16 +52,12 @@
             TaskPeriodSimpleSummary,
             TaskDayTimeline,
         },
-        beforeRouteLeave(to, from, next) {
-            const taskEditorWSHandler = new TaskEditorWSHandler( this.$store )
-            taskEditorWSHandler.Unsubscribe()
-            next();
-        },
         setup( props, { refs, root } ){
             const { $store, $router, $route } = root
             const store = $store as Store<IStore>
             const router = $router
             const taskEditorAPIHandler = new TaskEditorAPIHandler( store, router )
+            const taskEditorWSHandler = new TaskEditorWSHandler( store )
 
             const targetUsers = ref([] as Array<IClaims>)
             const targetUser = computed( () => targetUsers.value[0] )
@@ -97,6 +93,10 @@
                 daysData.value = emitData as Array<IDayData>
                 (refs.summary as ISummary).InitSummary()
             }
+
+            onUnmounted( () => {
+                taskEditorWSHandler.Unsubscribe()
+            })
 
             return {
                 targetUser,

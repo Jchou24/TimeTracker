@@ -1,6 +1,8 @@
 <template>
-    <div class="TaskDayTimeline" align-top v-if="daysData.length > 0">
-        <div class="task-timeline-line" />
+    <div class="TaskDayTimeline" align-top >
+        <SimpleTransition enterAnimation="animate__backInDown" leaveAnimation="animate__backOutUp">
+            <div class="task-timeline-line"  v-if="isShowContent"/>
+        </SimpleTransition>
         <div class="task-timeline-body" >
             <RippleTransitionFlip v-if="isShowContent">
                 <div class="timeline-row" :class="{ 'focus-row': dayData.isFormClicked }"
@@ -35,6 +37,7 @@
     // import TaskDayLeaveIcon from './TaskDayLeaveIcon.vue'
     // import TaskDayLeaveCheckbox from './TaskDayLeaveCheckbox.vue'
     import RippleTransitionFlip from '@/util/components/transition/RippleTransitionFlip.vue'
+    import SimpleTransition from '@/util/components/transition/SimpleTransition.vue'
 
     import debounce from 'lodash.debounce'
     import { Store } from 'vuex/types/index'
@@ -62,6 +65,7 @@
             // TaskDayLeaveIcon,
             // TaskDayLeaveCheckbox,
             RippleTransitionFlip,
+            SimpleTransition,
         },
         setup( props, { emit, root } ){
             const { $store, $router, $route } = root
@@ -125,6 +129,7 @@
                     endDate: props.dateRange?.endDate,
                 } as IQueryTasks
 
+                daysData.value = []
                 taskEditorAPIHandler.GetDaysData(queryTasks, isLoading, (response) => {
                         const tasksDays = response.data as Array<IGetDaysDataResponse>
                         tasksDays.forEach( tasksDay => tasksDay.formData.forEach( task => {

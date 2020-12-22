@@ -28,12 +28,12 @@
     import 'echarts/lib/component/legend'
     import 'echarts/lib/component/legendScroll'
     import 'echarts/lib/component/title'
+    import { EChartOption } from 'echarts'
 
     import theme from './greenTheme.json'
     ECharts.registerTheme('ovilia-green', theme)
 
     import { IEchartsPieRow, ITaskTimeSummaryDetail } from '@/models/charts'
-    import { EChartsFullOption } from 'echarts/lib/option'
     import { FormatDate } from '@/util/taskDate'
 
     interface IChartMethod{
@@ -94,7 +94,7 @@
                         type: 'line',
                         symbol: 'none',
                         // stack: 'x',
-                        smooth: false,
+                        // smooth: false,
                         // areaStyle: {
                         //     color: '#ccc',
                         //     // origin: "end"
@@ -145,15 +145,11 @@
 
                     ],
                     
-            } as EChartsFullOption };
+            } as EChartOption<EChartOption.SeriesLines> };
 
-            const options = reactive( GetOptions() )
+            const options = ref( GetOptions() )
             watch( () => props.lineData, () => {
-                const tmpOptons = GetOptions()
-                console.log( tmpOptons )
-                Object.keys(tmpOptons).forEach( key => {
-                    Reflect.set( options, key, tmpOptons[key] )
-                })
+                options.value = GetOptions()
             })
 
             // =================================================================

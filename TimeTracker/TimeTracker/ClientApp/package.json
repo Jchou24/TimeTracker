@@ -20,6 +20,7 @@
   "devDependencies": {
     "@mdi/font": "^5.8.55",
     "@microsoft/signalr": "^5.0.0",
+    "@types/echarts": "^4.9.3",
     "@types/jest": "^24.0.19",
     "@types/jquery": "^3.5.4",
     "@types/lodash.debounce": "^4.0.6",
@@ -38,7 +39,7 @@
     "@vue/test-utils": "^1.0.3",
     "animate.css": "^4.1.1",
     "axios": "^0.21.0",
-    "echarts": "^4.6.0",
+    "echarts": "^4.9.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "jctk-table-form": "^0.1.9",

@@ -37,21 +37,18 @@
         components:{
             NavItem
         },
-        computed:{
-            isActiveLink(){
-                return routeConfigs[this.routeConfigsKey].path == this.$route.path
-            }
-        },
         setup( props, { root } ){
             const { $router, $route } = root
             const to = computed( () => routeConfigs[props.routeConfigsKey].path )
             const navIcon = computed( () => props.mdiIcon ? routeConfigs[props.routeConfigsKey].nav.mdiIcon : "" )
             const navDisplayName = computed( () => props.displayName ? routeConfigs[props.routeConfigsKey].nav.displayName : "" )
+            const isActiveLink = computed( () => routeConfigs[props.routeConfigsKey].path == $router.currentRoute.path )
 
             return {
                 to,
                 navIcon,
                 navDisplayName,
+                isActiveLink,
             }
         }
     })

@@ -30,12 +30,12 @@
     import 'echarts/lib/component/legend'
     import 'echarts/lib/component/legendScroll'
     import 'echarts/lib/component/title'
+    import { EChartOption } from 'echarts'
 
     import theme from './greenTheme.json'
     ECharts.registerTheme('ovilia-green', theme)
 
     import { IEchartsPieRow } from '@/models/charts'
-    import { EChartsFullOption } from 'echarts/lib/option'
 
     interface IChartMethod{
         showLoading: Function;
@@ -74,7 +74,7 @@
                 const legendData = props.pieData.map( data => data.name )
                 const legendType = legendData.length > 5 ? 'scroll' : 'plain'
 
-                return {
+                const option = {
                     // title: {
                     //     text: props.title,
                     //     subtext: props.subTitle,
@@ -141,7 +141,7 @@
                                         width: '100%',
                                         align: 'right',
                                         height: 22,
-                                        borderRadius: [4, 4, 0, 0]
+                                        // borderRadius: [4, 4, 0, 0]
                                     },
                                     // hr: {
                                     //     borderColor: '#aaa',
@@ -189,14 +189,14 @@
                             data: data,
                         }
                     ]
-            } as EChartsFullOption };
+                } as EChartOption<EChartOption.SeriesPie> 
 
-            const options = reactive( GetOptions() )
+                return option
+            };
+
+            const options = ref( GetOptions() )
             watch( () => props.pieData, () => {
-                const tmpOptons = GetOptions()
-                Object.keys(tmpOptons).forEach( key => {
-                    Reflect.set( options, key, tmpOptons[key] )
-                })
+                options.value = GetOptions()
             })
 
             // =================================================================
