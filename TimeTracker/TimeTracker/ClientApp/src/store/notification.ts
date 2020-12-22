@@ -32,15 +32,15 @@ const SetNotificateWSReconnecting = (state: INotification) =>
 const SetNotificateWSClose = (state: INotification) =>
     state.NotificateWSClose = GetDebounceNoter( state, `Sorry! The connection is break unpredictably. Please refresh the browser to continue.`, 3000)
 
-const module: Module<any, any> = {
+const module: Module<INotification, any> = {
     namespaced: true,
     state: GetInitState(),
     mutations: {
-        Init: ( state: INotification ) => {
+        Init: ( state ) => {
             const initState = GetInitState()
             Vue.set(state, "notificator", initState.notificator)
         },
-        SetNotificator: ( state: INotification, notificator: ReturnType<typeof ToastInterface> ) => {
+        SetNotificator: ( state, notificator: ReturnType<typeof ToastInterface> ) => {
             state.notificator = notificator
             SetNotificate401( state )
             SetNotificate403( state )

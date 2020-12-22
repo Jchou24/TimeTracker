@@ -25,19 +25,19 @@ const SetOptions = ( state: ITaskParameters, tasktype: string, taskOptions: Arra
     Vue.set(state, tasktype, taskOptions)
 }
 
-const module: Module<any, any> = {
+const module: Module<ITaskParameters, any> = {
     namespaced: true,
     state: GetInitState(),
     mutations: {
-        Init: ( state: ITaskParameters ) => {
+        Init: ( state ) => {
             const initState = GetInitState()
             Vue.set(state, TASKTYPES, initState.taskTypes)
             Vue.set(state, TASKSOURCES, initState.taskSources)
             Vue.set(state, DAYWORKLIMITTIME, initState.dayWorkLimitTime)
         },
-        SetTaskTypes: ( state: ITaskParameters, taskTypes: Array<ITaskOption> ) => SetOptions(state, TASKTYPES, taskTypes),
-        SetTaskSources: ( state: ITaskParameters, taskSources: Array<ITaskOption> ) => SetOptions(state, TASKSOURCES, taskSources),
-        SetDayWorkLimitTime: ( state: ITaskParameters, dayWorkLimitTime: number ) => state.dayWorkLimitTime = dayWorkLimitTime,
+        SetTaskTypes: ( state, taskTypes: Array<ITaskOption> ) => SetOptions(state, TASKTYPES, taskTypes),
+        SetTaskSources: ( state, taskSources: Array<ITaskOption> ) => SetOptions(state, TASKSOURCES, taskSources),
+        SetDayWorkLimitTime: ( state, dayWorkLimitTime: number ) => state.dayWorkLimitTime = dayWorkLimitTime,
     },
     actions: {
     },

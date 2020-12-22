@@ -20,3 +20,9 @@
     })
 </script>
 
+
+<style lang="scss" scoped>
+    .TaskSummaryReporter{
+        width: 100%;
+    }
+</style>

@@ -9,7 +9,7 @@ const GetInitState = (): IWebSocket => ({
         taskEditorQueryTasks: undefined,
     })
 
-const module: Module<any, any> = {
+const module: Module<IWebSocket, any> = {
     namespaced: true,
     state: GetInitState(),
     mutations: {
@@ -17,10 +17,10 @@ const module: Module<any, any> = {
             const initState = GetInitState()
             Vue.set(state, "wsHandler", initState.wsHandler)
         },
-        SetWSHandler: ( state: IWebSocket, wsHandler: WSHandler ) => {
+        SetWSHandler: ( state, wsHandler: WSHandler ) => {
             state.wsHandler = wsHandler
         },
-        SetTaskEditorGroup: ( state: IWebSocket, queryTasks: IQueryTasks ) => {
+        SetTaskEditorGroup: ( state, queryTasks: IQueryTasks ) => {
             Vue.set(state, "taskEditorQueryTasks", queryTasks)
         },
     },

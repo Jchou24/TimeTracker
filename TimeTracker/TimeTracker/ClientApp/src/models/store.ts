@@ -2,6 +2,7 @@ import { IAuthentication } from './authentication'
 import { INotification } from './notification'
 import { IPageIdle } from './pageIdle'
 import { ITaskParameters } from './tasks'
+import { ITwoColumn } from './twoColumn'
 import { IWebSocket } from './webSocket'
 
 
@@ -16,6 +17,7 @@ interface IStore extends IStoreRoot{
     taskParameters: ITaskParameters,
     notification: INotification,
     webSocket: IWebSocket,
+    twoColumn: ITwoColumn,
 }
 
 export {

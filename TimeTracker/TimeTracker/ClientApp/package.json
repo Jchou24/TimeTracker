@@ -55,6 +55,7 @@
     "vue-echarts": "^4.1.0",
     "vue-template-compiler": "^2.6.11",
     "vue-toastification": "^1.7.8",
+    "vue-use-web": "^1.0.1",
     "vuetify": "^2.3.19",
     "vuex-multi-tab-state": "^1.0.15"
   }

@@ -9,6 +9,7 @@ import pageIdle from './pageIdle'
 import taskParameters from './taskParameters'
 import notification from './notification'
 import webSocket from './webSocket'
+import twoColumn from './twoColumn'
 import { GetGuid } from '@/util/authentication'
 
 Vue.use(Vuex)
@@ -34,6 +35,7 @@ export default new Vuex.Store({
         pageIdle,
         notification,
         webSocket,
+        twoColumn,
     },
     plugins: [
         createMultiTabState({

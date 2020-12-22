@@ -1,5 +1,6 @@
 <template>
     <v-app-bar class="Nav drop-shadow-2 px-16" app>
+        <TwoColumnSidebarToggleIcon />
         <NavLinkItem class="home-btn" routeConfigsKey="Home" displayName />        
         <NavLinkItem v-for="(navItem, idx) in navLeftItems" 
             :routeConfigsKey="navItem"
@@ -31,7 +32,8 @@
     import NavProgress from '@/components/nav/NavProgress.vue'
     import NavLinkItem from "./NavLinkItem.vue"
     import NavItem from "./NavItem.vue"
-    import SignIn from "@/components/auth/SignIn.vue"    
+    import TwoColumnSidebarToggleIcon from "./TwoColumnSidebarToggleIcon.vue"
+    import SignIn from "@/components/auth/SignIn.vue"
     
     import { routeConfigs } from '@/router/routeConfigs'
     import { AuthenticationAPIHandler } from '@/api/authentication.ts'
@@ -50,6 +52,7 @@
             NavProgress,
             NavLinkItem,
             NavItem,
+            TwoColumnSidebarToggleIcon,
             SignIn,
         },
         setup(props, { root }){

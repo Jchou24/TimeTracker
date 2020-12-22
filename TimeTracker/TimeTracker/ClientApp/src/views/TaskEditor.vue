@@ -112,7 +112,6 @@
 <style lang="scss">
     .TaskEditor{
         width: 100%;
-        min-width: 1400px;
         padding-top: 30px;
     }
 </style>

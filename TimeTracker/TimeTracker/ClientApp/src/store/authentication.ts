@@ -16,19 +16,19 @@ function SetClaims( state: IAuthentication, claims: IClaims ){
     Object.keys(claims).forEach( key => Reflect.set( state.claims, key, Reflect.get(claims, key) ) )
 }
 
-const module: Module<any, any> = {
+const module: Module<IAuthentication, any> = {
     namespaced: true,
     state: GetInitAuthentication(),
     mutations: {
-        Init: ( state: IAuthentication ) => {
+        Init: ( state ) => {
             const initAuthentication = GetInitAuthentication()
             Object.keys(initAuthentication).forEach( key => Reflect.set( state, key, Reflect.get(initAuthentication, key) ) )
             SetClaims(state, state.claims)
         },
-        SetIsAuthenticated: ( state: IAuthentication, isAuthenticated: boolean ) => state.isAuthenticated = isAuthenticated,
-        SetClaims: ( state: IAuthentication, claims: IClaims ) => SetClaims(state, claims),
-        SetEmail: ( state: IAuthentication, email: string ) => state.claims.email = email,
-        SetName: ( state: IAuthentication, name: string ) => state.claims.name = name,
+        SetIsAuthenticated: ( state, isAuthenticated: boolean ) => state.isAuthenticated = isAuthenticated,
+        SetClaims: ( state, claims: IClaims ) => SetClaims(state, claims),
+        SetEmail: ( state, email: string ) => state.claims.email = email,
+        SetName: ( state, name: string ) => state.claims.name = name,
     },
     actions: {
     },
