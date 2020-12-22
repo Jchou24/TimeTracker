@@ -1,6 +1,7 @@
 <template>
     <Center class="TrackSettings">
-        
+        <DatePeriodForm :width="800" />
+
     </Center>
 </template>
 
@@ -8,6 +9,7 @@
     import { defineComponent, ref } from '@vue/composition-api'
 
     import Center from './layouts/Center.vue'
+    import DatePeriodForm from '@/components/trackTask/trackSettings/DatePeriodForm.vue'
 
     export default defineComponent({
         name: 'TrackSettings',
@@ -16,6 +18,7 @@
         },
         components:{
             Center,
+            DatePeriodForm,
         },  
         setup(){
             const data = ref("AAA")

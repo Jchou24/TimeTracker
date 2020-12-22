@@ -6,13 +6,6 @@ interface IDateRange{
     endDate: string;
 }
 
-interface IPeriod{
-    guid: string;
-    startDate: string;
-    endDate: string;
-    name: string;
-}
-
 interface ITaskOption{
     id: number;
     guid: string;
@@ -121,7 +114,6 @@ interface ICreateTask{
 
 export {
     IDateRange,
-    IPeriod,
     ITaskOption,
     ITaskParameters,
     ITask,

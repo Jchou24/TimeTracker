@@ -29,7 +29,7 @@
                             >
                             <v-container>
                                 <v-row no-gutters justify="center" v-if="isShowPeriodName">
-                                    <v-col class="mt-2">
+                                    <v-col class="mt-2 font-weight-black">
                                         <v-icon class="mr-1">mdi-calendar-multiple</v-icon>{{targetDates.periodName}}
                                     </v-col>
                                 </v-row>

@@ -1,7 +1,12 @@
 <template>
     <Center class="PermissionEditor">
-        <AdminUncheckAccounts @GetAccounts="HandleGetAccounts" />
-        <AdminAccounts :accounts="accounts" @GetAccounts="HandleGetAccounts" />
+        <AdminUncheckAccounts
+            :width="800"
+            @GetAccounts="HandleGetAccounts" />
+        <AdminAccounts 
+            :width="800"
+            :accounts="accounts" 
+            @GetAccounts="HandleGetAccounts" />
     </Center>
 </template>
 

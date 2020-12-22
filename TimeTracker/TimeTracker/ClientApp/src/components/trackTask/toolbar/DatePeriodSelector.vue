@@ -35,7 +35,7 @@
                     fixed-header
                     filterable
                     multi-sort
-                    no-data-text="No User found"
+                    no-data-text="No Periods found"
                     @item-selected="HandleItemSelected"
                 />
             </v-card>
@@ -46,10 +46,11 @@
 <script lang="ts">
     import { computed, defineComponent, Ref, ref, watch } from '@vue/composition-api'
 
-    import { TaskEditorAPIHandler } from '@/api/taskEditor'
+    import { PeriodAPIHandler } from '@/api/period'
     import { Store } from 'vuex/types/index'
     import { IStore } from '@/models/store'
-    import { IPeriod, IDateRange } from '@/models/tasks'
+    import { IDateRange } from '@/models/tasks'
+    import { IPeriod } from '@/models/period'
     import { DataTableHeader } from 'vuetify'
     import { FormatDate } from '@/util/taskDate'
 
@@ -67,7 +68,7 @@
             const { $store, $router, $route } = root
             const store = $store as Store<IStore>
             const router = $router
-            const taskEditorAPIHandler = new TaskEditorAPIHandler( store, router )
+            const periodAPIHandler = new PeriodAPIHandler( store, router )
 
 
             const isOpenModalRef = computed({
@@ -97,7 +98,7 @@
             })            
 
             function InitPeriods(){
-                taskEditorAPIHandler.GetPeriods(isLoading, (response) => {
+                periodAPIHandler.GetPeriods(isLoading, (response) => {
                     periods.value = response.data as Array<IPeriod>
                 })
             }

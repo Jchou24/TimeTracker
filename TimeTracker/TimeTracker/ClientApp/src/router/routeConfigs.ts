@@ -85,7 +85,7 @@ const routeConfigs: IRouteConfigs = {
             requiredRoles:[ UserRoles.Admin ],
         },
         nav:{
-            displayName: "工時設定",
+            displayName: "系統設定",
             mdiIcon: "mdi-cog-outline",
         }
     },

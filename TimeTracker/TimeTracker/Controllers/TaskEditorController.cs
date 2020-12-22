@@ -39,13 +39,6 @@ namespace TimeTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetPeriods()
-        {
-            var result = this._context.Period.Select( x => x ).AsNoTracking().ToList();
-            return Ok(result);
-        }
-
-        [HttpPost]
         public IActionResult GetTaskTypes()
         {
             var result = this._context.TaskType.Select(x => x).AsNoTracking().ToList();

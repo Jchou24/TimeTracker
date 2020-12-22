@@ -1,6 +1,6 @@
 <template>
     <GeneralCard class="AdminAccounts my-10" title="Accounts" titleIcon="mdi-account-group" 
-        :width="800"
+        :width="width"
         v-if="props.accounts">
         <template v-slot:body>
             <v-card-title class="px-10 pb-2">
@@ -120,7 +120,10 @@
         props:{
             accounts:{
                 required: true
-            }
+            },
+            width:{
+                type: Number,
+            },
         },
         setup(props: IProps, { emit, root }){
             const { $store, $router } = root

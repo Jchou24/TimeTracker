@@ -23,12 +23,6 @@ class TaskEditorAPIHandler extends APIHandler{
             ErrorFunc?: (error: any) => void){
         this.HttpPost('api/TaskEditor/GetAccounts', isLoading, undefined, SuccessFunc, ErrorFunc)
     }
-
-    GetPeriods(isLoading: Ref<boolean>, 
-            SuccessFunc?: (response: AxiosResponse<any>) => void, 
-            ErrorFunc?: (error: any) => void){
-        this.HttpPost('api/TaskEditor/GetPeriods', isLoading, undefined, SuccessFunc, ErrorFunc)
-    }
     
     GetTaskTypes(isLoading: Ref<boolean>, 
             SuccessFunc?: (response: AxiosResponse<any>) => void, 
