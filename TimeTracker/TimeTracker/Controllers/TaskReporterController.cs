@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 using TimeTracker.DAL;
 using TimeTracker.DAL.Models;
@@ -16,11 +17,13 @@ namespace TimeTracker.Controllers
     {
         protected readonly ApplicationDbContext _context;
         protected readonly TaskReportHandler _taskReportHandler;
+        private readonly ILogger _logger;
 
-        public TaskReporterController(ApplicationDbContext applicationDbContext, TaskReportHandler taskReportHandler)
+        public TaskReporterController(ApplicationDbContext applicationDbContext, TaskReportHandler taskReportHandler, ILogger<TaskReporterController> logger)
         {
             this._context = applicationDbContext;
             this._taskReportHandler = taskReportHandler;
+            _logger = logger;
         }
 
         [HttpPost]

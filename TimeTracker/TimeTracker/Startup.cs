@@ -1,4 +1,5 @@
 using AutoMapper;
+using EFCoreSecondLevelCacheInterceptor;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TimeTracker.DAL;
 using TimeTracker.DAL.DBModels.Auth;
+using TimeTracker.Helper.Extensions;
 using TimeTracker.Hubs;
 using VueCliMiddleware;
 
@@ -44,10 +46,25 @@ namespace TimeTracker
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            // Add Cache for DB Context
+            // https://github.com/VahidN/EFCoreSecondLevelCacheInterceptor#2--add-secondlevelcacheinterceptor-to-your-dbcontextoptionsbuilder-pipeline
+            services.AddEFSecondLevelCache(options =>
+            {
+                //options.UseMemoryCacheProvider(CacheExpirationMode.Absolute, TimeSpan.FromSeconds(5))
+                options.UseMemoryCacheProvider(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(30))
+                //options.UseMemoryCacheProvider()
+                //.DisableLogging(true));
+                .DisableLogging(false);
+                //options.CacheAllQueries(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(30));
+            });
+
             // DB Context
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddConfiguredMsSqlDbContext(connectionString);
+
+            // Basic DB Context without cache
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(connectionString));
             services.AddScoped<IUserAuthHandler<User, int>, UserAuthHandler>();
             services.AddScoped<TaskHandler>();
             services.AddScoped<TaskReportHandler>();

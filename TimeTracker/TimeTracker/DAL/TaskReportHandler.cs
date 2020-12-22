@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCoreSecondLevelCacheInterceptor;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,22 @@ namespace TimeTracker.DAL
     public class TaskReportHandler
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger _logger;
 
-        public TaskReportHandler(ApplicationDbContext context)
+        public TaskReportHandler(ApplicationDbContext context, ILogger<TaskReportHandler> logger)
         {
             this._context = context;
+
+            _logger = logger;
         }
 
         public double GetLimitWorkTime()
         {
-            return this._context.DayWorkLimitTime.OrderByDescending(x => x.CreatedDate).FirstOrDefault().LimitWorkTime;
+            return this._context.DayWorkLimitTime
+                .OrderByDescending(x => x.CreatedDate)
+                .Cacheable()
+                .FirstOrDefault()
+                .LimitWorkTime;
         }
 
         protected IQueryable<Task> _SelectTask(QueryPeopleTasks queryPeopleTasks, bool? isLeave = null)
@@ -34,7 +43,7 @@ namespace TimeTracker.DAL
                 reault = reault.Where(x => x.TaskDay.IsLeave == isLeave);
             }
 
-            return reault.AsNoTracking();
+            return reault.AsNoTracking().Cacheable();
         }
 
         /// <summary>
@@ -58,6 +67,7 @@ namespace TimeTracker.DAL
                             queryPeopleTasks.StartDate.Date <= x.Date.Date &&
                             x.Date.Date <= queryPeopleTasks.EndDate.Date && 
                             x.IsLeave == true)
+                        .Cacheable()
                         .AsNoTracking()
                         .AsEnumerable()
                         .Select(x => new PersonSummary(x.Date, 0, dayWorkLimitTime, true));
