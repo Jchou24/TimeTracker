@@ -13,22 +13,15 @@ namespace TimeTracker.DAL
     public class TaskReportHandler
     {
         private readonly ApplicationDbContext _context;
+        private readonly ParameterHandler _parameterHandler;
         private readonly ILogger _logger;
 
-        public TaskReportHandler(ApplicationDbContext context, ILogger<TaskReportHandler> logger)
+        public TaskReportHandler(ApplicationDbContext context, ParameterHandler parameterHandler, ILogger<TaskReportHandler> logger)
         {
             this._context = context;
+            this._parameterHandler = parameterHandler;
 
             _logger = logger;
-        }
-
-        public double GetLimitWorkTime()
-        {
-            return this._context.DayWorkLimitTime
-                .OrderByDescending(x => x.CreatedDate)
-                .Cacheable()
-                .FirstOrDefault()
-                .LimitWorkTime;
         }
 
         protected IQueryable<Task> _SelectTask(QueryPeopleTasks queryPeopleTasks, bool? isLeave = null)
@@ -53,7 +46,7 @@ namespace TimeTracker.DAL
         /// <returns></returns>
         protected IEnumerable<PersonSummary> _GetPersonSummary(QueryTasks queryTasks)
         {
-            var dayWorkLimitTime = this.GetLimitWorkTime();
+            var dayWorkLimitTime = this._parameterHandler.GetLimitWorkTime();
             var queryPeopleTasks = new QueryPeopleTasks(queryTasks);
 
             var regularSummary = this._SelectTask(queryPeopleTasks, false)

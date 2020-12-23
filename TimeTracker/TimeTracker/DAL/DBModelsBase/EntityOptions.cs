@@ -22,5 +22,7 @@ namespace TimeTracker.DAL.DBModelsBase
         [Column(TypeName = "NVARCHAR")]
         [StringLength(256)]
         public string DisplayName { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }

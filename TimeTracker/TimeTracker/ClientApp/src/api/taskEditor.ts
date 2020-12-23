@@ -23,42 +23,6 @@ class TaskEditorAPIHandler extends APIHandler{
             ErrorFunc?: (error: any) => void){
         this.HttpPost('api/TaskEditor/GetAccounts', isLoading, undefined, SuccessFunc, ErrorFunc)
     }
-    
-    GetTaskTypes(isLoading: Ref<boolean>, 
-            SuccessFunc?: (response: AxiosResponse<any>) => void, 
-            ErrorFunc?: (error: any) => void){
-        this.HttpPost('api/TaskEditor/GetTaskTypes', isLoading, undefined, (response) => {
-            this._store.commit("taskParameters/SetTaskTypes", response.data)
-            
-            if(SuccessFunc){
-                SuccessFunc(response)
-            }           
-        }, ErrorFunc, false)
-    }
-
-    GetDayWorkLimitTime(isLoading: Ref<boolean>, 
-            SuccessFunc?: (response: AxiosResponse<any>) => void, 
-            ErrorFunc?: (error: any) => void){
-        this.HttpPost('api/TaskEditor/GetDayWorkLimitTime', isLoading, undefined, (response) => {
-            this._store.commit("taskParameters/SetDayWorkLimitTime", response.data)
-            
-            if(SuccessFunc){
-                SuccessFunc(response)
-            }           
-        }, ErrorFunc, false)
-    }
-
-    GetTaskSources(isLoading: Ref<boolean>, 
-            SuccessFunc?: (response: AxiosResponse<any>) => void, 
-            ErrorFunc?: (error: any) => void){
-        this.HttpPost('api/TaskEditor/GetTaskSources', isLoading, undefined, (response) => {
-            this._store.commit("taskParameters/SetTaskSources", response.data)
-            
-            if(SuccessFunc){
-                SuccessFunc(response)
-            }           
-        }, ErrorFunc, false)
-    }
 
     GetDaysData(data: IQueryTasks, isLoading: Ref<boolean>,
         SuccessFunc?: (response: AxiosResponse<any>) => void, 

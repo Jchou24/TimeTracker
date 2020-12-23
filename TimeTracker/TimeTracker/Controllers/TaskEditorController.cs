@@ -39,20 +39,6 @@ namespace TimeTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetTaskTypes()
-        {
-            var result = this._context.TaskType.Select(x => x).AsNoTracking().ToList();
-            return Ok(result);
-        }
-
-        [HttpPost]
-        public IActionResult GetTaskSources()
-        {
-            var result = this._context.TaskSource.Select(x => x).AsNoTracking().ToList();
-            return Ok(result);
-        }
-        
-        [HttpPost]
         public IActionResult GetDaysData(QueryTasks queryTasks)
         {
             var result = this._taskHandler.GetDaysData(queryTasks);
@@ -70,14 +56,5 @@ namespace TimeTracker.Controllers
 
             return Ok(tasksGuids);
         }
-
-        [HttpPost]
-        public IActionResult GetDayWorkLimitTime()
-        {
-            var tmp = this._context.DayWorkLimitTime.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-
-            return Ok(tmp.LimitWorkTime);
-        }
-
     }
 }

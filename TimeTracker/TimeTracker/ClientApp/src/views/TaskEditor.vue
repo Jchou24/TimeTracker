@@ -31,6 +31,7 @@
     import { IClaims } from '@/models/authentication.ts'
     import { IDateRange, IDayData } from '@/models/tasks'
     import { TaskEditorAPIHandler, TaskEditorWSHandler } from '@/api/taskEditor'
+    import { ParameterAPIHandler } from '@/api/parameter'
     import { Store } from 'vuex/types/index'
     import { IStore } from '@/models/store'
 
@@ -58,6 +59,7 @@
             const router = $router
             const taskEditorAPIHandler = new TaskEditorAPIHandler( store, router )
             const taskEditorWSHandler = new TaskEditorWSHandler( store )
+            const parameterAPIHandler = new ParameterAPIHandler( store, router )
 
             const targetUsers = ref([] as Array<IClaims>)
             const targetUser = computed( () => targetUsers.value[0] )
@@ -75,15 +77,15 @@
             // ======================================================================
             function InitTaskParameter(){
                 if( store.state.taskParameters.taskSources.length == 0 ){
-                    taskEditorAPIHandler.GetTaskSources(isLoading)
+                    parameterAPIHandler.GetTaskSources(isLoading)
                 }
                 
                 if( store.state.taskParameters.taskTypes.length == 0 ){
-                    taskEditorAPIHandler.GetTaskTypes(isLoading)
+                    parameterAPIHandler.GetTaskTypes(isLoading)
                 }
 
                 if( !store.state.taskParameters.dayWorkLimitTime ){
-                    taskEditorAPIHandler.GetDayWorkLimitTime(isLoading)
+                    parameterAPIHandler.GetDayWorkLimitTime(isLoading)
                 }
             }
             InitTaskParameter()

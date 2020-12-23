@@ -10,7 +10,7 @@ using TimeTracker.DAL;
 namespace TimeTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201214204908_InitialCreate")]
+    [Migration("20201223040510_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -337,7 +337,7 @@ namespace TimeTracker.Migrations
                             Email = "admin@auth.com",
                             Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Admin",
-                            PasswordHash = "$MYHASH$V1$10000$oGVbCMGhuybVZjC/4kZyQC2jS2pAP/rlz3iQ+RbL/ZOwp0Av",
+                            PasswordHash = "$MYHASH$V1$10000$QNfbryMVH4/NtgniuzQy2hU8EIclMgA3kHT2vAjg9cr4O8Dk",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -348,7 +348,7 @@ namespace TimeTracker.Migrations
                             Email = "user@auth.com",
                             Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "User",
-                            PasswordHash = "$MYHASH$V1$10000$dGx1xEJAWbvpyfwpNjMFcQn18GFQYZavCU4e3SFgVA/1Dmk7",
+                            PasswordHash = "$MYHASH$V1$10000$4iD4Ab5Z+nwCj5QpRoSRQ07iZ/dCZjriZ+TAa1b5fVYA+tyc",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -359,7 +359,7 @@ namespace TimeTracker.Migrations
                             Email = "test@auth.com",
                             Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Test",
-                            PasswordHash = "$MYHASH$V1$10000$KQvY9JgfmUrdjFBAAX8PHSNrYJOxuWiJL1NL6isDkO5UqL0a",
+                            PasswordHash = "$MYHASH$V1$10000$zrh46ZLlGqzln9eQ8uOQN7yvUde17uCWc7xKlZ1tVtad3FLc",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -370,7 +370,7 @@ namespace TimeTracker.Migrations
                             Email = "test2@auth.com",
                             Guid = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Test2",
-                            PasswordHash = "$MYHASH$V1$10000$ZG8AWlu88pNNOy+4wknMosIV9aeAuDitji2BCPmfUNoVmpMK",
+                            PasswordHash = "$MYHASH$V1$10000$Xx63Yky8pmBz3DhPHYuyPV+MY/5sTfaLt8KMHX5gM5RLtI7V",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -453,7 +453,7 @@ namespace TimeTracker.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("fb67e5cc-90c1-4394-b579-4b8203be3374"),
+                            Guid = new Guid("0eff278d-f5d8-48c2-ae77-b1c7831fadcd"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LimitWorkTime = 7.5,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -513,6 +513,17 @@ namespace TimeTracker.Migrations
                     b.HasKey("Guid");
 
                     b.ToTable("Period");
+
+                    b.HasData(
+                        new
+                        {
+                            Guid = new Guid("b52ae551-5541-4894-b1f3-675d6594a963"),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndDate = new DateTime(2020, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Test1",
+                            StartDate = new DateTime(2020, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("TimeTracker.DAL.DBModels.Task.Task", b =>
@@ -566,6 +577,176 @@ namespace TimeTracker.Migrations
                     b.HasIndex("TaskTypeGuid");
 
                     b.ToTable("Task");
+
+                    b.HasData(
+                        new
+                        {
+                            Guid = new Guid("c1e81b33-8819-4e12-be9b-8a494748b644"),
+                            ConsumeTime = 4.0,
+                            Date = new DateTime(2020, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 0,
+                            TaskContent = "Architecture design",
+                            TaskDayGuid = new Guid("9c903286-0816-4800-a04c-a04774f2e9d9"),
+                            TaskName = "Track Time",
+                            TaskSourceGuid = new Guid("05d51407-4082-4746-a816-463106f68f1a"),
+                            TaskTypeGuid = new Guid("7e8aef7a-3a2d-4023-b330-17b02c6f043f")
+                        },
+                        new
+                        {
+                            Guid = new Guid("8c74bd17-2f8d-4c46-be24-be446fbd44d4"),
+                            ConsumeTime = 3.0,
+                            Date = new DateTime(2020, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 1,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("9c903286-0816-4800-a04c-a04774f2e9d9"),
+                            TaskName = "FEZ",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("4f3acf7f-7cc4-4a76-bd07-7bbeabd2882a")
+                        },
+                        new
+                        {
+                            Guid = new Guid("a52433ff-268f-41f7-a0bb-2cdb409ab696"),
+                            ConsumeTime = 3.0,
+                            Date = new DateTime(2020, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 0,
+                            TaskContent = "AAAAA",
+                            TaskDayGuid = new Guid("0232dc59-fca7-415c-ab8d-354a3efe39d0"),
+                            TaskName = "",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("0db027e5-2cba-478e-91f4-ab62eb3b01e4"),
+                            ConsumeTime = 0.0,
+                            Date = new DateTime(2020, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 1,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("0232dc59-fca7-415c-ab8d-354a3efe39d0"),
+                            TaskName = "BBBBBB",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("a13a6b6a-914e-4605-b13e-e2a97781b26e"),
+                            ConsumeTime = 2.0,
+                            Date = new DateTime(2020, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 0,
+                            TaskContent = "hooooooooooo",
+                            TaskDayGuid = new Guid("f7d1bef4-f5d2-4e19-a22a-bceda34c5201"),
+                            TaskName = "Yeah",
+                            TaskSourceGuid = new Guid("6d5f7be6-e44d-4121-be95-d8216700784c"),
+                            TaskTypeGuid = new Guid("b44afdaa-4c82-45a8-b0e2-9dc7017973d1")
+                        },
+                        new
+                        {
+                            Guid = new Guid("5900e184-21e7-417c-8560-ba32c0e60b44"),
+                            ConsumeTime = 4.5,
+                            Date = new DateTime(2020, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 1,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("f7d1bef4-f5d2-4e19-a22a-bceda34c5201"),
+                            TaskName = "",
+                            TaskSourceGuid = new Guid("05d51407-4082-4746-a816-463106f68f1a"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("649d8897-75a6-42fa-b019-e932a351353f"),
+                            ConsumeTime = 4.0,
+                            Date = new DateTime(2020, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 2,
+                            TaskContent = "dadadadadada",
+                            TaskDayGuid = new Guid("f7d1bef4-f5d2-4e19-a22a-bceda34c5201"),
+                            TaskName = "FEZ",
+                            TaskSourceGuid = new Guid("6d5f7be6-e44d-4121-be95-d8216700784c"),
+                            TaskTypeGuid = new Guid("4f3acf7f-7cc4-4a76-bd07-7bbeabd2882a")
+                        },
+                        new
+                        {
+                            Guid = new Guid("90950112-6c55-456d-9bec-fc977f1dbff4"),
+                            ConsumeTime = 1.5,
+                            Date = new DateTime(2020, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 3,
+                            TaskContent = "cccCcccCcccC",
+                            TaskDayGuid = new Guid("f7d1bef4-f5d2-4e19-a22a-bceda34c5201"),
+                            TaskName = "CCCCCCCCCC",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("16e9da49-f4ff-497c-a5e5-e98c31e5ca58"),
+                            ConsumeTime = 7.0,
+                            Date = new DateTime(2020, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 0,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("6063bb59-a6c5-4ab5-90ed-b1e47fbe4429"),
+                            TaskName = "",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("24ea4b7f-f8e2-452d-8edf-5d160524d251"),
+                            ConsumeTime = 4.5,
+                            Date = new DateTime(2020, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 0,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("69af239c-2be5-4f17-8ac8-54b903b26fcc"),
+                            TaskName = "",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("86191f6c-e0e5-4d57-a554-5f9531e1df3e"),
+                            ConsumeTime = 3.0,
+                            Date = new DateTime(2020, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 0,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("3db25699-dbb4-4887-8d78-048edf9699b2"),
+                            TaskName = "",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("07bf1e95-8bb9-4561-b240-5d602160cedb"),
+                            ConsumeTime = 2.0,
+                            Date = new DateTime(2020, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 0,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("e41347d1-4637-4686-98f9-ee24034099ff"),
+                            TaskName = "",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("9474ad51-3726-4242-87f7-903550bcbd4a"),
+                            ConsumeTime = 3.0,
+                            Date = new DateTime(2020, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 1,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("e41347d1-4637-4686-98f9-ee24034099ff"),
+                            TaskName = "",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        },
+                        new
+                        {
+                            Guid = new Guid("c362df5f-ab37-4638-b430-3933c84ca33e"),
+                            ConsumeTime = 5.0,
+                            Date = new DateTime(2020, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 0,
+                            TaskContent = "",
+                            TaskDayGuid = new Guid("5ac060a0-f33f-412e-ab3d-237927e953e1"),
+                            TaskName = "",
+                            TaskSourceGuid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
+                            TaskTypeGuid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9")
+                        });
                 });
 
             modelBuilder.Entity("TimeTracker.DAL.DBModels.Task.TaskDay", b =>
@@ -598,6 +779,71 @@ namespace TimeTracker.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("TaskDay");
+
+                    b.HasData(
+                        new
+                        {
+                            Guid = new Guid("9c903286-0816-4800-a04c-a04774f2e9d9"),
+                            Date = new DateTime(2020, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = false,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Guid = new Guid("0232dc59-fca7-415c-ab8d-354a3efe39d0"),
+                            Date = new DateTime(2020, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = false,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Guid = new Guid("f7d1bef4-f5d2-4e19-a22a-bceda34c5201"),
+                            Date = new DateTime(2020, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = false,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Guid = new Guid("6063bb59-a6c5-4ab5-90ed-b1e47fbe4429"),
+                            Date = new DateTime(2020, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = true,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Guid = new Guid("69af239c-2be5-4f17-8ac8-54b903b26fcc"),
+                            Date = new DateTime(2020, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = false,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Guid = new Guid("d118d32e-119c-43aa-8c58-8d538dcb044a"),
+                            Date = new DateTime(2020, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = true,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Guid = new Guid("3db25699-dbb4-4887-8d78-048edf9699b2"),
+                            Date = new DateTime(2020, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = false,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Guid = new Guid("e41347d1-4637-4686-98f9-ee24034099ff"),
+                            Date = new DateTime(2020, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = false,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Guid = new Guid("5ac060a0-f33f-412e-ab3d-237927e953e1"),
+                            Date = new DateTime(2020, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsLeave = false,
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("TimeTracker.DAL.DBModels.Task.TaskSource", b =>
@@ -620,6 +866,9 @@ namespace TimeTracker.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("NVARCHAR(256)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("UpdatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -635,42 +884,47 @@ namespace TimeTracker.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("fbf9bcfd-f443-4d01-8364-6d50337714ab"),
+                            Guid = new Guid("28fce02f-146d-4bc0-8eb4-abffd63f8d12"),
                             CodeName = "default",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("8ad3a826-e524-41ca-a305-e4eec449f39c"),
+                            Guid = new Guid("05d51407-4082-4746-a816-463106f68f1a"),
                             CodeName = "Boss",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Boss",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("97af70b3-f5c9-4e9d-964c-3d1c713d5b96"),
+                            Guid = new Guid("e4c9c211-b0b3-437e-9eb8-cf418b54d262"),
                             CodeName = "Girl friend",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Girl friend",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("7626436e-596a-42f2-8053-3e9b1c696f23"),
+                            Guid = new Guid("6d5f7be6-e44d-4121-be95-d8216700784c"),
                             CodeName = "Father",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Father",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("3d3828da-eb55-4625-88dc-854193f1bf3e"),
+                            Guid = new Guid("dcfae46b-a036-4b30-aa6d-80e6b1535d15"),
                             CodeName = "Mother",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Mother",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -751,6 +1005,9 @@ namespace TimeTracker.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("NVARCHAR(256)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("UpdatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -766,58 +1023,65 @@ namespace TimeTracker.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("d0143f5b-f764-42b8-be69-0991db5e68ea"),
+                            Guid = new Guid("bf7a6ca5-8202-4f2c-ba1e-637d07b432c9"),
                             CodeName = "default",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("542c0388-5e13-4036-900a-8e2d335eabb1"),
+                            Guid = new Guid("7e8aef7a-3a2d-4023-b330-17b02c6f043f"),
                             CodeName = "Coding",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Coding",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("fbbde38a-6f1e-4869-92c7-610e0801193c"),
+                            Guid = new Guid("bc9c35bc-1a57-4422-905a-278c5c96747e"),
                             CodeName = "Shopping",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Shopping",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("f680f01c-9b4e-4004-8231-3164e9b96d2b"),
+                            Guid = new Guid("b44afdaa-4c82-45a8-b0e2-9dc7017973d1"),
                             CodeName = "Play Baseball",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Play Baseball",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("c8d080e7-4c12-4d68-a2ab-3800db829248"),
+                            Guid = new Guid("c74bea15-cadf-4f73-b56d-9af80676b24a"),
                             CodeName = "Wash Floors",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Wash Floors",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("42d5aa55-139a-433a-8d58-f034ad8a7e05"),
+                            Guid = new Guid("533c120c-a1aa-4182-926f-943fccfc7a15"),
                             CodeName = "Reading",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Reading",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("fc572033-ca5d-434e-b1b0-cbe569ad774a"),
+                            Guid = new Guid("4f3acf7f-7cc4-4a76-bd07-7bbeabd2882a"),
                             CodeName = "Play PC Game",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Play PC Game",
+                            IsActive = true,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
