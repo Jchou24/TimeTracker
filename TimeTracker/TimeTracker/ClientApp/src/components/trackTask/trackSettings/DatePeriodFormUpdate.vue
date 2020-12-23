@@ -1,19 +1,13 @@
 <template>
-    <div class="AddPeriod">
-        <v-btn class="pl-5 mx-3" color="primary" rounded elevation="4" large
-            @click="isOpenModal = true"
-            >
-            <v-icon left>mdi-plus-circle-outline</v-icon> Add Period
-        </v-btn>
-
+    <div class="DatePeriodFormUpdate">
         <v-dialog :width="modalWidth"
-            v-model="isOpenModal"
+            v-model="isOpenModalRef"
             >
-            <GeneralCard title="Add Period" titleIcon="mdi-plus-circle" :width="modalWidth" v-if="isOpenModal">
+            <GeneralCard title="Update Period" titleIcon="mdi-calendar-import" :width="modalWidth">
                 <template v-slot:body>
                     <v-container fluid class="px-6">
                         <v-row class="justify-center">
-                            <v-text-field class="AddPeriod-field"
+                            <v-text-field class="DatePeriodFormUpdate-field"
                                 v-model="name"
                                 label="Period Name"
                                 counter
@@ -24,10 +18,10 @@
                             />
                         </v-row>
                         <v-row class="justify-center">
-                            <DatePicker class="AddPeriod-field" label="Start Date" :date.sync="startDate" />
+                            <DatePicker class="DatePeriodFormUpdate-field" label="Start Date" :date.sync="startDate" />
                         </v-row>
                         <v-row class="justify-center mb-n6">
-                            <DatePicker class="AddPeriod-field" label="End Date" :date.sync="endDate" />
+                            <DatePicker class="DatePeriodFormUpdate-field" label="End Date" :date.sync="endDate" />
                         </v-row>
                     </v-container>
                 </template>
@@ -41,8 +35,8 @@
                         rounded                        
                         @click="HandleSubmit" :disabled="isDisabledSubmit"
                     >
-                        <v-icon left>mdi-plus-circle-outline</v-icon>
-                        Add
+                        <v-icon left>mdi-upload</v-icon>
+                        Update
                     </v-btn>
                 </template>
             </GeneralCard>
@@ -61,17 +55,22 @@
     import { IPeriod } from '@/models/period'
     import { DataTableHeader } from 'vuetify'
     import { PeriodAPIHandler } from '@/api/period'
-    import moment from 'moment'
     import { ToastSuccess, ToastError } from '@/util/notification'
     import { useToast } from "vue-toastification/composition"
     import { IsDisabledSubmit } from '@/util/period'
 
     export default defineComponent({
-        name: 'AddPeriod',
+        name: 'DatePeriodFormUpdate',
         props:{
             modalWidth:{
                 type: Number,
                 default: 500
+            },
+            isOpenModal:{
+                type: Boolean,
+            },
+            period:{
+                type:  Object as () => IPeriod,
             }
         },
         components:{
@@ -86,7 +85,10 @@
             const toast = useToast()
 
             const isLoading = ref(false)
-            const isOpenModal = ref(false)
+            const isOpenModalRef = computed({
+                get: () => props.isOpenModal,
+                set: (value) => emit("update:isOpenModal", value)
+            })
             
             const name = ref("")
             const startDate = ref("")
@@ -94,24 +96,25 @@
             const isDisabledSubmit = computed( () => IsDisabledSubmit(name.value, startDate.value, endDate.value, isLoading.value) )
 
             function InitFormValue() {
-                name.value = ""
-                startDate.value = ""
-                endDate.value = ""
+                name.value = props.period?.name || ""
+                startDate.value = props.period?.startDate || ""
+                endDate.value = props.period?.endDate || ""
             }
-            InitFormValue()
+            watch( () => props.period, () => InitFormValue() )            
             // =================================================================
             function HandleSubmit() {
-                const periods = [{
+                const period = {
+                    guid: props.period?.guid,
                     name: name.value,
                     startDate: startDate.value,
                     endDate: endDate.value,
-                }] as Array<IPeriod>
+                } as IPeriod
 
-                periodAPIHandler.CreatePeriods(periods, isLoading, (response) => {
-                    isOpenModal.value = false
-                    periods[0].guid = response.data[0]
-                    emit("addPeriod", periods[0])
-                    ToastSuccess( `Add Period ${name.value}`, toast)
+                periodAPIHandler.UpdatePeriods([period], isLoading, (response) => {
+                    isOpenModalRef.value = false
+                    emit("update:period", period)
+                    emit("updatePeriod", period)
+                    ToastSuccess( `Period Updated`, toast)
                     InitFormValue()
                 }, () => {
                     // TODO handle error case
@@ -121,7 +124,7 @@
 
             return {
                 isLoading,
-                isOpenModal,
+                isOpenModalRef,
                 isDisabledSubmit,
                 name,
                 startDate,
@@ -133,7 +136,7 @@
 </script>
 
 <style lang="scss" >
-    .AddPeriod-field{
+    .DatePeriodFormUpdate-field{
         width: 350px;
         max-width: 350px;
 

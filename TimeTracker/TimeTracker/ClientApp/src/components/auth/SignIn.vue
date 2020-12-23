@@ -12,7 +12,7 @@
                 shaped
                 @keydown.enter.native="SignIn"                
                 >
-                <v-card-title class="flex-center text-h4 my-4" ><v-icon class="text-h4" left>mdi-account-circle</v-icon>登入</v-card-title>
+                <v-card-title class="title flex-center text-h4 my-4 font-weight-black" ><v-icon class="title text-h4" left>mdi-account-circle</v-icon>登入</v-card-title>
                 <v-divider class="mb-7" />
                 <v-card-text class="px-10">
                     <v-text-field
@@ -157,4 +157,7 @@
 </script>
 
 <style lang="scss" scoped>
+    .title{
+        color: $color-title;
+    }
 </style>

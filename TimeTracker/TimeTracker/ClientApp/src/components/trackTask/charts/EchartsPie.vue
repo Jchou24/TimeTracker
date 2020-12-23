@@ -245,7 +245,7 @@
             top: 0;
             background: white;
             z-index: 1;
-            color: #334b5c;
+            color: $color-title;
         }
 
         .data-charts{
@@ -256,7 +256,6 @@
             &::-webkit-scrollbar
             {
                 width: 8px;
-                background-color: #eaeaea;
             }
         
             &::-webkit-scrollbar-thumb

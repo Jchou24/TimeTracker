@@ -76,17 +76,17 @@
             })       
             // ======================================================================
             function InitTaskParameter(){
-                if( store.state.taskParameters.taskSources.length == 0 ){
+                // if( store.state.taskParameters.taskSources.length == 0 ){
                     parameterAPIHandler.GetTaskSources(isLoading)
-                }
+                // }
                 
-                if( store.state.taskParameters.taskTypes.length == 0 ){
+                // if( store.state.taskParameters.taskTypes.length == 0 ){
                     parameterAPIHandler.GetTaskTypes(isLoading)
-                }
+                // }
 
-                if( !store.state.taskParameters.dayWorkLimitTime ){
+                // if( !store.state.taskParameters.dayWorkLimitTime ){
                     parameterAPIHandler.GetDayWorkLimitTime(isLoading)
-                }
+                // }
             }
             InitTaskParameter()
             // ======================================================================

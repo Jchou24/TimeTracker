@@ -6,7 +6,7 @@
             outlined
             shaped
             >
-            <v-card-title class="flex-center text-h4 my-4"><v-icon class="text-h4" left>mdi-account-circle</v-icon>個人資訊/設定</v-card-title>
+            <v-card-title class="title flex-center text-h4 my-4 font-weight-black"><v-icon class="title text-h4" left>mdi-account-circle</v-icon>個人資訊/設定</v-card-title>
             <v-divider class="mb-4" />
             <v-card-title class="setting-info">
                 <v-container fluid class="px-6">
@@ -275,5 +275,9 @@
         cursor: pointer;
         height: 35px;
         border-radius: 15px;
+    }
+
+    .title{
+        color: $color-title;
     }
 </style>

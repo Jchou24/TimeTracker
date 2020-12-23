@@ -57,7 +57,7 @@
                         </v-col>
                         <v-col>
                             <v-row class="justify-end">
-                                <AddPeriod @addPeriod="HandleAddPeriod" />
+                                <DatePeriodFormAdd :modalWidth="modalWidth" @addPeriod="HandleAddPeriod" />
                                 <v-btn class="pl-5 pr-6 mr-3" color="primary" rounded elevation="4" large
                                     :loading="isLoadingPeriods"
                                     :disabled="isLoadingPeriods"
@@ -72,8 +72,8 @@
             </template>
         </GeneralCard>
 
-        <UpdatePeriod 
-            :modalWidth="width"
+        <DatePeriodFormUpdate 
+            :modalWidth="modalWidth"
             :isOpenModal.sync="isOpenUpdateModal"
             :period.sync="updatePeriod"
             @updatePeriod="HandleUpdatePeriod"
@@ -85,8 +85,8 @@
     import { computed, defineComponent, Ref, ref, watch } from '@vue/composition-api'
 
     import GeneralCard from '@/components/card/GeneralCard.vue'
-    import AddPeriod from './AddPeriod.vue'
-    import UpdatePeriod from './UpdatePeriod.vue'
+    import DatePeriodFormAdd from './DatePeriodFormAdd.vue'
+    import DatePeriodFormUpdate from './DatePeriodFormUpdate.vue'
 
     import { Store } from 'vuex/types/index'
     import { IStore } from '@/models/store'
@@ -102,12 +102,15 @@
         props:{
             width:{
                 type: Number,
-            }
+            },
+            modalWidth:{
+                type: Number,
+            },
         },
         components:{
             GeneralCard,
-            AddPeriod,
-            UpdatePeriod,
+            DatePeriodFormAdd,
+            DatePeriodFormUpdate,
         },
         setup( props, { emit, root } ){
             const { $store, $router, $route } = root
@@ -119,9 +122,9 @@
             const selected = ref([] as Array<IPeriod>)
             const search = ref("")
             const headers = [
-                { text: "Name", value: "name", align:"center" },
-                { text: "Start Date", value: "startDate", align:"center" },
-                { text: "End Date", value: "endDate", align:"center" },
+                { text: "Name", value: "name" },
+                { text: "Start Date", value: "startDate" },
+                { text: "End Date", value: "endDate" },
                 { text: 'Actions', value: 'actions', sortable: false },
             ] as Array<DataTableHeader>
             const isLoadingPeriods = ref(false)

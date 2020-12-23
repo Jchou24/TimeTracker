@@ -62,6 +62,7 @@ namespace TimeTracker.Controllers
                     period.StartDate = queryPeriod.StartDate;
                     period.EndDate = queryPeriod.EndDate;
                     period.Name= queryPeriod.Name;
+                    period.SetUpdatedDate();
                     isUpdate = true;
                 }
             }

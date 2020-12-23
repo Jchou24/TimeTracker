@@ -68,6 +68,7 @@ namespace TimeTracker
             services.AddScoped<IUserAuthHandler<User, int>, UserAuthHandler>();
             services.AddScoped<TaskHandler>();
             services.AddScoped<TaskReportHandler>();
+            services.AddScoped<ParameterHandler>();            
 
             // Web Socket
             services.AddTransient<WSHubHandler<WSHub>>();

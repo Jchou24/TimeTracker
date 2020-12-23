@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TimeTracker.DAL;
 using TimeTracker.DAL.DBModels.Task;
 using TimeTracker.DAL.Models;
 using TimeTracker.Helper.Auth;
-using TimeTracker.Models.Period;
 
 namespace TimeTracker.Controllers
 {
@@ -33,129 +29,64 @@ namespace TimeTracker.Controllers
             return Ok(this._parameterHandler.GetLimitWorkTime());
         }
 
+        // ======================================================================
+        // TaskTypes
         [HttpPost]
         public IActionResult GetTaskTypes()
         {
-            var result = this._context.TaskType.Where(x => x.IsActive == true).AsNoTracking().ToList();
-            return Ok(result);
+            return Ok(this._parameterHandler.GetTaskTypes());
         }
 
         [HttpPost]
         [AuthorizeRole(UserRoles.Admin)]
         public IActionResult GetAllTaskTypes()
         {
-            var result = this._context.TaskType.Select(x => x).AsNoTracking().ToList();
-            return Ok(result);
+            return Ok(this._parameterHandler.GetAllTaskTypes());
         }
 
         [HttpPost]
         [AuthorizeRole(UserRoles.Admin)]
-        public IActionResult CreateTaskTypes()
+        public IActionResult CreateTaskTypes(List<TaskType> taskTypes)
         {
-            return Ok();
+            return Ok(this._parameterHandler.CreateTaskTypes(taskTypes));
         }
 
         [HttpPost]
         [AuthorizeRole(UserRoles.Admin)]
-        public IActionResult UpdateTaskTypes()
+        public IActionResult UpdateTaskTypes(List<TaskType> taskTypes)
         {
+            this._parameterHandler.UpdateTaskTypes(taskTypes);
             return Ok();
         }
 
+        // ======================================================================
+        // TaskSources
         [HttpPost]
         public IActionResult GetTaskSources()
         {
-            var result = this._context.TaskSource.Where(x => x.IsActive == true).AsNoTracking().ToList();
-            return Ok(result);
+            return Ok(this._parameterHandler.GetTaskSources());
         }
 
         [HttpPost]
         [AuthorizeRole(UserRoles.Admin)]
         public IActionResult GetAllTaskSources()
         {
-            var result = this._context.TaskSource.Select(x => x).AsNoTracking().ToList();
-            return Ok(result);
+            return Ok(this._parameterHandler.GetAllTaskSources());
         }
 
         [HttpPost]
         [AuthorizeRole(UserRoles.Admin)]
-        public IActionResult CreateTaskSources()
+        public IActionResult CreateTaskSources(List<TaskSource> taskSources)
         {
+            return Ok(this._parameterHandler.CreateTaskSources(taskSources));
+        }
+
+        [HttpPost]
+        [AuthorizeRole(UserRoles.Admin)]
+        public IActionResult UpdateTaskSources(List<TaskSource> taskSources)
+        {
+            this._parameterHandler.UpdateTaskSources(taskSources);
             return Ok();
         }
-
-        [HttpPost]
-        [AuthorizeRole(UserRoles.Admin)]
-        public IActionResult UpdateTaskSources()
-        {
-            return Ok();
-        }
-
-        /*
-        [HttpPost]
-        [AuthorizeRole(UserRoles.User)]
-        public IActionResult GetPeriods()
-        {
-            var result = this._context.Period.Select(x => x).AsNoTracking();
-            return Ok(result);
-        }
-
-        [HttpPost]
-        [AuthorizeRole(UserRoles.Admin)]
-        public IActionResult CreatePeriods(IEnumerable<Period> periods)
-        {
-            foreach (var period in periods)
-            {
-                period.Guid = Guid.NewGuid();
-            }
-
-            this._context.Period.AddRange(periods);
-            this._context.SaveChanges();
-
-            var result = periods.Select(x => x.Guid);
-            return Ok(result);
-        }
-
-        [HttpPost]
-        [AuthorizeRole(UserRoles.Admin)]
-        public IActionResult UpdatePeriods(IEnumerable<QueryPeriod> queryPeriods)
-        {
-            bool isUpdate = false;
-            foreach (var queryPeriod in queryPeriods)
-            {
-                var period = this._context.Period.Where(x => x.Guid == queryPeriod.Guid).SingleOrDefault();
-
-                if (period != null)
-                {
-                    period.StartDate = queryPeriod.StartDate;
-                    period.EndDate = queryPeriod.EndDate;
-                    period.Name= queryPeriod.Name;
-                    isUpdate = true;
-                }
-            }
-
-            if (isUpdate)
-            {
-                this._context.SaveChanges();
-            }
-            return Ok();
-        }
-
-        [HttpPost]
-        [AuthorizeRole(UserRoles.Admin)]
-        public IActionResult DeletePeriods(IEnumerable<QueryPeriod> queryPeriods)
-        {
-            var targetGuids = queryPeriods.Select(x => x.Guid);
-            var targetPeriods = this._context.Period.Where(x => targetGuids.Contains(x.Guid));
-
-            if (targetPeriods != null)
-            {
-                this._context.Period.RemoveRange(targetPeriods);
-                this._context.SaveChanges();
-            }
-            
-            return Ok();
-        }
-        */
     }
 }
