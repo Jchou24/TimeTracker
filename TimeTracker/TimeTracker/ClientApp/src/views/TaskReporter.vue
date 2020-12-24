@@ -1,36 +1,39 @@
 <template>
-    <div class="TaskReporter">
-        <TwoColumn>
-            <template v-slot:left>
-                <MetaDisplayer 
-                    :singleSelectTarget="!multipleMode" 
-                    :selectedUsers.sync="targetUsers" 
-                    :selectedDates.sync="targetDates" 
-                    :width="widthMetaDisplayer" />
-                <TaskPeriodSimpleSummary 
-                    :selectedUsers="targetUsers"
-                    :sourceSummary="simpleSummary" 
-                    :selectedDates="targetDates" 
-                    :isReactiveMode="false" />
-            </template>
-            <template v-slot:right>
-                <div class="charts margin-center">
-                    <EchartsPie class="chart" title="工作類型" :isShowLoading="isLoadingTaskType" :pieData="taskTypeSummary" />
-                    <EchartsPie class="chart" title="工作來源" :isShowLoading="isLoadingTaskSource" :pieData="taskSourceSummary" />
-                    <EchartsPie class="chart" title="工時比例" :isShowLoading="isLoadingTaskTime" :pieData="taskTimeSummary" />
-                    <!-- No idea how to handle null value -->
-                    <!-- <TaskPeriodEchartsLine class="chart" title="工時曲線" :isShowLoading="isLoadingTaskTimeSummaryDetail" :lineData="taskTimeSummaryDetail"                        
-                        v-if="multipleMode"
-                    /> -->
-                </div>
-            </template>
-        </TwoColumn>
-    </div>
+    <Container>
+        <div class="TaskReporter">
+            <TwoColumn>
+                <template v-slot:left>
+                    <MetaDisplayer 
+                        :singleSelectTarget="!multipleMode" 
+                        :selectedUsers.sync="targetUsers" 
+                        :selectedDates.sync="targetDates" 
+                        :width="widthMetaDisplayer" />
+                    <TaskPeriodSimpleSummary 
+                        :selectedUsers="targetUsers"
+                        :sourceSummary="simpleSummary" 
+                        :selectedDates="targetDates" 
+                        :isReactiveMode="false" />
+                </template>
+                <template v-slot:right>
+                    <div class="charts margin-center">
+                        <EchartsPie class="chart" title="工作類型" :isShowLoading="isLoadingTaskType" :pieData="taskTypeSummary" />
+                        <EchartsPie class="chart" title="工作來源" :isShowLoading="isLoadingTaskSource" :pieData="taskSourceSummary" />
+                        <EchartsPie class="chart" title="工時比例" :isShowLoading="isLoadingTaskTime" :pieData="taskTimeSummary" />
+                        <!-- No idea how to handle null value -->
+                        <!-- <TaskPeriodEchartsLine class="chart" title="工時曲線" :isShowLoading="isLoadingTaskTimeSummaryDetail" :lineData="taskTimeSummaryDetail"                        
+                            v-if="multipleMode"
+                        /> -->
+                    </div>
+                </template>
+            </TwoColumn>
+        </div>
+    </Container>
 </template>
 
 <script lang="ts">
     import { computed, defineComponent, reactive, ref, watch } from '@vue/composition-api'
 
+    import Container from './layouts/Container.vue'
     import TwoColumn from '@/views/layouts/TwoColumn.vue'
     import MetaDisplayer from '@/components/trackTask/toolbar/MetaDisplayer.vue'
     import TaskPeriodSimpleSummary from '@/components/trackTask/charts/TaskPeriodSimpleSummary.vue'
@@ -59,6 +62,7 @@
             },
         },
         components:{
+            Container,
             TwoColumn,
             MetaDisplayer,
             TaskPeriodSimpleSummary,

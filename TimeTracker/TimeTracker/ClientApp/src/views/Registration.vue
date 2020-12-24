@@ -1,12 +1,15 @@
 <template>
-    <Center class="Registration">
-        <Register />
-    </Center>
+    <Container>
+        <Center class="Registration">
+            <Register />
+        </Center>
+    </Container>
 </template>
 
 <script lang="ts">
     import { defineComponent, ref } from '@vue/composition-api'
 
+    import Container from './layouts/Container.vue'
     import Center from './layouts/Center.vue'
     import Register from '@/components/auth/Register.vue'
 
@@ -16,6 +19,7 @@
 
         },
         components:{
+            Container,
             Center,
             Register
         },      

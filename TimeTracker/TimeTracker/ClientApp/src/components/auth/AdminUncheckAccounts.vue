@@ -1,5 +1,5 @@
 <template>
-    <GeneralCard class="AdminUncheckAccounts my-10" title="Uncheck Accounts" titleIcon="mdi-account-alert" :width="width">
+    <GeneralCard class="AdminUncheckAccounts" title="Uncheck Accounts" titleIcon="mdi-account-alert" :width="width">
         <template v-slot:body>
             <v-card-title class="px-10 pb-2">
                 #Unchecks: {{uncheckAccounts.length}}

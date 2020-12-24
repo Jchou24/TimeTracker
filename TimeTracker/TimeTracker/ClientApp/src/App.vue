@@ -13,12 +13,10 @@
 
         <Nav />
 
-        <v-main>
-            <v-container fluid fill-height >
-                <SimpleTransition mode="out-in">
-                    <router-view></router-view>
-                </SimpleTransition>
-            </v-container>
+        <v-main class="main">
+            <SimpleTransition mode="out-in">
+                <router-view></router-view>
+            </SimpleTransition>
         </v-main>
 
         <!-- <v-footer app> -->
@@ -129,14 +127,6 @@
 </script>
 
 <style lang="scss">
-    // #app {
-    //     font-family: Avenir, Helvetica, Arial, sans-serif;
-    //     -webkit-font-smoothing: antialiased;
-    //     -moz-osx-font-smoothing: grayscale;
-    //     text-align: center;
-    //     color: #2c3e50;
-    // }
-
     .toast-notification{
         width: 400px;
     }
@@ -144,5 +134,13 @@
 </style>
 
 <style lang="scss" scoped>
-    
+    .main{
+        // background: url("~@/assets/img/noisy_grid2.png");
+        // background: url("~@/assets/img/vichy.png");
+        
+        // background: url("~@/assets/img/noisy_grid.png");
+        // background: url("~@/assets/img/fabric_of_squares_gray.png");
+        // background: url("~@/assets/img/whitey-light.png");
+        background: url("~@/assets/img/whitey.png");
+    }
 </style>

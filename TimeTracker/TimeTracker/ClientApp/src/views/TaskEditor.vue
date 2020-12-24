@@ -1,28 +1,31 @@
 <template>
-    <div class="TaskEditor">
-        <TwoColumn>
-            <template v-slot:left>
-                <MetaDisplayer 
-                    singleSelectTarget 
-                    :selectedUsers.sync="targetUsers" 
-                    :selectedDates.sync="targetDates" 
-                    :width="widthMetaDisplayer" />
-                <TaskPeriodSimpleSummary isReactiveMode
-                    :selectedUsers="targetUsers" 
-                    :daysData="daysData" 
-                    :selectedDates="targetDates" 
-                    ref="summary" />
-            </template>
-            <template v-slot:right>
-                <TaskDayTimeline class="margin-center" :user="targetUser" :dateRange="targetDates" @updateDaysData="HandleUpdateDaysData" />
-            </template>
-        </TwoColumn>
-    </div>
+    <Container>
+        <div class="TaskEditor">
+            <TwoColumn>
+                <template v-slot:left>
+                    <MetaDisplayer 
+                        singleSelectTarget 
+                        :selectedUsers.sync="targetUsers" 
+                        :selectedDates.sync="targetDates" 
+                        :width="widthMetaDisplayer" />
+                    <TaskPeriodSimpleSummary isReactiveMode
+                        :selectedUsers="targetUsers" 
+                        :daysData="daysData" 
+                        :selectedDates="targetDates" 
+                        ref="summary" />
+                </template>
+                <template v-slot:right>
+                    <TaskDayTimeline class="margin-center" :user="targetUser" :dateRange="targetDates" @updateDaysData="HandleUpdateDaysData" />
+                </template>
+            </TwoColumn>
+        </div>
+    </Container>
 </template>
 
 <script lang="ts">
     import { computed, defineComponent, onUnmounted, reactive, ref, watch } from '@vue/composition-api'
 
+    import Container from './layouts/Container.vue'
     import TwoColumn from '@/views/layouts/TwoColumn.vue'
     import MetaDisplayer from '@/components/trackTask/toolbar/MetaDisplayer.vue'
     import TaskPeriodSimpleSummary from '@/components/trackTask/charts/TaskPeriodSimpleSummary.vue'
@@ -48,6 +51,7 @@
             }
         },
         components:{
+            Container,
             TwoColumn,
             MetaDisplayer,
             TaskPeriodSimpleSummary,

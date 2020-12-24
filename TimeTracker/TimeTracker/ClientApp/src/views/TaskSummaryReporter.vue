@@ -1,12 +1,15 @@
 <template>
-    <div class="TaskSummaryReporter">
-        <TaskReporter multipleMode/>
-    </div>
+    <Container>
+        <div class="TaskSummaryReporter">
+            <TaskReporter multipleMode/>
+        </div>
+    </Container>
 </template>
 
 <script lang="ts">
     import { defineComponent, ref } from '@vue/composition-api'
 
+    import Container from './layouts/Container.vue'
     import TaskReporter from './TaskReporter.vue'
 
     export default defineComponent({
@@ -15,6 +18,7 @@
 
         },
         components:{
+            Container,
             TaskReporter,
         },      
     })

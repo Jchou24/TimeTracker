@@ -1,21 +1,34 @@
 <template>
-    <Center class="PermissionEditor">
-        <AdminUncheckAccounts
-            :width="800"
-            @GetAccounts="HandleGetAccounts" />
-        <AdminAccounts 
-            :width="800"
-            :accounts="accounts" 
-            @GetAccounts="HandleGetAccounts" />
-    </Center>
+    <!-- <Container> -->
+    <Container :isFullHeight="false">
+        <Center class="PermissionEditor">
+            <Tab :tabTitles="tabTitles">
+                <v-tab-item>
+                    <AdminAccounts class="add-margin"
+                        :width="800"
+                        :accounts="accounts" 
+                        @GetAccounts="HandleGetAccounts" />
+                </v-tab-item>
+
+                <v-tab-item>
+                    <AdminUncheckAccounts class="add-margin"
+                        :width="800"
+                        @GetAccounts="HandleGetAccounts" />
+                </v-tab-item>
+            </Tab>
+        </Center>
+    </Container>
 </template>
 
 <script lang="ts">
     import { defineComponent, reactive, ref } from '@vue/composition-api'
 
+    import Container from './layouts/Container.vue'
     import Center from './layouts/Center.vue'
+    import Tab from './layouts/Tab.vue'
     import AdminAccounts from '@/components/auth/AdminAccounts.vue'
     import AdminUncheckAccounts from '@/components/auth/AdminUncheckAccounts.vue'
+
     import { IClaims, IUserRole } from '@/models/authentication'
     import { AdminAPIHandler } from '@/api/admin'
     import { IStore } from '@/models/store'
@@ -27,7 +40,9 @@
 
         },
         components:{
+            Container,
             Center,
+            Tab,
             AdminAccounts,
             AdminUncheckAccounts,
         },
@@ -46,7 +61,16 @@
             }
             HandleGetAccounts()
 
+            const tabTitles = [{
+                    text: "Accounts",
+                    icon: "mdi-account-group",
+                },{
+                    text: "Uncheck Accounts",
+                    icon: "mdi-account-alert",
+                }]
+
             return {
+                tabTitles,
                 accounts,
                 HandleGetAccounts
             }
@@ -54,3 +78,8 @@
     })
 </script>
 
+<style lang="scss" scoped>
+    .add-margin{
+        margin: 20px;
+    }
+</style>

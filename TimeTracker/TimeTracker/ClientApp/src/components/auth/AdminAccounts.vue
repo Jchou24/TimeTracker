@@ -1,5 +1,5 @@
 <template>
-    <GeneralCard class="AdminAccounts my-10" title="Accounts" titleIcon="mdi-account-group" 
+    <GeneralCard class="AdminAccounts" title="Accounts" titleIcon="mdi-account-group" 
         :width="width"
         v-if="props.accounts">
         <template v-slot:body>
