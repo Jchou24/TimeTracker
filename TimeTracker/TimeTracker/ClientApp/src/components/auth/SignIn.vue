@@ -1,20 +1,18 @@
 <template>
-    <div class="SignIn text-center">
-        <v-dialog
-            v-model="isOpenModalRef"
-            width="500"            
+    <div class="SignIn text-center" :class="{darkMode}">
+        <v-card
+            :loading="isLoading"
+            :disabled="isLoading"
+            elevation="10"
+            outlined
+            :shaped="!darkMode"
+            @keydown.enter.native="SignIn"
+            :width="width"
             >
-            <v-card
-                :loading="isLoading"
-                :disabled="isLoading"
-                elevation="10"
-                outlined
-                shaped
-                @keydown.enter.native="SignIn"                
-                >
-                <v-card-title class="title flex-center text-h4 my-4 font-weight-black" ><v-icon class="title text-h4" left>mdi-account-circle</v-icon>登入</v-card-title>
-                <v-divider class="mb-7" />
-                <v-card-text class="px-10">
+            <v-card-title class="title flex-center text-h4 mb-4 pt-8 font-weight-black" ><v-icon class="title text-h4" left>mdi-account-circle</v-icon>登入</v-card-title>
+            <v-divider class="mb-7" v-if="!darkMode" />
+            <v-card-text class="px-10">
+                <div class="content">
                     <v-text-field
                         v-model="email"
                         :error-messages="errorMessages.Email"
@@ -38,23 +36,24 @@
                     <p class="error--text" v-for="(err, idx) in errorMessages.Fail" :key="idx">
                         {{err}}
                     </p>
-                </v-card-text>
-                <v-divider class="mt-n4"></v-divider>
-                <v-card-actions class="py-6 flex-center">
-                    <v-btn class="pa-6 px-8 text-center"
-                        color="primary"
-                        :loading="isLoading"
-                        elevation="2"
-                        large
-                        rounded                        
-                        @click="SignIn" :disabled="isAuthenticated"
-                    >
-                        <v-icon left>mdi-send</v-icon>
-                        Submit
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+                </div>
+            </v-card-text>
+            <v-divider v-if="!darkMode" />
+            <v-card-actions class="py-6 flex-center card-action">
+                <v-btn class="pa-6 px-8 text-center"
+                    :loading="isLoading"
+                    elevation="2"
+                    large
+                    rounded
+                    :color="darkMode ? 'accent' : 'primary' "
+                    :block="darkMode"
+                    @click="SignIn" :disabled="isAuthenticated"
+                >
+                    <v-icon left>mdi-send</v-icon>
+                    Submit
+                </v-btn>
+            </v-card-actions>
+        </v-card>
     </div>
 </template>
 
@@ -68,9 +67,14 @@
     export default defineComponent({
         name: 'SignIn',
         props:{
-            isOpenModal:{
+            width:{
+                type: Number,
+                default: 450,
+            },
+            darkMode:{
                 type: Boolean,
-            }
+                default: false,
+            },
         },
         setup(props, { emit, root }){
             const { $store, $router } = root
@@ -91,10 +95,10 @@
             })
 
             const GetEmptyErrorMessages = () => ({
-                    Email: [],
-                    Password: [],
-                    Fail: [],
-                })
+                Email: [],
+                Password: [],
+                Fail: [],
+            })
 
             const errorMessages = reactive(GetEmptyErrorMessages())
             function EmptyErrorMessages(){
@@ -108,16 +112,10 @@
                     password: password.value,
                 } as ILogin))
 
-            const isOpenModalRef = computed({
-                get(){
-                    return props.isOpenModal as boolean
-                },
-                set(value: boolean){
-                    emit("update:isOpenModal", value)
-                    password.value = ""
-                    EmptyErrorMessages()
-                }
-            })
+            function ResetPassword(){
+                password.value = ""
+                EmptyErrorMessages()
+            }
 
             const isLoading = ref(false)
             function SignIn(){
@@ -128,7 +126,7 @@
                 authenticationAPIHandler.Login(logindata.value as ILogin, isLoading, () => {
                     EmptyErrorMessages()
                     password.value = ""
-                    isOpenModalRef.value = false
+                    emit( "loginSuccess" )
                 }, ( error ) => {
                     if (error.response.status == 400) {
                         EmptyErrorMessages()
@@ -141,7 +139,6 @@
             }
 
             return {
-                isOpenModalRef,
                 isAuthenticated,
                 isLoading,      
                 
@@ -150,6 +147,7 @@
                 errorMessages,
 
                 SignIn,
+                ResetPassword,
             }
         }
 
@@ -157,7 +155,41 @@
 </script>
 
 <style lang="scss" scoped>
-    .title{
+    .SignIn .title{
         color: $color-title;
+    }
+
+    .SignIn.darkMode{
+        .theme--light.v-card{
+            border: unset;
+            border-radius: 15px;
+            padding-top: 0px;
+            padding-bottom: 15px;
+            background: linear-gradient(to bottom right, #7d7a8280, #38343e );
+
+            .title{
+                color: white;
+                @include vm-drop-shadow-1(0px, 0px, 5px, rgba(197, 195, 195, 0.5));
+            }
+
+            .content{
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                max-width: 400px;
+                background: linear-gradient(to bottom right, #ffffff 75%, #dadada );;
+                padding: 20px;
+                padding-top: 30px;
+                padding-bottom: 10px;
+                border-radius: 15px;
+                @include vm-drop-shadow-1(0px, 0px, 10px, rgba(197, 195, 195, 0.5));
+            }
+
+            .card-action{
+                padding-top: 10px !important;
+                margin: 0 auto;
+                max-width: 400px;
+            }
+        }        
     }
 </style>

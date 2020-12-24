@@ -56,6 +56,7 @@ html {
     // background-attachment: fixed;
 
     overflow: auto;
+    overflow-y: auto !important;
     
     // @media (max-width: $mediaquery-width-sm) { 
     //     &::-webkit-scrollbar { 
@@ -82,4 +83,11 @@ html {
             }
         }
     // }
+}
+
+.animate__animated.animate__fastest {
+    -webkit-animation-duration: 0.25s;
+    animation-duration: 0.25s;
+    -webkit-animation-duration: 0.25s;
+    animation-duration: 0.25s;
 }

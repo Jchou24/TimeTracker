@@ -20,7 +20,7 @@
 
         <NavItem mdiIcon="mdi-logout" left @click.native="SignOut" v-if="isAuthenticated">登出</NavItem>
         <NavItem mdiIcon="mdi-login" left @click.native="isOpenModal=true" v-else>登入</NavItem>
-        <SignIn :isOpenModal.sync="isOpenModal" />
+        <SignInModal :isOpenModal.sync="isOpenModal" />
 
         <NavProgress/>
     </v-app-bar>
@@ -33,7 +33,7 @@
     import NavLinkItem from "./NavLinkItem.vue"
     import NavItem from "./NavItem.vue"
     import TwoColumnSidebarToggleIcon from "./TwoColumnSidebarToggleIcon.vue"
-    import SignIn from "@/components/auth/SignIn.vue"
+    import SignInModal from "@/components/auth/SignInModal.vue"
     
     import { routeConfigs } from '@/router/routeConfigs'
     import { AuthenticationAPIHandler } from '@/api/authentication.ts'
@@ -53,7 +53,7 @@
             NavLinkItem,
             NavItem,
             TwoColumnSidebarToggleIcon,
-            SignIn,
+            SignInModal,
         },
         setup(props, { root }){
             const { $store, $router } = root

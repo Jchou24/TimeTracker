@@ -131,10 +131,7 @@
         width: 400px;
     }
 
-</style>
-
-<style lang="scss" scoped>
-    .main{
+    html{
         // background: url("~@/assets/img/noisy_grid2.png");
         // background: url("~@/assets/img/vichy.png");
         
@@ -142,5 +139,13 @@
         // background: url("~@/assets/img/fabric_of_squares_gray.png");
         // background: url("~@/assets/img/whitey-light.png");
         background: url("~@/assets/img/whitey.png");
+
+        .theme--light.v-application{
+            background: unset;
+        }
     }
+</style>
+
+<style lang="scss" scoped>
+    
 </style>

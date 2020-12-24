@@ -1,5 +1,5 @@
 <template>
-    <transition   
+    <transition
         :mode="mode"
         :enter-active-class="enterClass"
         :leave-active-class="leaveClass"
@@ -25,10 +25,14 @@
                 type: String,
                 default: "animate__fadeOut"
             },
+            speed:{
+                type: String,
+                default: "animate__faster"
+            },
         },
         setup(props, { root }){
-            const enterClass = computed( () => `animate__animated ${props.enterAnimation} animate__faster` )
-            const leaveClass = computed( () => `animate__animated ${props.leaveAnimation} animate__faster` )
+            const enterClass = computed( () => `animate__animated ${props.enterAnimation} ${props.speed}` )
+            const leaveClass = computed( () => `animate__animated ${props.leaveAnimation} ${props.speed}` )
 
             return {
                 enterClass,
@@ -39,5 +43,4 @@
 </script>
 
 <style lang="scss" scoped>
-
 </style>
