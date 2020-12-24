@@ -115,7 +115,7 @@ hr.vm-style-3 {
     }
 }
 
-@mixin vm-ransition($target:all, $time: 0.3s, $affect:ease-in-out) {
+@mixin vm-transition($target:all, $time: 0.3s, $affect:ease-in-out) {
     -webkit-transition: $target $time ease-in-out;
     -moz-transition: $target $time ease-in-out;
     -ms-transition: $target $time ease-in-out;

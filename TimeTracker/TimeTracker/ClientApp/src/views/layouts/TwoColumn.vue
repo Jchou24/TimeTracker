@@ -92,7 +92,7 @@
     .two-column{
         width: 100%;
 
-        @include vm-ransition( padding-left, 0.2s );
+        @include vm-transition( padding-left, 0.2s );
         &.active-sidebar{
             padding-left: $width-sidebar;
         }

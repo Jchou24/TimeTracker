@@ -157,6 +157,7 @@
                     EmptyErrorMessages()
                     isRegistOk.value = true
                     ToastSuccess( "Registration success! Please connect admin to activate your account.", toast, { timeout: 15 * 1000 })
+                    emit("registSuccess")
                 }, ( error ) => {
                     console.log( error )
                     isRegistOk.value = false

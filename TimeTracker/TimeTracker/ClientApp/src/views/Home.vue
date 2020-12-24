@@ -5,8 +5,8 @@
             <Container>
                 <Center>
                     <SimpleTransition mode="out-in" speed="animate__fastest">
-                        <div class="default-screen" v-if="!isBlurBackground" >
-                            <Clock />
+                        <div class="default-screen" :class="{'with-buttons': isShowButtons}" v-if="!isBlurBackground" >
+                            <Clock class="clock" />
 
                             <SimpleTransition mode="out-in">
                                 <div class="buttons mt-8" v-if="isShowButtons">
@@ -21,10 +21,11 @@
                         </div>
 
                         <SignIn darkMode :width="550" v-on-clickaway="() => ReturnDefaultScreen()"
-                            @loginSuccess="isOpenModalRef = false"
+                            @loginSuccess="ReturnDefaultScreen"
                             v-if="isShowSignIn" />
 
                         <Register darkMode :width="550" v-on-clickaway="() => ReturnDefaultScreen()"
+                            @registSuccess="HandleRegistSuccess"
                             v-if="isShowRegist" />
                     </SimpleTransition>         
                 </Center>
@@ -83,7 +84,9 @@
                 isShowSignIn.value = false
             }
 
-            
+            function HandleRegistSuccess() {
+                setTimeout( ReturnDefaultScreen, 5000 )
+            }
 
             const GetClass = computed( () => {
                 const size = GetSize(width.value)
@@ -101,6 +104,7 @@
                 isShowButtons,
                 GetClass,
                 ReturnDefaultScreen,
+                HandleRegistSuccess,
             }
         }
     });
@@ -141,6 +145,15 @@
             z-index: 2;
         }
 
+        .default-screen{
+            @include vm-transition(all, 0.5s);
+
+            height: 500px;
+            &.with-buttons{
+                height: 600px;
+            }
+        }
+
         .content{
             z-index: 1;
             width: 80%;
@@ -153,7 +166,7 @@
             background-size: cover;
             background-position: center;
 
-            @include vm-ransition(all, 0.5s);
+            @include vm-transition(all, 0.5s);
         }
 
         &.md, &.sm, &.xs{
