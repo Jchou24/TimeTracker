@@ -59,7 +59,14 @@ namespace TimeTracker
             });
 
             // DB Context
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = "";
+
+            connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                connectionString = Configuration.GetConnectionString("DefaultConnection");
+            }
+                
             services.AddConfiguredMsSqlDbContext(connectionString);
 
             // Basic DB Context without cache
