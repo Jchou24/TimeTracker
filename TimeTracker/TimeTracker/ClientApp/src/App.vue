@@ -72,6 +72,7 @@
                 toastClassName: "toast-notification",
                 transition: "Vue-Toastification__fade",
                 draggable: false,
+                closeOnClick: false,
             })
             const toast = useToast()
             store.commit("notification/SetNotificator", toast)

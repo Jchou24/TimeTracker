@@ -156,8 +156,8 @@
 
         .content{
             z-index: 1;
-            width: 80%;
-            height: 90%;
+            width: 90%;
+            height: 95%;
             border-radius: 50px;
             @include vm-drop-shadow-1(0px, 0px, 15px, rgba(197, 195, 195, 0.5));
 
@@ -171,8 +171,8 @@
 
         &.md, &.sm, &.xs{
             .content{
-                width: 90%;
-                height: 90%;
+                width: 95%;
+                height: 95%;
             }
         }
 

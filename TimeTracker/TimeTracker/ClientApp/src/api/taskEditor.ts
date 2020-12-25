@@ -101,6 +101,19 @@ class TaskEditorWSHandler{
         this._wsHandler?.connection.invoke("UpdateTaskCol", tasks)
     }
 
+    protected TryReconnect(){
+        const isReconnecting = this._wsHandler?.TryReconnect(() => {
+            this._store.state.notification.NotificateWSReconnected()
+            // this.Subscribe()
+        }, () => {
+            this._store.state.notification.NotificateWSClose()
+        })
+
+        if (isReconnecting) {
+            this._store.state.notification.NotificateWSReconnecting()
+        }
+    }
+
     protected ValidateState(){
         if( !this._wsHandler ){
             this._store.state.notification.NotificateWSClose()

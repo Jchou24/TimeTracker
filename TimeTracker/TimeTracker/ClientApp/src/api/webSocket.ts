@@ -54,6 +54,7 @@ class WSHandler{
         });
         
         this.connection.onreconnecting( () => {
+            // console.log("try reconnecting")
             if (!this._store.state.authentication.isAuthenticated) {
                 return
             }
@@ -63,6 +64,7 @@ class WSHandler{
         })
 
         this.connection.onreconnected( () => {
+            // console.log("try reconnect")
             if (!this._store.state.authentication.isAuthenticated) {
                 return
             }
@@ -89,6 +91,28 @@ class WSHandler{
         // console.log("Stop WSHandler")
         this._isSuccessClose = true
         return this.connection.stop()
+    }
+
+    public TryReconnect( SuccessCallBack?: () => void, ErrorCallBack?: () => void ){
+        if (this._tryingToReconnect) {
+            return true
+        }
+
+        this._tryingToReconnect = true
+        this.Stop()
+            .then(() => {
+                this.Start()
+                    .then(() => {
+                        this._tryingToReconnect = false
+                        this.InitialListeners()
+
+                        if(SuccessCallBack){
+                            SuccessCallBack()
+                        }
+                    })
+                    .catch(ErrorCallBack)
+            })
+            .catch(ErrorCallBack)
     }
 }
 
