@@ -11,6 +11,12 @@
             <v-card-title class="setting-info">
                 <v-container fluid class="px-6">
                     <v-row no-gutters>
+                        <v-col>
+                            <SettingsImageEditor class="my-6" />
+                        </v-col>
+                    </v-row>
+
+                    <v-row no-gutters>
                         <v-col cols="4" >
                             Account status
                         </v-col>
@@ -149,6 +155,8 @@
     import { computed, defineComponent, ref } from '@vue/composition-api'
     // import { useStore } from 'vuex'
 
+    import SettingsImageEditor from './SettingsImageEditor.vue'
+
     // import { useToast } from "vue-toastification";
     import { useToast } from "vue-toastification/composition"
     import { ToastSuccess } from '@/util/notification.ts'
@@ -161,6 +169,9 @@
 
     export default defineComponent({
         name: 'Settings',
+        components:{
+            SettingsImageEditor
+        },
         setup(props, { emit, root }){
             const { $store, $router } = root
             // const store = useStore()

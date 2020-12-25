@@ -14,18 +14,20 @@ import { GetGuid } from '@/util/authentication'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+export default new Vuex.Store<IStoreRoot>({
     state: {
         isLoading: false,
         tabGuid: GetGuid(),
+        userImage: "",
     },
     mutations: {
-        TurnOnLoading: ( state: IStoreRoot ) => {
+        TurnOnLoading: ( state ) => {
             state.isLoading = true 
         },
-        TurnOffLoading: ( state: IStoreRoot ) => {
+        TurnOffLoading: ( state ) => {
             state.isLoading = false 
         },
+        SetUserImage: ( state, userImage: string ) => state.userImage = userImage
     },
     actions: {
     },
@@ -39,7 +41,7 @@ export default new Vuex.Store({
     },
     plugins: [
         createMultiTabState({
-            statesPaths: ['authentication', 'pageIdle']
+            statesPaths: ['authentication', 'pageIdle', 'userImage']
         }),
     ],
 }) as Store<IStore>

@@ -59,6 +59,7 @@
     "vue-toastification": "^1.7.8",
     "vue-use-web": "^1.0.1",
     "vuetify": "^2.3.19",
+    "vuetify-image-input": "^19.1.0",
     "vuex-multi-tab-state": "^1.0.15"
   }
 }

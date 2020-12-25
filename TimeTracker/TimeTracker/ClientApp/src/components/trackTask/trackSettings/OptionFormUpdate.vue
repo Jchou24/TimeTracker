@@ -65,12 +65,10 @@
 
     import { Store } from 'vuex/types/index'
     import { IStore } from '@/models/store'
-    import { IPeriod } from '@/models/period'
     import { DataTableHeader } from 'vuetify'
     import { PeriodAPIHandler } from '@/api/period'
     import { ToastSuccess, ToastError } from '@/util/notification'
     import { useToast } from "vue-toastification/composition"
-    import { IsDisabledSubmit } from '@/util/parameter'
     import { IOptionMethods, ITaskEntityOption } from '@/models/parameter'
 
     export default defineComponent({

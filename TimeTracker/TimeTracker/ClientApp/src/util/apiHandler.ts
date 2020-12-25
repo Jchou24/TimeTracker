@@ -47,6 +47,7 @@ class APIHandler{
     LogoutProcess(){
         this._store.commit("authentication/Init")
         this._store.commit("pageIdle/Init")
+        this._store.commit("SetUserImage", "")
         this.HttpPost('api/Account/Logout')
     }
 

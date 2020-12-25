@@ -18,6 +18,7 @@ namespace TimeTracker.DAL
         }
 
         public DbSet<User> User { get; set; }
+        public DbSet<UserImage> UserImage { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<MapUserRole> MapUserRoles { get; set; }
         
@@ -40,6 +41,9 @@ namespace TimeTracker.DAL
                 .Property(u => u.Guid)
                 .ValueGeneratedOnAdd()
                 .HasValueGenerator<GuidValueGenerator>();
+
+            modelBuilder.Entity<UserImage>()
+                .HasOne(a => a.User);
 
             modelBuilder.Entity<User>()
                 .HasMany(p => p.UserRoles)

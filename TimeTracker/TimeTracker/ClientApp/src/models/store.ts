@@ -9,6 +9,7 @@ import { IWebSocket } from './webSocket'
 interface IStoreRoot{
     isLoading: boolean,
     tabGuid: string,
+    userImage: string,
 }
 
 interface IStore extends IStoreRoot{

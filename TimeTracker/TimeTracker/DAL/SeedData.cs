@@ -57,6 +57,14 @@ namespace TimeTracker.DAL
                 .HasData(user);
 
             modelBuilder
+                .Entity<UserImage>()
+                .HasData(new UserImage(1, SeedDataImg.GetPickachu()));
+
+            modelBuilder
+                .Entity<UserImage>()
+                .HasData(new UserImage(2, SeedDataImg.GetTotoro()));
+
+            modelBuilder
                 .Entity<User>()
                 .HasData(new User("test@auth.com", "test")
                 {

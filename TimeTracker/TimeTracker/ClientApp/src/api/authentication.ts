@@ -6,11 +6,27 @@ import { IClaims, ILogin, IUpdatePassword } from '@/models/authentication'
 import { IStore } from '@/models/store'
 import VueRouter from 'vue-router'
 import { ParameterAPIHandler } from './parameter'
+import { ImageAPIHandler } from './imges'
 
 class AuthenticationAPIHandler extends APIHandler{
     
     constructor( store: Store<IStore>, router: VueRouter ) {
         super(store, router)
+    }
+
+    protected Init(isSetAuthenticated: boolean, isLoading: Ref<boolean>){
+        this.GetUserInfo( isLoading, () => {
+            if (isSetAuthenticated) {
+                this._store.commit("authentication/SetIsAuthenticated", true)    
+            }            
+        })
+
+        const parameterAPIHandler = new ParameterAPIHandler( this._store, this._rootRouter )
+        parameterAPIHandler.GetTaskSources(isLoading)
+        parameterAPIHandler.GetTaskTypes(isLoading)
+
+        const imageAPIHandler = new ImageAPIHandler( this._store, this._rootRouter )
+        imageAPIHandler.GetImage()
     }
 
     GetUserInfo(isLoading?: Ref<boolean>,
@@ -33,7 +49,7 @@ class AuthenticationAPIHandler extends APIHandler{
             }
             this._store.commit("authentication/SetIsAuthenticated", Boolean(response.data))
             if(this._store.state.authentication.isAuthenticated){
-                this.GetUserInfo(isLoading)
+                this.Init(false, isLoading)
             }
         }, ErrorFunc)
     }
@@ -45,13 +61,8 @@ class AuthenticationAPIHandler extends APIHandler{
             if(SuccessFunc){
                 SuccessFunc(response)
             }
-            this.GetUserInfo( isLoading, () => {
-                this._store.commit("authentication/SetIsAuthenticated", true)
-            })
 
-            const parameterAPIHandler = new ParameterAPIHandler( this._store, this._rootRouter )
-            parameterAPIHandler.GetTaskSources(isLoading)
-            parameterAPIHandler.GetTaskTypes(isLoading)
+            this.Init(true, isLoading)
         }, ErrorFunc)
     }
 

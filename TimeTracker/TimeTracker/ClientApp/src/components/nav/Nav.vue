@@ -15,7 +15,7 @@
             mdiIcon displayName left
             :key="'right'+idx" />
             
-        <NavLinkItem class="individual-settings" routeConfigsKey="IndividualSettings" mdiIcon v-if="isAuthenticated" />
+        <NavIndividualSettings v-if="isAuthenticated" />
         <NavLinkItem routeConfigsKey="Registration" mdiIcon displayName left v-if="!isAuthenticated" />
 
         <NavItem mdiIcon="mdi-logout" left @click.native="SignOut" v-if="isAuthenticated">登出</NavItem>
@@ -32,6 +32,7 @@
     import NavProgress from '@/components/nav/NavProgress.vue'
     import NavLinkItem from "./NavLinkItem.vue"
     import NavItem from "./NavItem.vue"
+    import NavIndividualSettings from "./NavIndividualSettings.vue"
     import TwoColumnSidebarToggleIcon from "./TwoColumnSidebarToggleIcon.vue"
     import SignInModal from "@/components/auth/SignInModal.vue"
     
@@ -52,6 +53,7 @@
             NavProgress,
             NavLinkItem,
             NavItem,
+            NavIndividualSettings,
             TwoColumnSidebarToggleIcon,
             SignInModal,
         },
