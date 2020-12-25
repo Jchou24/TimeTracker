@@ -68,7 +68,11 @@
             const authenticationAPIHandler = new AuthenticationAPIHandler( store, router )
             // =================================================================
             
-            provideToast({ toastClassName: "toast-notification" })
+            provideToast({ 
+                toastClassName: "toast-notification",
+                transition: "Vue-Toastification__fade",
+                draggable: false,
+            })
             const toast = useToast()
             store.commit("notification/SetNotificator", toast)
             
@@ -127,8 +131,12 @@
 </script>
 
 <style lang="scss">
-    .toast-notification{
-        width: 400px;
+    .Vue-Toastification__container{
+        padding-top: 68px;
+
+        .toast-notification{
+            width: 400px;
+        }
     }
 
     html{

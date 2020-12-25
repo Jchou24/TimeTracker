@@ -14,6 +14,7 @@ class WSHandler{
     protected _rootRouter: VueRouter
     protected _authenticationAPIHandler: AuthenticationAPIHandler
     protected _tryingToReconnect = false
+    protected _isSuccessClose = false
 
     constructor( store: Store<IStore>, router: VueRouter ) {
         this._store = store
@@ -71,24 +72,7 @@ class WSHandler{
         })
 
         this.connection.onclose( () => {
-            if (!this._store.state.authentication.isAuthenticated) {
-                return
-            }
-
-            let retry = 3
-            while( retry > 0 ){
-                setTimeout( () => 
-                    this.Start()
-                        .then( () => retry = -1 )
-                        .catch( () => retry -= 1 )
-                , 5000)
-            }
-
-            if (retry == 0) {
-                // retry success
-                this._store.state.notification.NotificateWSReconnected()
-            }else{
-                // retry fail
+            if (!this._isSuccessClose) {
                 this._store.state.notification.NotificateWSClose()
             }
         })
@@ -96,11 +80,14 @@ class WSHandler{
 
     public Start(){
         // console.log("Start WSHandler")
+        this._isSuccessClose = false
+        this._tryingToReconnect = false
         return this.connection.start()
     }
 
     public Stop(){
         // console.log("Stop WSHandler")
+        this._isSuccessClose = true
         return this.connection.stop()
     }
 }

@@ -6,11 +6,6 @@ function ToastSuccess(message: string, toast?: ReturnType<typeof ToastInterface>
     type?: TYPE.SUCCESS | undefined;
 }) | undefined){
     const mergedOption = {
-        icon: {
-            iconClass: 'material-icons',  
-            iconChildren: 'check_circle_outline', 
-            iconTag: 'span'   
-        },
         timeout: 7 * 1000,
         ...option
     } as PluginOptions
@@ -21,11 +16,6 @@ function ToastWarning(message: string, toast?: ReturnType<typeof ToastInterface>
     type?: TYPE.WARNING | undefined;
 }) | undefined){
     const mergedOption = {
-        icon: {
-            iconClass: 'material-icons',  
-            iconChildren: 'warning', 
-            iconTag: 'span'   
-        },
         timeout: 7 * 1000,
         ...option
     } as PluginOptions
@@ -36,11 +26,6 @@ function ToastError(message: string, toast?: ReturnType<typeof ToastInterface>, 
     type?: TYPE.WARNING | undefined;
 }) | undefined){
     const mergedOption = {
-        icon: {
-            iconClass: 'material-icons',  
-            iconChildren: 'error', 
-            iconTag: 'span'   
-        },
         timeout: 7 * 1000,
         ...option
     } as PluginOptions
