@@ -38,7 +38,7 @@ const SetNotificateWSReconnecting = (state: INotification) =>
 
 const SetNotificateWSClose = (state: INotification) =>
     state.NotificateWSClose = GetDebounceNoter( state, 
-        `Sorry! The connection is break unpredictably. Please refresh the browser to continue.`, 500, { timeout: false })
+        `Sorry! The connection is break unpredictably. Your operation will not be executing. Please refresh the browser to continue.`, 500, { timeout: false })
 
 const module: Module<INotification, any> = {
     namespaced: true,
