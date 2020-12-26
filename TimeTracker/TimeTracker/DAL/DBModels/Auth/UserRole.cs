@@ -15,11 +15,11 @@ namespace TimeTracker.DAL.DBModels.Auth
         /// for matching program code
         /// </summary>
         [Required]
-        [Column(TypeName = "NVARCHAR")]
+        //[Column(TypeName = "NVARCHAR")]
         [StringLength(256)]
         [Unique]
         public string CodeName { get; set; }
-        [Column(TypeName = "NVARCHAR")]
+        //[Column(TypeName = "NVARCHAR")]
         [StringLength(256)]
         public string DisplayName { get; set; }
         [JsonIgnore]

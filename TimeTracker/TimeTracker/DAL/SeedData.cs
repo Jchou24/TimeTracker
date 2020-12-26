@@ -136,6 +136,8 @@ namespace TimeTracker.DAL
                 {
                     Guid = Guid.NewGuid(),
                     LimitWorkTime = 7.5,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now,
                 });
 
             // add Period
@@ -253,10 +255,12 @@ namespace TimeTracker.DAL
                     Guid = taskDay.Guid,
                     Date = taskDay.Date,
                     UserId = taskDay.User.Id,
-                    IsLeave = taskDay.IsLeave
+                    IsLeave = taskDay.IsLeave,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now,
                 });
-            }            
-            
+            }
+
             // add task
             var adminTasks = new List<Task>();
             var userTasks = new List<Task>();
@@ -484,8 +488,12 @@ namespace TimeTracker.DAL
                         TaskSourceGuid = task.TaskSource.Guid,
                         TaskName = task.TaskName,
                         TaskContent = task.TaskContent,
+
+                        CreatedDate = DateTime.Now,
+                        UpdatedDate = DateTime.Now,
                     });
             }
+
         }
     }
 }

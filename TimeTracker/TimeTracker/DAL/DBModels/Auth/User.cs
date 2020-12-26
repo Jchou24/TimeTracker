@@ -20,13 +20,13 @@ namespace TimeTracker.DAL.DBModels.Auth
         [Unique]
         public Guid Guid { get; set; }
 
-        [Column(TypeName = "NVARCHAR")]
+        //[Column(TypeName = "NVARCHAR")]
         [StringLength(256)]
         public string Name { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
-        [Column(TypeName = "NVARCHAR")]
+        //[Column(TypeName = "NVARCHAR")]
         [StringLength(256)]
         [Unique]
         public string Email { get; set; }

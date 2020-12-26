@@ -53,21 +53,13 @@ namespace TimeTracker
                 //options.UseMemoryCacheProvider(CacheExpirationMode.Absolute, TimeSpan.FromSeconds(5))
                 options.UseMemoryCacheProvider(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(30))
                 //options.UseMemoryCacheProvider()
-                //.DisableLogging(true));
-                .DisableLogging(false);
+                .DisableLogging(true);
+                //.DisableLogging(false);
                 //options.CacheAllQueries(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(30));
             });
 
             // DB Context
-            var connectionString = "";
-
-            connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                connectionString = Configuration.GetConnectionString("DefaultConnection");
-            }
-                
-            services.AddConfiguredMsSqlDbContext(connectionString);
+            services.InitDB(Configuration);
 
             // Basic DB Context without cache
             //services.AddDbContext<ApplicationDbContext>(options =>
@@ -184,12 +176,7 @@ namespace TimeTracker
                 spa.Options.SourcePath = "ClientApp";
             });
 
-            var builder = new ConfigurationBuilder()
-                  .SetBasePath(Directory.GetCurrentDirectory())
-                  .AddJsonFile("appsettings.json");
-            var config = builder.Build();
-
-            if (Boolean.Parse(config["IsLaunchSPAServer"]))
+            if (Boolean.Parse(Configuration.GetSection("IsLaunchSPAServer").Value))
             {
                 UseVueSPAServerWithVisualStudio(app);
             }

@@ -29,7 +29,7 @@ namespace TimeTracker.DAL.DBModels.Task
         [Required]
         public DateTime EndDate { get; set; }
 
-        [Column(TypeName = "NVARCHAR")]
+        //[Column(TypeName = "NVARCHAR")]
         [StringLength(256)]
         public string Name { get; set; }
     }
