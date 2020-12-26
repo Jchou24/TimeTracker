@@ -144,6 +144,7 @@ namespace TimeTracker
                 app.UseHsts();
             }
 
+            app.UseDeveloperExceptionPage();
             app.UseHttpsRedirection();
 
             // Static files
