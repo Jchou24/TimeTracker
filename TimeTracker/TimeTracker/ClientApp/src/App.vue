@@ -23,6 +23,7 @@
             <!-- -->
         <!-- </v-footer> -->
 
+        <PageIdle />
         <!-- <PageIdle :isLogOutRedirect="false" /> -->
         <!-- <PageIdle :isLogOutRedirect="false" :idleSeconds="3" :userConfirmSeconds="5000" /> -->
     </v-app>

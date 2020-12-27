@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.9eaa18bbbfe5642b02861eb3e5abf7f3.js"
+  "/precache-manifest.cbc0157ab5d2573158e29e29eca1a9eb.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "TimeTracker"});
