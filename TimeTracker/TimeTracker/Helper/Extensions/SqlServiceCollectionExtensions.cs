@@ -21,7 +21,11 @@ namespace TimeTracker.Helper.Extensions
         /// <param name="Configuration"></param>
         public static IServiceCollection InitDB(this IServiceCollection services, IConfiguration Configuration)
         {
-            var dbType = Configuration.GetSection("DBType").Value;
+            var dbType = Environment.GetEnvironmentVariable("DBTYPE");
+            if (string.IsNullOrWhiteSpace(dbType))
+            {
+                dbType = Configuration.GetSection("DBType").Value;
+            }
 
             DBTypes db;
             switch (dbType)

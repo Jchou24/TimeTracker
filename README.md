@@ -107,6 +107,10 @@ dotnet ef database update
 
 * DBType: `MS`, `PG`
 
+  * Environment Variable:
+
+    * `DBTYPE`: 當環境變數設定此值時，將優先從此環境變數讀取 DBType
+
   * `MS`: 使用 MS SQL
 
   * `PG`: 使用 Postgres SQL
