@@ -1,3 +1,5 @@
+![img](./screen_shot.png)
+
 # Time Tracker
 
 簡易工時填寫系統 + 含簡易授權機制之會員系統
@@ -47,6 +49,8 @@
 # Online Demo
 
 * [Demo 網站](https://time-tracker-vue-netcore.herokuapp.com/)
+
+* [Demo 影片](https://jchou24.github.io/Demos/TimeTracker/Demo(2021-01-01).mp4)
 
 * 網站使用 Heroku 部屬，閒置啟動可能會需要花一點時間
 
