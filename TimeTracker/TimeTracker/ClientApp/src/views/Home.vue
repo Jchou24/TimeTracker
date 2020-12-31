@@ -18,6 +18,14 @@
                                     > Sign In </v-btn>
                                 </div>
                             </SimpleTransition>
+
+                            <div class="github-icon" >
+                                <a href="https://github.com/Jchou24/TimeTracker" target="_blank" rel="noopener noreferrer" >
+                                    <v-btn icon class="button font-weight-black text-h6" x-large>
+                                        <v-icon>mdi-github</v-icon>
+                                    </v-btn>
+                                </a>
+                            </div>
                         </div>
 
                         <SignIn darkMode :width="550" v-on-clickaway="() => ReturnDefaultScreen()"
@@ -209,8 +217,24 @@
             box-shadow: 0 6px 8px -6px rgba(10, 175, 230, 1), 0 8px 6px -6px rgba(10, 175, 230, 0);
         }
 
+        .github-icon{
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            .button{
+                width: 50px;
+                border-bottom: unset;
+                box-shadow: unset;
+                color: #daf6ff !important;
+                text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);                
+           }
+        }
+
         &.xs .buttons .button{
             width: 200px;
+        }
+        &.xs .buttons.github-icon .button{
+            width: 50px;
         }
     }
 </style>

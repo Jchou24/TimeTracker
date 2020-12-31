@@ -1,9 +1,9 @@
 <template>
     <router-link class="NavLinkItem" :class="{ 'router-link-custom-active': isActiveLink }" :to="to">
-        <NavItem :mdiIcon="navIcon" :left="left" v-if="displayName">
+        <NavItem :icon="icon" :mdiIcon="navIcon" :left="left" v-if="displayName">
             {{ navDisplayName }}
         </NavItem>
-        <NavItem :mdiIcon="navIcon" :left="left" v-else>
+        <NavItem :icon="icon" :mdiIcon="navIcon" :left="left" v-else>
             <slot></slot>
         </NavItem>
     </router-link>
@@ -30,6 +30,10 @@
                 default: false,
             },
             left:{
+                type: Boolean,
+                default: false,
+            },
+            icon:{
                 type: Boolean,
                 default: false,
             }

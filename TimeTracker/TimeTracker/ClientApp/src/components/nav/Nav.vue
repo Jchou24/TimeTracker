@@ -1,6 +1,8 @@
 <template>
     <v-app-bar class="Nav drop-shadow-2 px-16" app>
+
         <TwoColumnSidebarToggleIcon />
+        <NavGithubLink />
         <NavLinkItem class="home-btn" routeConfigsKey="Home" displayName />        
         <NavLinkItem v-for="(navItem, idx) in navLeftItems" 
             :routeConfigsKey="navItem"
@@ -30,6 +32,7 @@
     import { defineComponent, computed, watch, ref } from '@vue/composition-api'
 
     import NavProgress from '@/components/nav/NavProgress.vue'
+    import NavGithubLink from "./NavGithubLink.vue"
     import NavLinkItem from "./NavLinkItem.vue"
     import NavItem from "./NavItem.vue"
     import NavIndividualSettings from "./NavIndividualSettings.vue"
@@ -51,6 +54,7 @@
         },
         components:{
             NavProgress,
+            NavGithubLink,
             NavLinkItem,
             NavItem,
             NavIndividualSettings,

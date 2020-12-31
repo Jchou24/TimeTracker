@@ -1,5 +1,5 @@
 <template>
-    <v-btn class="NavItem" depressed x-large>
+    <v-btn class="NavItem" :icon="icon" depressed x-large>
         <v-icon :left="left" v-if="mdiIcon">{{mdiIcon}}</v-icon>
         <slot></slot>
     </v-btn>
@@ -17,6 +17,10 @@
                 default: "",
             },
             left:{
+                type: Boolean,
+                default: false,
+            },
+            icon:{
                 type: Boolean,
                 default: false,
             }

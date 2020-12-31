@@ -1,8 +1,8 @@
 <template>
-    <NavLinkItem class="individual-settings" routeConfigsKey="IndividualSettings" v-if="isUseUserImage">
+    <NavLinkItem icon class="individual-settings px-2" routeConfigsKey="IndividualSettings" v-if="isUseUserImage">
         <v-img class="user-image-nav" :src="userImage" />
     </NavLinkItem>
-    <NavLinkItem class="individual-settings" routeConfigsKey="IndividualSettings" mdiIcon v-else />
+    <NavLinkItem icon class="individual-settings px-2" routeConfigsKey="IndividualSettings" mdiIcon v-else />
 </template>
 
 <script lang="ts">
