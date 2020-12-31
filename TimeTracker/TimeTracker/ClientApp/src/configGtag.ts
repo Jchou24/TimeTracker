@@ -5,20 +5,15 @@ import VueGtag from "vue-gtag"
 import VueRouter from 'vue-router'
 
 function ConfigGtag(vue: VueConstructor<Vue>, router: VueRouter) {
-    const GA_ID = process.env.GA_ID
-    console.log("check gtag", GA_ID)
-    if (process.env.NODE_ENV === 'production' && GA_ID ) {
-        console.log("enable gtag", GA_ID)
-
+    const gaId = process.env.VUE_APP_GA_ID
+    // console.log("check gtag", gaId)
+    if (process.env.NODE_ENV === 'production' && gaId ) {
         vue.use(VueGtag, {
             config: { 
-                id: GA_ID
+                id: gaId
             },
             appName: 'Time Tracker',
             pageTrackerScreenviewEnabled: true,
-            onReady () {
-                console.log("gtag ready")
-            }
         }, router)
     }
 }

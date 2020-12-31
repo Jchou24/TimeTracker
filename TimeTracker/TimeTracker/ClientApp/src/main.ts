@@ -22,6 +22,7 @@ Vue.config.productionTip = false
 Vue.use(VueCompositionAPI)
 
 const router = CreateRouter(store)
+
 ConfigGtag( Vue, router)
 
 new Vue({
