@@ -4,7 +4,7 @@ import './registerServiceWorker'
 import CreateRouter from './router/index'
 import store from './store'
 import VueCompositionAPI from '@vue/composition-api'
-import ConfigGA from './configGA'
+import ConfigGtag from './configGtag'
 
 import vuetify from './vuetify'
 
@@ -22,7 +22,7 @@ Vue.config.productionTip = false
 Vue.use(VueCompositionAPI)
 
 const router = CreateRouter(store)
-ConfigGA( Vue, router)
+ConfigGtag( Vue, router)
 
 new Vue({
     vuetify,
