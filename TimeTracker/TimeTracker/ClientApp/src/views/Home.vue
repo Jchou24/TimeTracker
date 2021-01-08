@@ -163,11 +163,17 @@
         }
 
         .content{
+            position: relative;
             z-index: 1;
             width: 90%;
             height: 95%;
             border-radius: 50px;
             @include vm-drop-shadow-1(0px, 0px, 15px, rgba(197, 195, 195, 0.5));
+
+            $hover-width: 15px;
+            $color-hover: rgba(197, 195, 195, 0.5);
+            box-shadow: 
+                0px 0px $hover-width $color-hover;
 
             background: url("~@/assets/img/forest/forest2.jpg");
             background-repeat: no-repeat;
